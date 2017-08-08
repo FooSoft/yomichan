@@ -51,10 +51,10 @@
 {{/inline}}
 
 {{#*inline "glossary"}}
-    {{~#if html}}<div style="text-align: left;">{{/if~}}
+    {{~#if html}}<div style="list-style-position: inside;">{{/if~}}
     {{~#if modeKanji~}}
         {{~#if definition.glossary.[1]~}}
-            {{~#if html}}<ol>{{#each definition.glossary}}<li>{{.}}</li>{{/each}}</ol>
+            {{~#if html}}<ol style="padding: 0">{{#each definition.glossary}}<li>{{.}}</li>{{/each}}</ol>
             {{~else}}{{#each definition.glossary}}{{.}}{{#unless @last}}, {{/unless}}{{/each}}{{/if~}}
         {{~else~}}
             {{definition.glossary.[0]}}
@@ -62,7 +62,7 @@
     {{~else~}}
         {{~#if group~}}
             {{~#if definition.definitions.[1]~}}
-                {{~#if html}}<ol>{{#each definition.definitions}}<li>{{> glossary-single html=../html brief=../brief}}</li>{{/each}}</ol>
+                {{~#if html}}<ol style="padding: 0">{{#each definition.definitions}}<li>{{> glossary-single html=../html brief=../brief}}</li>{{/each}}</ol>
                 {{~else}}{{#each definition.definitions}} * {{> glossary-single html=../html brief=../brief}}{{/each}}{{/if~}}
             {{~else~}}
                 {{~> glossary-single definition.definitions.[0] html=html brief=brief~}}

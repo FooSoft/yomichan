@@ -157,7 +157,7 @@ templates['fields.html'] = template({"1":function(container,depth0,helpers,parti
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.modeKanji : depth0),{"name":"if","hash":{},"fn":container.program(44, data, 0, blockParams, depths),"inverse":container.program(53, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.html : depth0),{"name":"if","hash":{},"fn":container.program(66, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"42":function(container,depth0,helpers,partials,data) {
-    return "<div style=\"text-align: left;\">";
+    return "<div style=\"list-style-position: inside;\">";
 },"44":function(container,depth0,helpers,partials,data) {
     var stack1;
 
@@ -169,7 +169,7 @@ templates['fields.html'] = template({"1":function(container,depth0,helpers,parti
 },"46":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "<ol>"
+  return "<ol style=\"padding: 0\">"
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.definition : depth0)) != null ? stack1.glossary : stack1),{"name":"each","hash":{},"fn":container.program(47, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "</ol>";
 },"47":function(container,depth0,helpers,partials,data) {
@@ -199,7 +199,7 @@ templates['fields.html'] = template({"1":function(container,depth0,helpers,parti
 },"56":function(container,depth0,helpers,partials,data,blockParams,depths) {
     var stack1;
 
-  return "<ol>"
+  return "<ol style=\"padding: 0\">"
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = (depth0 != null ? depth0.definition : depth0)) != null ? stack1.definitions : stack1),{"name":"each","hash":{},"fn":container.program(57, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "</ol>";
 },"57":function(container,depth0,helpers,partials,data,blockParams,depths) {
