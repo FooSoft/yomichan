@@ -140,6 +140,10 @@ class TextSourceRange {
             state.offset = offset + consumed + stripped;
             state.remainder -= consumed;
         } else if (TextSourceRange.shouldEnter(node)) {
+            if (node.tagName === 'BR') {
+                state.content += '\n';
+                state.remainder -= 1;
+            }
             for (let i = 0; i < node.childNodes.length; ++i) {
                 if (!TextSourceRange.seekForwardHelper(node.childNodes[i], state)) {
                     break;
@@ -189,6 +193,10 @@ class TextSourceRange {
             state.offset = offset - consumed - stripped;
             state.remainder -= consumed;
         } else if (TextSourceRange.shouldEnter(node)) {
+            if (node.tagName === 'BR') {
+                state.content = '\n' + state.content;
+                state.remainder -= 1;
+            }
             for (let i = node.childNodes.length - 1; i >= 0; --i) {
                 if (!TextSourceRange.seekBackwardHelper(node.childNodes[i], state)) {
                     break;
