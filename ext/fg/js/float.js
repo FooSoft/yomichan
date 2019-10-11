@@ -97,7 +97,20 @@ class DisplayFloat extends Display {
     }
 
     initialize(options, popupInfo, url) {
-        const css = options.general.customPopupCss;
+        const darkModeCss = `
+body {
+    color: #fff;
+    background: #000;
+}
+.expression .kanji-link {
+    color: rgb(191, 191, 191);
+}
+.glossary-item {
+    color: #fff;
+}
+        `.trim();
+
+        const css = options.general.customPopupCss + (options.general.darkMode ? '\n' + darkModeCss : '');
         if (css) {
             this.setStyle(css);
         }

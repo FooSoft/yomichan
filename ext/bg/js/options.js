@@ -262,6 +262,7 @@ function profileOptionsCreateDefaults() {
             resultOutputMode: 'group',
             debugInfo: false,
             maxResults: 32,
+            darkMode: false,
             showAdvanced: false,
             popupDisplayMode: 'default',
             popupWidth: 400,

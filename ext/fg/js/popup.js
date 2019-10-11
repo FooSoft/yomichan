@@ -62,7 +62,8 @@ class Popup {
                 this.invokeApi('initialize', {
                     options: {
                         general: {
-                            customPopupCss: options.general.customPopupCss
+                            customPopupCss: options.general.customPopupCss,
+                            darkMode: options.general.darkMode
                         }
                     },
                     popupInfo: {

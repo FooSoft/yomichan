@@ -28,6 +28,7 @@ async function formRead(options) {
     options.general.compactGlossaries = $('#compact-glossaries').prop('checked');
     options.general.resultOutputMode = $('#result-output-mode').val();
     options.general.debugInfo = $('#show-debug-info').prop('checked');
+    options.general.darkMode = $('#dark-mode-popup').prop('checked');
     options.general.showAdvanced = $('#show-advanced-options').prop('checked');
     options.general.maxResults = parseInt($('#max-displayed-results').val(), 10);
     options.general.popupDisplayMode = $('#popup-display-mode').val();
@@ -96,6 +97,7 @@ async function formWrite(options) {
     $('#compact-glossaries').prop('checked', options.general.compactGlossaries);
     $('#result-output-mode').val(options.general.resultOutputMode);
     $('#show-debug-info').prop('checked', options.general.debugInfo);
+    $('#dark-mode-popup').prop('checked', options.general.darkMode);
     $('#show-advanced-options').prop('checked', options.general.showAdvanced);
     $('#max-displayed-results').val(options.general.maxResults);
     $('#popup-display-mode').val(options.general.popupDisplayMode);
