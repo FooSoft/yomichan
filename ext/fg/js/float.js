@@ -99,14 +99,19 @@ class DisplayFloat extends Display {
     initialize(options, popupInfo, url) {
         const darkModeCss = `
 body {
-    color: #fff;
-    background: #000;
+    background-color: #000;
+}
+.expression {
+    color: rgb(200, 200, 200);
 }
 .expression .kanji-link {
-    color: rgb(191, 191, 191);
+    color: rgb(200, 200, 200);
 }
 .glossary-item {
-    color: #fff;
+    color: rgb(236, 236, 236);
+}
+.label {
+    color: rgb(236, 236, 236);
 }
         `.trim();
 
