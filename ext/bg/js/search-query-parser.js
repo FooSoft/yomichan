@@ -84,11 +84,8 @@ class QueryParser extends TextScanner {
 
     getMouseEventListeners() {
         return [
-            [this.node, 'click', this.onClick.bind(this)],
-            [this.node, 'mousedown', this.onMouseDown.bind(this)],
-            [this.node, 'mousemove', this.onMouseMove.bind(this)],
-            [this.node, 'mouseover', this.onMouseOver.bind(this)],
-            [this.node, 'mouseout', this.onMouseOut.bind(this)]
+            ...super.getMouseEventListeners(),
+            [this.node, 'click', this.onClick.bind(this)]
         ];
     }
 
