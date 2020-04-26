@@ -269,7 +269,9 @@ class Frontend extends TextScanner {
             contentScale /= this._pageZoomFactor;
         }
         if (popupScaleRelativeToVisualViewport) {
-            contentScale /= Frontend._getVisualViewportScale();
+            const visualViewport = window.visualViewport;
+            const visualViewportScale = (visualViewport !== null && typeof visualViewport === 'object' ? visualViewport.scale : 1.0);
+            contentScale /= visualViewportScale;
         }
         if (contentScale === this._contentScale) { return; }
 
@@ -301,10 +303,5 @@ class Frontend extends TextScanner {
         if (textSource !== null && await this.popup.isVisible()) {
             this._showPopupContent(textSource, await this.getOptionsContext());
         }
-    }
-
-    static _getVisualViewportScale() {
-        const visualViewport = window.visualViewport;
-        return visualViewport !== null && typeof visualViewport === 'object' ? visualViewport.scale : 1.0;
     }
 }
