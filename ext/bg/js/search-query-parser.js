@@ -44,10 +44,6 @@ class QueryParser extends TextScanner {
         await this.queryParserGenerator.prepare();
     }
 
-    onError(error) {
-        yomichan.logError(error);
-    }
-
     onClick(e) {
         super.onClick(e);
         this.searchAt(e.clientX, e.clientY, 'click');
