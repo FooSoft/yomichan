@@ -202,10 +202,6 @@ class TextScanner extends EventDispatcher {
         throw new Error('Override me');
     }
 
-    onError(error) {
-        yomichan.logError(error);
-    }
-
     async scanTimerWait() {
         const delay = this.options.scanning.delay;
         const promise = promiseTimeout(delay, true);
@@ -311,7 +307,7 @@ class TextScanner extends EventDispatcher {
                 }
             }
         } catch (e) {
-            this.onError(e);
+            yomichan.logError(e);
         }
     }
 

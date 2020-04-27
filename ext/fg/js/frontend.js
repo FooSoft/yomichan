@@ -84,7 +84,7 @@ class Frontend extends TextScanner {
             this._updateContentScale();
             this._broadcastRootPopupInformation();
         } catch (e) {
-            this.onError(e);
+            yomichan.logError(e);
         }
     }
 
@@ -188,7 +188,7 @@ class Frontend extends TextScanner {
                     this._showPopupContent(textSource, await this.getOptionsContext(), 'orphaned');
                 }
             } else {
-                this.onError(e);
+                yomichan.logError(e);
             }
         } finally {
             if (results === null && this.options.scanning.autoHideResults) {
