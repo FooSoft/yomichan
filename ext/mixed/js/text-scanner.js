@@ -223,16 +223,11 @@ class TextScanner extends EventDispatcher {
     }
 
     setEnabled(enabled, canEnable) {
-        if (enabled && canEnable) {
-            if (!this.enabled) {
-                this.hookEvents();
-                this.enabled = true;
-            }
+        this.eventListeners.removeAllEventListeners();
+        this.enabled = enabled && canEnable;
+        if (this.enabled) {
+            this.hookEvents();
         } else {
-            if (this.enabled) {
-                this.eventListeners.removeAllEventListeners();
-                this.enabled = false;
-            }
             this.clearSelection(true);
         }
     }
