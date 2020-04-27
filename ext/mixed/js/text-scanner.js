@@ -33,6 +33,7 @@ class TextScanner extends EventDispatcher {
         this.scanTimerPromise = null;
         this.causeCurrent = null;
         this.textSourceCurrent = null;
+        this.textSourceCurrentSelected = false;
         this.pendingLookup = false;
         this.options = null;
 
@@ -301,10 +302,7 @@ class TextScanner extends EventDispatcher {
                 const result = await this.onSearchSource(textSource, cause);
                 if (result !== null) {
                     this.causeCurrent = cause;
-                    this.textSourceCurrent = textSource;
-                    if (this.options.scanning.selectText) {
-                        textSource.select();
-                    }
+                    this.setCurrentTextSource(textSource);
                 }
                 this.pendingLookup = false;
             } finally {
@@ -336,10 +334,11 @@ class TextScanner extends EventDispatcher {
 
     clearSelection(passive) {
         if (this.textSourceCurrent !== null) {
-            if (this.options.scanning.selectText) {
+            if (this.textSourceCurrentSelected) {
                 this.textSourceCurrent.deselect();
             }
             this.textSourceCurrent = null;
+            this.textSourceCurrentSelected = false;
         }
         this.trigger('clearSelection', {passive});
     }
@@ -349,7 +348,13 @@ class TextScanner extends EventDispatcher {
     }
 
     setCurrentTextSource(textSource) {
-        return this.textSourceCurrent = textSource;
+        this.textSourceCurrent = textSource;
+        if (this.options.scanning.selectText) {
+            this.textSourceCurrent.select();
+            this.textSourceCurrentSelected = true;
+        } else {
+            this.textSourceCurrentSelected = false;
+        }
     }
 
     static isScanningModifierPressed(scanningModifier, mouseEvent) {
