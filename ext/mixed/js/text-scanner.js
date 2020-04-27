@@ -21,8 +21,9 @@
  * docRangeFromPoint
  */
 
-class TextScanner {
+class TextScanner extends EventDispatcher {
     constructor(node, ignoreElements, ignorePoints) {
+        super();
         this.node = node;
         this.ignoreElements = ignoreElements;
         this.ignorePoints = ignorePoints;
@@ -92,7 +93,7 @@ class TextScanner {
 
         if (DOM.isMouseButtonDown(e, 'primary')) {
             this.scanTimerClear();
-            this.onSearchClear(true);
+            this.clearSelection(false);
         }
     }
 
@@ -235,7 +236,7 @@ class TextScanner {
                 this.eventListeners.removeAllEventListeners();
                 this.enabled = false;
             }
-            this.onSearchClear(false);
+            this.clearSelection(true);
         }
     }
 
@@ -333,13 +334,14 @@ class TextScanner {
         }
     }
 
-    onSearchClear(_) {
+    clearSelection(passive) {
         if (this.textSourceCurrent !== null) {
             if (this.options.scanning.selectText) {
                 this.textSourceCurrent.deselect();
             }
             this.textSourceCurrent = null;
         }
+        this.trigger('clearSelection', {passive});
     }
 
     getCurrentTextSource() {
