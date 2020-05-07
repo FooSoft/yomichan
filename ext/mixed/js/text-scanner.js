@@ -88,7 +88,7 @@ class TextScanner extends EventDispatcher {
         const scanningOptions = this._options.scanning;
         const scanningModifier = scanningOptions.modifier;
         if (!(
-            TextScanner.isScanningModifierPressed(scanningModifier, e) ||
+            this._isScanningModifierPressed(scanningModifier, e) ||
             (scanningOptions.middleMouse && DOM.isMouseButtonDown(e, 'auxiliary'))
         )) {
             return;
@@ -190,7 +190,7 @@ class TextScanner extends EventDispatcher {
     _onTouchEnd(e) {
         if (
             this._primaryTouchIdentifier === null ||
-            TextScanner.getTouch(e.changedTouches, this._primaryTouchIdentifier) === null
+            this._getTouch(e.changedTouches, this._primaryTouchIdentifier) === null
         ) {
             return;
         }
@@ -213,7 +213,7 @@ class TextScanner extends EventDispatcher {
             return;
         }
 
-        const primaryTouch = TextScanner.getTouch(e.changedTouches, this._primaryTouchIdentifier);
+        const primaryTouch = this._getTouch(e.changedTouches, this._primaryTouchIdentifier);
         if (primaryTouch === null) {
             return;
         }
@@ -376,7 +376,7 @@ class TextScanner extends EventDispatcher {
         }
     }
 
-    static isScanningModifierPressed(scanningModifier, mouseEvent) {
+    _isScanningModifierPressed(scanningModifier, mouseEvent) {
         switch (scanningModifier) {
             case 'alt': return mouseEvent.altKey;
             case 'ctrl': return mouseEvent.ctrlKey;
@@ -387,7 +387,7 @@ class TextScanner extends EventDispatcher {
         }
     }
 
-    static getTouch(touchList, identifier) {
+    _getTouch(touchList, identifier) {
         for (const touch of touchList) {
             if (touch.identifier === identifier) {
                 return touch;
