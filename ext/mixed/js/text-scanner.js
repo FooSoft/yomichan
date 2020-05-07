@@ -24,27 +24,27 @@
 class TextScanner extends EventDispatcher {
     constructor(node, ignoreElements, ignorePoints) {
         super();
-        this.node = node;
-        this.ignoreElements = ignoreElements;
-        this.ignorePoints = ignorePoints;
+        this._node = node;
+        this._ignoreElements = ignoreElements;
+        this._ignorePoints = ignorePoints;
 
         this.ignoreNodes = null;
 
-        this.scanTimerPromise = null;
         this.causeCurrent = null;
-        this.textSourceCurrent = null;
-        this.textSourceCurrentSelected = false;
-        this.pendingLookup = false;
-        this.options = null;
+        this._scanTimerPromise = null;
+        this._textSourceCurrent = null;
+        this._textSourceCurrentSelected = false;
+        this._pendingLookup = false;
+        this._options = null;
 
-        this.enabled = false;
-        this.eventListeners = new EventListenerCollection();
+        this._enabled = false;
+        this._eventListeners = new EventListenerCollection();
 
-        this.primaryTouchIdentifier = null;
-        this.preventNextContextMenu = false;
-        this.preventNextMouseDown = false;
-        this.preventNextClick = false;
-        this.preventScroll = false;
+        this._primaryTouchIdentifier = null;
+        this._preventNextContextMenu = false;
+        this._preventNextMouseDown = false;
+        this._preventNextClick = false;
+        this._preventScroll = false;
 
         this._canClearSelection = true;
     }
@@ -58,7 +58,7 @@ class TextScanner extends EventDispatcher {
     }
 
     _onMouseOver(e) {
-        if (this.ignoreElements().includes(e.target)) {
+        if (this._ignoreElements().includes(e.target)) {
             this._scanTimerClear();
         }
     }
@@ -66,14 +66,14 @@ class TextScanner extends EventDispatcher {
     _onMouseMove(e) {
         this._scanTimerClear();
 
-        if (this.pendingLookup || DOM.isMouseButtonDown(e, 'primary')) {
+        if (this._pendingLookup || DOM.isMouseButtonDown(e, 'primary')) {
             return;
         }
 
         const modifiers = DOM.getActiveModifiers(e);
         this.trigger('activeModifiersChanged', {modifiers});
 
-        const scanningOptions = this.options.scanning;
+        const scanningOptions = this._options.scanning;
         const scanningModifier = scanningOptions.modifier;
         if (!(
             TextScanner.isScanningModifierPressed(scanningModifier, e) ||
@@ -97,9 +97,9 @@ class TextScanner extends EventDispatcher {
     }
 
     _onMouseDown(e) {
-        if (this.preventNextMouseDown) {
-            this.preventNextMouseDown = false;
-            this.preventNextClick = true;
+        if (this._preventNextMouseDown) {
+            this._preventNextMouseDown = false;
+            this._preventNextClick = true;
             e.preventDefault();
             e.stopPropagation();
             return false;
@@ -116,8 +116,8 @@ class TextScanner extends EventDispatcher {
     }
 
     _onClick(e) {
-        if (this.preventNextClick) {
-            this.preventNextClick = false;
+        if (this._preventNextClick) {
+            this._preventNextClick = false;
             e.preventDefault();
             e.stopPropagation();
             return false;
@@ -125,12 +125,12 @@ class TextScanner extends EventDispatcher {
     }
 
     _onAuxClick() {
-        this.preventNextContextMenu = false;
+        this._preventNextContextMenu = false;
     }
 
     _onContextMenu(e) {
-        if (this.preventNextContextMenu) {
-            this.preventNextContextMenu = false;
+        if (this._preventNextContextMenu) {
+            this._preventNextContextMenu = false;
             e.preventDefault();
             e.stopPropagation();
             return false;
@@ -138,54 +138,54 @@ class TextScanner extends EventDispatcher {
     }
 
     _onTouchStart(e) {
-        if (this.primaryTouchIdentifier !== null || e.changedTouches.length === 0) {
+        if (this._primaryTouchIdentifier !== null || e.changedTouches.length === 0) {
             return;
         }
 
-        this.preventScroll = false;
-        this.preventNextContextMenu = false;
-        this.preventNextMouseDown = false;
-        this.preventNextClick = false;
+        this._preventScroll = false;
+        this._preventNextContextMenu = false;
+        this._preventNextMouseDown = false;
+        this._preventNextClick = false;
 
         const primaryTouch = e.changedTouches[0];
         if (DOM.isPointInSelection(primaryTouch.clientX, primaryTouch.clientY, window.getSelection())) {
             return;
         }
 
-        this.primaryTouchIdentifier = primaryTouch.identifier;
+        this._primaryTouchIdentifier = primaryTouch.identifier;
 
-        if (this.pendingLookup) {
+        if (this._pendingLookup) {
             return;
         }
 
-        const textSourceCurrentPrevious = this.textSourceCurrent !== null ? this.textSourceCurrent.clone() : null;
+        const textSourceCurrentPrevious = this._textSourceCurrent !== null ? this._textSourceCurrent.clone() : null;
 
         this.searchAt(primaryTouch.clientX, primaryTouch.clientY, 'touchStart')
             .then(() => {
                 if (
-                    this.textSourceCurrent === null ||
-                    this.textSourceCurrent.equals(textSourceCurrentPrevious)
+                    this._textSourceCurrent === null ||
+                    this._textSourceCurrent.equals(textSourceCurrentPrevious)
                 ) {
                     return;
                 }
 
-                this.preventScroll = true;
-                this.preventNextContextMenu = true;
-                this.preventNextMouseDown = true;
+                this._preventScroll = true;
+                this._preventNextContextMenu = true;
+                this._preventNextMouseDown = true;
             });
     }
 
     _onTouchEnd(e) {
         if (
-            this.primaryTouchIdentifier === null ||
-            TextScanner.getTouch(e.changedTouches, this.primaryTouchIdentifier) === null
+            this._primaryTouchIdentifier === null ||
+            TextScanner.getTouch(e.changedTouches, this._primaryTouchIdentifier) === null
         ) {
             return;
         }
 
-        this.primaryTouchIdentifier = null;
-        this.preventScroll = false;
-        this.preventNextClick = false;
+        this._primaryTouchIdentifier = null;
+        this._preventScroll = false;
+        this._preventNextClick = false;
         // Don't revert context menu and mouse down prevention,
         // since these events can occur after the touch has ended.
         // this.preventNextContextMenu = false;
@@ -197,11 +197,11 @@ class TextScanner extends EventDispatcher {
     }
 
     _onTouchMove(e) {
-        if (!this.preventScroll || !e.cancelable || this.primaryTouchIdentifier === null) {
+        if (!this._preventScroll || !e.cancelable || this._primaryTouchIdentifier === null) {
             return;
         }
 
-        const primaryTouch = TextScanner.getTouch(e.changedTouches, this.primaryTouchIdentifier);
+        const primaryTouch = TextScanner.getTouch(e.changedTouches, this._primaryTouchIdentifier);
         if (primaryTouch === null) {
             return;
         }
@@ -216,29 +216,29 @@ class TextScanner extends EventDispatcher {
     }
 
     async _scanTimerWait() {
-        const delay = this.options.scanning.delay;
+        const delay = this._options.scanning.delay;
         const promise = promiseTimeout(delay, true);
-        this.scanTimerPromise = promise;
+        this._scanTimerPromise = promise;
         try {
             return await promise;
         } finally {
-            if (this.scanTimerPromise === promise) {
-                this.scanTimerPromise = null;
+            if (this._scanTimerPromise === promise) {
+                this._scanTimerPromise = null;
             }
         }
     }
 
     _scanTimerClear() {
-        if (this.scanTimerPromise !== null) {
-            this.scanTimerPromise.resolve(false);
-            this.scanTimerPromise = null;
+        if (this._scanTimerPromise !== null) {
+            this._scanTimerPromise.resolve(false);
+            this._scanTimerPromise = null;
         }
     }
 
     setEnabled(enabled) {
-        this.eventListeners.removeAllEventListeners();
-        this.enabled = enabled;
-        if (this.enabled) {
+        this._eventListeners.removeAllEventListeners();
+        this._enabled = enabled;
+        if (this._enabled) {
             this._hookEvents();
         } else {
             this.clearSelection(true);
@@ -247,67 +247,67 @@ class TextScanner extends EventDispatcher {
 
     _hookEvents() {
         const eventListenerInfos = this._getMouseEventListeners();
-        if (this.options.scanning.touchInputEnabled) {
+        if (this._options.scanning.touchInputEnabled) {
             eventListenerInfos.push(...this._getTouchEventListeners());
         }
 
         for (const [node, type, listener, options] of eventListenerInfos) {
-            this.eventListeners.addEventListener(node, type, listener, options);
+            this._eventListeners.addEventListener(node, type, listener, options);
         }
     }
 
     _getMouseEventListeners() {
         return [
-            [this.node, 'mousedown', this._onMouseDown.bind(this)],
-            [this.node, 'mousemove', this._onMouseMove.bind(this)],
-            [this.node, 'mouseover', this._onMouseOver.bind(this)],
-            [this.node, 'mouseout', this._onMouseOut.bind(this)]
+            [this._node, 'mousedown', this._onMouseDown.bind(this)],
+            [this._node, 'mousemove', this._onMouseMove.bind(this)],
+            [this._node, 'mouseover', this._onMouseOver.bind(this)],
+            [this._node, 'mouseout', this._onMouseOut.bind(this)]
         ];
     }
 
     _getTouchEventListeners() {
         return [
-            [this.node, 'click', this._onClick.bind(this)],
-            [this.node, 'auxclick', this._onAuxClick.bind(this)],
-            [this.node, 'touchstart', this._onTouchStart.bind(this)],
-            [this.node, 'touchend', this._onTouchEnd.bind(this)],
-            [this.node, 'touchcancel', this._onTouchCancel.bind(this)],
-            [this.node, 'touchmove', this._onTouchMove.bind(this), {passive: false}],
-            [this.node, 'contextmenu', this._onContextMenu.bind(this)]
+            [this._node, 'click', this._onClick.bind(this)],
+            [this._node, 'auxclick', this._onAuxClick.bind(this)],
+            [this._node, 'touchstart', this._onTouchStart.bind(this)],
+            [this._node, 'touchend', this._onTouchEnd.bind(this)],
+            [this._node, 'touchcancel', this._onTouchCancel.bind(this)],
+            [this._node, 'touchmove', this._onTouchMove.bind(this), {passive: false}],
+            [this._node, 'contextmenu', this._onContextMenu.bind(this)]
         ];
     }
 
     setOptions(options) {
-        this.options = options;
+        this._options = options;
     }
 
     async searchAt(x, y, cause) {
         try {
             this._scanTimerClear();
 
-            if (this.pendingLookup) {
+            if (this._pendingLookup) {
                 return;
             }
 
-            for (const ignorePointFn of this.ignorePoints) {
+            for (const ignorePointFn of this._ignorePoints) {
                 if (await ignorePointFn(x, y)) {
                     return;
                 }
             }
 
-            const textSource = docRangeFromPoint(x, y, this.options.scanning.deepDomScan);
+            const textSource = docRangeFromPoint(x, y, this._options.scanning.deepDomScan);
             try {
-                if (this.textSourceCurrent !== null && this.textSourceCurrent.equals(textSource)) {
+                if (this._textSourceCurrent !== null && this._textSourceCurrent.equals(textSource)) {
                     return;
                 }
 
-                this.pendingLookup = true;
+                this._pendingLookup = true;
                 const result = await this.onSearchSource(textSource, cause);
                 if (result !== null) {
                     this.causeCurrent = cause;
                     this.setCurrentTextSource(textSource);
                 }
-                this.pendingLookup = false;
+                this._pendingLookup = false;
             } finally {
                 if (textSource !== null) {
                     textSource.cleanup();
@@ -340,27 +340,27 @@ class TextScanner extends EventDispatcher {
 
     clearSelection(passive) {
         if (!this._canClearSelection) { return; }
-        if (this.textSourceCurrent !== null) {
-            if (this.textSourceCurrentSelected) {
-                this.textSourceCurrent.deselect();
+        if (this._textSourceCurrent !== null) {
+            if (this._textSourceCurrentSelected) {
+                this._textSourceCurrent.deselect();
             }
-            this.textSourceCurrent = null;
-            this.textSourceCurrentSelected = false;
+            this._textSourceCurrent = null;
+            this._textSourceCurrentSelected = false;
         }
         this.trigger('clearSelection', {passive});
     }
 
     getCurrentTextSource() {
-        return this.textSourceCurrent;
+        return this._textSourceCurrent;
     }
 
     setCurrentTextSource(textSource) {
-        this.textSourceCurrent = textSource;
-        if (this.options.scanning.selectText) {
-            this.textSourceCurrent.select();
-            this.textSourceCurrentSelected = true;
+        this._textSourceCurrent = textSource;
+        if (this._options.scanning.selectText) {
+            this._textSourceCurrent.select();
+            this._textSourceCurrentSelected = true;
         } else {
-            this.textSourceCurrentSelected = false;
+            this._textSourceCurrentSelected = false;
         }
     }
 
