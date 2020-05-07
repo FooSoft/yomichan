@@ -198,10 +198,8 @@ class TextScanner extends EventDispatcher {
         this._primaryTouchIdentifier = null;
         this._preventScroll = false;
         this._preventNextClick = false;
-        // Don't revert context menu and mouse down prevention,
-        // since these events can occur after the touch has ended.
-        // this.preventNextContextMenu = false;
-        // this.preventNextMouseDown = false;
+        // Don't revert context menu and mouse down prevention, since these events can occur after the touch has ended.
+        // I.e. this._preventNextContextMenu and this._preventNextMouseDown should not be assigned to false.
     }
 
     _onTouchCancel(e) {
