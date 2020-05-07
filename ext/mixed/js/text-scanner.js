@@ -28,9 +28,9 @@ class TextScanner extends EventDispatcher {
         this._ignoreElements = ignoreElements;
         this._ignorePoints = ignorePoints;
 
-        this.ignoreNodes = null;
+        this._ignoreNodes = null;
 
-        this.causeCurrent = null;
+        this._causeCurrent = null;
         this._scanTimerPromise = null;
         this._textSourceCurrent = null;
         this._textSourceCurrentSelected = false;
@@ -55,6 +55,18 @@ class TextScanner extends EventDispatcher {
 
     set canClearSelection(value) {
         this._canClearSelection = value;
+    }
+
+    get ignoreNodes() {
+        return this._ignoreNodes;
+    }
+
+    set ignoreNodes(value) {
+        this._ignoreNodes = value;
+    }
+
+    get causeCurrent() {
+        return this._causeCurrent;
     }
 
     _onMouseOver(e) {
@@ -304,7 +316,7 @@ class TextScanner extends EventDispatcher {
                 this._pendingLookup = true;
                 const result = await this.onSearchSource(textSource, cause);
                 if (result !== null) {
-                    this.causeCurrent = cause;
+                    this._causeCurrent = cause;
                     this.setCurrentTextSource(textSource);
                 }
                 this._pendingLookup = false;
@@ -323,11 +335,11 @@ class TextScanner extends EventDispatcher {
 
         clonedTextSource.setEndOffset(length);
 
-        if (this.ignoreNodes !== null && clonedTextSource.range) {
+        if (this._ignoreNodes !== null && clonedTextSource.range) {
             length = clonedTextSource.text().length;
             while (clonedTextSource.range && length > 0) {
                 const nodes = TextSourceRange.getNodesInRange(clonedTextSource.range);
-                if (!TextSourceRange.anyNodeMatchesSelector(nodes, this.ignoreNodes)) {
+                if (!TextSourceRange.anyNodeMatchesSelector(nodes, this._ignoreNodes)) {
                     break;
                 }
                 --length;
