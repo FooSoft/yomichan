@@ -57,14 +57,14 @@ class TextScanner extends EventDispatcher {
         this._canClearSelection = value;
     }
 
-    onMouseOver(e) {
+    _onMouseOver(e) {
         if (this.ignoreElements().includes(e.target)) {
-            this.scanTimerClear();
+            this._scanTimerClear();
         }
     }
 
-    onMouseMove(e) {
-        this.scanTimerClear();
+    _onMouseMove(e) {
+        this._scanTimerClear();
 
         if (this.pendingLookup || DOM.isMouseButtonDown(e, 'primary')) {
             return;
@@ -84,7 +84,7 @@ class TextScanner extends EventDispatcher {
 
         const search = async () => {
             if (scanningModifier === 'none') {
-                if (!await this.scanTimerWait()) {
+                if (!await this._scanTimerWait()) {
                     // Aborted
                     return;
                 }
@@ -96,7 +96,7 @@ class TextScanner extends EventDispatcher {
         search();
     }
 
-    onMouseDown(e) {
+    _onMouseDown(e) {
         if (this.preventNextMouseDown) {
             this.preventNextMouseDown = false;
             this.preventNextClick = true;
@@ -106,16 +106,16 @@ class TextScanner extends EventDispatcher {
         }
 
         if (DOM.isMouseButtonDown(e, 'primary')) {
-            this.scanTimerClear();
+            this._scanTimerClear();
             this.clearSelection(false);
         }
     }
 
-    onMouseOut() {
-        this.scanTimerClear();
+    _onMouseOut() {
+        this._scanTimerClear();
     }
 
-    onClick(e) {
+    _onClick(e) {
         if (this.preventNextClick) {
             this.preventNextClick = false;
             e.preventDefault();
@@ -124,11 +124,11 @@ class TextScanner extends EventDispatcher {
         }
     }
 
-    onAuxClick() {
+    _onAuxClick() {
         this.preventNextContextMenu = false;
     }
 
-    onContextMenu(e) {
+    _onContextMenu(e) {
         if (this.preventNextContextMenu) {
             this.preventNextContextMenu = false;
             e.preventDefault();
@@ -137,7 +137,7 @@ class TextScanner extends EventDispatcher {
         }
     }
 
-    onTouchStart(e) {
+    _onTouchStart(e) {
         if (this.primaryTouchIdentifier !== null || e.changedTouches.length === 0) {
             return;
         }
@@ -175,7 +175,7 @@ class TextScanner extends EventDispatcher {
             });
     }
 
-    onTouchEnd(e) {
+    _onTouchEnd(e) {
         if (
             this.primaryTouchIdentifier === null ||
             TextScanner.getTouch(e.changedTouches, this.primaryTouchIdentifier) === null
@@ -192,11 +192,11 @@ class TextScanner extends EventDispatcher {
         // this.preventNextMouseDown = false;
     }
 
-    onTouchCancel(e) {
-        this.onTouchEnd(e);
+    _onTouchCancel(e) {
+        this._onTouchEnd(e);
     }
 
-    onTouchMove(e) {
+    _onTouchMove(e) {
         if (!this.preventScroll || !e.cancelable || this.primaryTouchIdentifier === null) {
             return;
         }
@@ -215,7 +215,7 @@ class TextScanner extends EventDispatcher {
         throw new Error('Override me');
     }
 
-    async scanTimerWait() {
+    async _scanTimerWait() {
         const delay = this.options.scanning.delay;
         const promise = promiseTimeout(delay, true);
         this.scanTimerPromise = promise;
@@ -228,7 +228,7 @@ class TextScanner extends EventDispatcher {
         }
     }
 
-    scanTimerClear() {
+    _scanTimerClear() {
         if (this.scanTimerPromise !== null) {
             this.scanTimerPromise.resolve(false);
             this.scanTimerPromise = null;
@@ -239,16 +239,16 @@ class TextScanner extends EventDispatcher {
         this.eventListeners.removeAllEventListeners();
         this.enabled = enabled;
         if (this.enabled) {
-            this.hookEvents();
+            this._hookEvents();
         } else {
             this.clearSelection(true);
         }
     }
 
-    hookEvents() {
-        const eventListenerInfos = this.getMouseEventListeners();
+    _hookEvents() {
+        const eventListenerInfos = this._getMouseEventListeners();
         if (this.options.scanning.touchInputEnabled) {
-            eventListenerInfos.push(...this.getTouchEventListeners());
+            eventListenerInfos.push(...this._getTouchEventListeners());
         }
 
         for (const [node, type, listener, options] of eventListenerInfos) {
@@ -256,24 +256,24 @@ class TextScanner extends EventDispatcher {
         }
     }
 
-    getMouseEventListeners() {
+    _getMouseEventListeners() {
         return [
-            [this.node, 'mousedown', this.onMouseDown.bind(this)],
-            [this.node, 'mousemove', this.onMouseMove.bind(this)],
-            [this.node, 'mouseover', this.onMouseOver.bind(this)],
-            [this.node, 'mouseout', this.onMouseOut.bind(this)]
+            [this.node, 'mousedown', this._onMouseDown.bind(this)],
+            [this.node, 'mousemove', this._onMouseMove.bind(this)],
+            [this.node, 'mouseover', this._onMouseOver.bind(this)],
+            [this.node, 'mouseout', this._onMouseOut.bind(this)]
         ];
     }
 
-    getTouchEventListeners() {
+    _getTouchEventListeners() {
         return [
-            [this.node, 'click', this.onClick.bind(this)],
-            [this.node, 'auxclick', this.onAuxClick.bind(this)],
-            [this.node, 'touchstart', this.onTouchStart.bind(this)],
-            [this.node, 'touchend', this.onTouchEnd.bind(this)],
-            [this.node, 'touchcancel', this.onTouchCancel.bind(this)],
-            [this.node, 'touchmove', this.onTouchMove.bind(this), {passive: false}],
-            [this.node, 'contextmenu', this.onContextMenu.bind(this)]
+            [this.node, 'click', this._onClick.bind(this)],
+            [this.node, 'auxclick', this._onAuxClick.bind(this)],
+            [this.node, 'touchstart', this._onTouchStart.bind(this)],
+            [this.node, 'touchend', this._onTouchEnd.bind(this)],
+            [this.node, 'touchcancel', this._onTouchCancel.bind(this)],
+            [this.node, 'touchmove', this._onTouchMove.bind(this), {passive: false}],
+            [this.node, 'contextmenu', this._onContextMenu.bind(this)]
         ];
     }
 
@@ -283,7 +283,7 @@ class TextScanner extends EventDispatcher {
 
     async searchAt(x, y, cause) {
         try {
-            this.scanTimerClear();
+            this._scanTimerClear();
 
             if (this.pendingLookup) {
                 return;
