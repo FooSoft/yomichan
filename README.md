@@ -38,7 +38,7 @@ Yomichan comes in two flavors: *stable* and *testing*. Over the years, this exte
 complex features, which have become increasingly difficult for me to test across different browsers, versions, and
 environments. All new changes are initially introduced into the *testing* version, and when I am reasonably confident
 that they are bug free, they will get promoted to the *stable* version. If you are technically savvy and don't mind
-submitting issues on GitHub, try the *testing* version; otherwise the *stable* version will be your best bet.
+submitting issues on GitHub, try the *testing* version; otherwise, the *stable* version will be your best bet.
 
 *   **Google Chrome**
     ([stable](https://chrome.google.com/webstore/detail/yomichan/ogmnaimimemjmbakcfefmnahgdfhfami) or [testing](https://chrome.google.com/webstore/detail/yomichan-testing/bcknnfebhefllbjhagijobjklocakpdm))
