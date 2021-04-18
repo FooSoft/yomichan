@@ -474,19 +474,23 @@ class Translator {
     _groupDictionaryEntriesByHeadword(dictionaryEntries) {
         const groups = new Map();
         for (const dictionaryEntry of dictionaryEntries) {
-            const {inflections, headwords: [{term, reading}]} = dictionaryEntry;
+            const {inflections, sequence, definitions: [{dictionary}], headwords: [{term, reading}]} = dictionaryEntry;
             const key = this._createMapKey([term, reading, ...inflections]);
             let dictionaryEntries2 = groups.get(key);
             if (typeof dictionaryEntries2 === 'undefined') {
-                dictionaryEntries2 = [];
+                dictionaryEntries2 = {
+                    sequence,
+                    sequenceDictionary: dictionary,
+                    entries: []
+                };
                 groups.set(key, dictionaryEntries2);
             }
-            dictionaryEntries2.push(dictionaryEntry);
+            dictionaryEntries2.entries.push(dictionaryEntry);
         }
 
         const results = [];
         for (const dictionaryEntries2 of groups.values()) {
-            const dictionaryEntry = this._createGroupedDictionaryEntry(dictionaryEntries2, -1, null, false);
+            const dictionaryEntry = this._createGroupedDictionaryEntry(dictionaryEntries2.entries, dictionaryEntries2.sequence, dictionaryEntries2.sequenceDictionary, false);
             results.push(dictionaryEntry);
         }
         return results;
