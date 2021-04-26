@@ -691,6 +691,9 @@ button.action-button[data-icon=play-audio]::before {
 button.action-button[data-icon=source-term]::before {
     background-image: url('/images/source-term.svg');
 }
+button.action-button[data-icon=magnifying-glass]::before {
+    background-image: url('/images/magnifying-glass.svg');
+}
 :root[data-result-output-mode=merge] .entry[data-type=term] .actions>button.action-button.action-play-audio {
     display: none;
 }

@@ -1100,7 +1100,7 @@ class Display extends EventDispatcher {
             const infos = states[i];
             let noteId = null;
             for (let j = 0, jj = infos.length; j < jj; ++j) {
-                const {canAdd, noteIds} = infos[j];
+                const {canAdd, noteIds, tags} = infos[j];
                 const mode = modes[j];
                 const button = this._adderButtonFind(i, mode);
                 if (button === null) {
@@ -1112,6 +1112,17 @@ class Display extends EventDispatcher {
                 }
                 button.disabled = !canAdd;
                 button.hidden = false;
+
+                if (button.disabled && tags && tags.length >= 1) {
+                    const tagsIndicator = this._tagsIndicatorFind(i);
+                    if (tagsIndicator === null) {
+                        continue;
+                    }
+
+                    tagsIndicator.disabled = false;
+                    tagsIndicator.hidden = false;
+                    tagsIndicator.title = `Card tags: ${tags.join(', ')}`;
+                }
             }
             if (noteId !== null) {
                 this._viewerButtonShow(i, noteId);
@@ -1318,6 +1329,11 @@ class Display extends EventDispatcher {
     _adderButtonFind(index, mode) {
         const entry = this._getEntry(index);
         return entry !== null ? entry.querySelector(`.action-add-note[data-mode="${mode}"]`) : null;
+    }
+
+    _tagsIndicatorFind(index) {
+        const entry = this._getEntry(index);
+        return entry !== null ? entry.querySelector('.action-view-tags') : null;
     }
 
     _viewerButtonFind(index) {
