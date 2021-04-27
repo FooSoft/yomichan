@@ -1147,9 +1147,11 @@ class Display extends EventDispatcher {
             tags = tags.filter((tag) => !optionTags.includes(tag));
         }
 
-        tagsIndicator.disabled = false;
-        tagsIndicator.hidden = false;
-        tagsIndicator.title = `Card tags: ${tags.join(', ')}`;
+        if (tags.length > 0) {
+            tagsIndicator.disabled = false;
+            tagsIndicator.hidden = false;
+            tagsIndicator.title = `Card tags: ${tags.join(', ')}`;
+        }
     }
 
     _onShowTags(e) {
