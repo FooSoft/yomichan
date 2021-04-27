@@ -113,6 +113,7 @@ class Display extends EventDispatcher {
         this._displayAudio = new DisplayAudio(this);
         this._ankiNoteNotification = null;
         this._ankiNoteNotificationEventListeners = null;
+        this._ankiTagNotification = null;
         this._queryPostProcessor = null;
         this._optionToggleHotkeyHandler = new OptionToggleHotkeyHandler(this);
         this._elementOverflowController = new ElementOverflowController();
@@ -1100,7 +1101,7 @@ class Display extends EventDispatcher {
             const infos = states[i];
             let noteId = null;
             for (let j = 0, jj = infos.length; j < jj; ++j) {
-                const {canAdd, noteIds, tags} = infos[j];
+                const {canAdd, noteIds, noteInfos} = infos[j];
                 const mode = modes[j];
                 const button = this._adderButtonFind(i, mode);
                 if (button === null) {
@@ -1113,21 +1114,56 @@ class Display extends EventDispatcher {
                 button.disabled = !canAdd;
                 button.hidden = false;
 
-                if (button.disabled && tags && tags.length >= 1) {
-                    const tagsIndicator = this._tagsIndicatorFind(i);
-                    if (tagsIndicator === null) {
-                        continue;
-                    }
 
-                    tagsIndicator.disabled = false;
-                    tagsIndicator.hidden = false;
-                    tagsIndicator.title = `Card tags: ${tags.join(', ')}`;
+                // this._setupTagsIndicator(i, noteInfos);
+                if (noteInfos) {
+                    this._setupTagsIndicator(i, noteInfos);
                 }
             }
             if (noteId !== null) {
                 this._viewerButtonShow(i, noteId);
             }
         }
+    }
+
+    _setupTagsIndicator(i, noteInfos) {
+        const tagsIndicator = this._tagsIndicatorFind(i);
+        if (tagsIndicator === null) {
+            return;
+        }
+
+        let optionTags = this._options.anki.tags;
+        if (!Array.isArray(optionTags)) {
+            optionTags = [];
+        }
+
+        // in case a user has disabled note duplication check we look at the tags for all notes
+        // that were found. this seems to fit the purpose of showing tags better
+        // (i already have this word added but i still want to pay special attention to it for some reason)
+        const noteTags = noteInfos.reduce((tags, noteInfo) => tags.concat(noteInfo.tags), []);
+
+        const tags = noteTags.filter((tag) => !optionTags.includes(tag));
+
+        tagsIndicator.disabled = false;
+        tagsIndicator.hidden = false;
+        tagsIndicator.title = `Card tags: ${tags.join(', ')}`;
+    }
+
+    _onShowTags(e) {
+        e.preventDefault();
+        const tags = e.currentTarget.title;
+        this._showSnackbarNotification(tags);
+    }
+
+    _showSnackbarNotification(message) {
+        if (this._ankiTagNotification === null) {
+            const node = this._displayGenerator.createEmptyFooterNotification();
+            node.classList.add('click-scannable');
+            this._ankiTagNotification = new DisplayNotification(this._footerNotificationContainer, node);
+        }
+
+        this._ankiTagNotification.setContent(message);
+        this._ankiTagNotification.open();
     }
 
     _entrySetCurrent(index) {
@@ -1719,6 +1755,7 @@ class Display extends EventDispatcher {
 
     _addEntryEventListeners(entry) {
         this._eventListeners.addEventListener(entry, 'click', this._onEntryClick.bind(this));
+        this._addMultipleEventListeners(entry, '.action-view-tags', 'click', this._onShowTags.bind(this));
         this._addMultipleEventListeners(entry, '.action-add-note', 'click', this._onNoteAdd.bind(this));
         this._addMultipleEventListeners(entry, '.action-view-note', 'click', this._onNoteView.bind(this));
         this._addMultipleEventListeners(entry, '.headword-kanji-link', 'click', this._onKanjiLookup.bind(this));

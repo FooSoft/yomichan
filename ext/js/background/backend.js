@@ -469,7 +469,6 @@ class Backend {
             const valid = AnkiUtil.isNoteDataValid(note);
             if (!valid) { canAdd = false; }
             const info = {canAdd, valid, noteIds: null};
-
             results.push(info);
             if (!canAdd && valid) {
                 cannotAdd.push({note, info});
@@ -484,29 +483,7 @@ class Backend {
 
                 if (noteIds.length > 0) {
                     cannotAdd[i].info.noteIds = noteIds;
-
-                    /* TODO: should i be selecting the first ID like this?
-                        looking at findNoteIds I can't see how we could find
-                        more than one ID, but an example that proves me wrong
-                        would be cool (and also how to get the right ID) */
-                    const noteId = noteIds[0];
-
-                    /* TODO: should I be catching any errors here? findNoteIds
-                        is not wrapped in try/catch, but I can't find a catch
-                        anywhere in the code that calls this function */
-                    const noteInfo = (await this._anki.notesInfo([noteId]))[0];
-
-                    /* TODO: is this the right way to get user settings?
-                        I couldn't find any examples in the code */
-                    const settingsTags = this._getSetting({
-                        path: 'anki.tags',
-                        scope: 'profile',
-                        optionsContext: {current: true}
-                    });
-
-                    if (settingsTags && noteInfo) {
-                        cannotAdd[i].info.tags = noteInfo.tags.filter((tag) => !settingsTags.includes(tag));
-                    }
+                    cannotAdd[i].info.noteInfos = await this._anki.notesInfo(noteIds);
                 }
             }
         }
