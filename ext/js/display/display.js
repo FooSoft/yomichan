@@ -1115,8 +1115,8 @@ class Display extends EventDispatcher {
                 button.hidden = false;
 
 
-                // this._setupTagsIndicator(i, noteInfos);
-                if (noteInfos) {
+                const showTags = this._options.anki.showTags;
+                if (showTags && noteInfos) {
                     this._setupTagsIndicator(i, noteInfos);
                 }
             }
@@ -1140,9 +1140,12 @@ class Display extends EventDispatcher {
         // in case a user has disabled note duplication check we look at the tags for all notes
         // that were found. this seems to fit the purpose of showing tags better
         // (i already have this word added but i still want to pay special attention to it for some reason)
-        const noteTags = noteInfos.reduce((tags, noteInfo) => tags.concat(noteInfo.tags), []);
+        let tags = noteInfos.reduce((ts, noteInfo) => ts.concat(noteInfo.tags), []);
 
-        const tags = noteTags.filter((tag) => !optionTags.includes(tag));
+        const filterTags = this._options.anki.filterTags;
+        if (filterTags) {
+            tags = tags.filter((tag) => !optionTags.includes(tag));
+        }
 
         tagsIndicator.disabled = false;
         tagsIndicator.hidden = false;
