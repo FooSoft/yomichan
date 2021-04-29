@@ -480,7 +480,6 @@ class Backend {
             const noteIdsArray = await this._anki.findNoteIds(cannotAddNotes);
             for (let i = 0, ii = Math.min(cannotAdd.length, noteIdsArray.length); i < ii; ++i) {
                 const noteIds = noteIdsArray[i];
-
                 if (noteIds.length > 0) {
                     cannotAdd[i].info.noteIds = noteIds;
                     cannotAdd[i].info.noteInfos = await this._anki.notesInfo(noteIds);

@@ -1097,6 +1097,7 @@ class Display extends EventDispatcher {
     }
 
     _updateAdderButtons2(states, modes) {
+        const {displayTags} = this._options.anki;
         for (let i = 0, ii = states.length; i < ii; ++i) {
             const infos = states[i];
             let noteId = null;
@@ -1114,9 +1115,7 @@ class Display extends EventDispatcher {
                 button.disabled = !canAdd;
                 button.hidden = false;
 
-
-                const showTags = this._options.anki.showTags;
-                if (showTags && noteInfos) {
+                if (displayTags !== 'never' && Array.isArray(noteInfos)) {
                     this._setupTagsIndicator(i, noteInfos);
                 }
             }
@@ -1132,35 +1131,33 @@ class Display extends EventDispatcher {
             return;
         }
 
-        let optionTags = this._options.anki.tags;
-        if (!Array.isArray(optionTags)) {
-            optionTags = [];
+        const {tags: optionTags, displayTags} = this._options.anki;
+        const noteTags = new Set();
+        for (const {tags} of noteInfos) {
+            for (const tag of tags) {
+                noteTags.add(tag);
+            }
+        }
+        if (displayTags === 'non-standard') {
+            for (const tag of optionTags) {
+                noteTags.delete(tag);
+            }
         }
 
-        // in case a user has disabled note duplication check we look at the tags for all notes
-        // that were found. this seems to fit the purpose of showing tags better
-        // (i already have this word added but i still want to pay special attention to it for some reason)
-        let tags = noteInfos.reduce((ts, noteInfo) => ts.concat(noteInfo.tags), []);
-
-        const filterTags = this._options.anki.filterTags;
-        if (filterTags) {
-            tags = tags.filter((tag) => !optionTags.includes(tag));
-        }
-
-        if (tags.length > 0) {
+        if (noteTags.size > 0) {
             tagsIndicator.disabled = false;
             tagsIndicator.hidden = false;
-            tagsIndicator.title = `Card tags: ${tags.join(', ')}`;
+            tagsIndicator.title = `Card tags: ${Array.from(noteTags).join(', ')}`;
         }
     }
 
     _onShowTags(e) {
         e.preventDefault();
         const tags = e.currentTarget.title;
-        this._showSnackbarNotification(tags);
+        this._showAnkiTagsNotification(tags);
     }
 
-    _showSnackbarNotification(message) {
+    _showAnkiTagsNotification(message) {
         if (this._ankiTagNotification === null) {
             const node = this._displayGenerator.createEmptyFooterNotification();
             node.classList.add('click-scannable');

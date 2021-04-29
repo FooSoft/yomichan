@@ -1584,42 +1584,29 @@
         <div class="settings-item advanced-only">
             <div class="settings-item-inner">
                 <div class="settings-item-left">
-                    <div class="settings-item-label">Show custom card tags</div>
-                    <div class="settings-item-description">
-                        Show an icon next to the "view added note" button that shows all tags on that note (if it has
-                        any).
+                    <div class="settings-item-label">
+                        Show card tags
+                        <a class="more-toggle more-only" data-parent-distance="4">(?)</a>
                     </div>
                 </div>
                 <div class="settings-item-right">
-                    <label class="toggle">
-                        <input type="checkbox" data-setting="anki.showTags" id="show-tags-enabled">
-                        <span class="toggle-body">
-                            <span class="toggle-track"></span>
-                            <span class="toggle-knob"></span>
-                        </span>
-                    </label>
+                    <select data-setting="anki.displayTags">
+                        <option value="never">Never</option>
+                        <option value="always">Always</option>
+                        <option value="non-standard">Non-Standard</option>
+                    </select>
                 </div>
             </div>
-            <div class="settings-item-children settings-item-children-group" id="filter-tags-enabled-more-options" hidden>
-                <div class="settings-item advanced-only">
-                    <div class="settings-item-inner">
-                        <div class="settings-item-left">
-                            <div class="settings-item-label">Filter tags</div>
-                            <div class="settings-item-description">
-                                Don't show tags included in the "Card tags" option above.
-                            </div>
-                        </div>
-                        <div class="settings-item-right">
-                            <label class="toggle">
-                                <input type="checkbox" data-setting="anki.filterTags" id="filter-tags-enabled">
-                                <span class="toggle-body">
-                                    <span class="toggle-track"></span>
-                                    <span class="toggle-knob"></span>
-                                </span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
+            <div class="settings-item-children more" hidden>
+                <p>
+                    When coming across a word that is already in an anki deck, show an icon that lets you quickly see
+                    which tags that card has. If set to <em>Non-Standard</em> then all tags that are included in the
+                    <em>Card tags</em> option will be filtered out from the list. If no tags remain after filtering, then
+                    the icon will not be shown.
+                </p>
+                <p>
+                    <a class="more-toggle" data-parent-distance="3">Less&hellip;</a>
+                </p>
             </div>
         </div>
     </div>
