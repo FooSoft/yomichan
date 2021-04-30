@@ -1082,8 +1082,8 @@ class Display extends EventDispatcher {
             let states;
             try {
                 const noteContext = this._getNoteContext();
-                const {checkForDuplicates} = this._options.anki;
-                states = await this._areDictionaryEntriesAddable(dictionaryEntries, modes, noteContext, checkForDuplicates ? null : true);
+                const {checkForDuplicates, displayTags} = this._options.anki;
+                states = await this._areDictionaryEntriesAddable(dictionaryEntries, modes, noteContext, checkForDuplicates ? null : true, displayTags !== 'never');
             } catch (e) {
                 return;
             }
@@ -1147,7 +1147,7 @@ class Display extends EventDispatcher {
         if (noteTags.size > 0) {
             tagsIndicator.disabled = false;
             tagsIndicator.hidden = false;
-            tagsIndicator.title = `Card tags: ${Array.from(noteTags).join(', ')}`;
+            tagsIndicator.title = `Card tags: ${[...noteTags].join(', ')}`;
         }
     }
 
@@ -1478,7 +1478,7 @@ class Display extends EventDispatcher {
         return templates;
     }
 
-    async _areDictionaryEntriesAddable(dictionaryEntries, modes, context, forceCanAddValue) {
+    async _areDictionaryEntriesAddable(dictionaryEntries, modes, context, forceCanAddValue, fetchAdditionalInfo) {
         const modeCount = modes.length;
         const notePromises = [];
         for (const dictionaryEntry of dictionaryEntries) {
@@ -1496,7 +1496,7 @@ class Display extends EventDispatcher {
             }
             infos = this._getAnkiNoteInfoForceValue(notes, forceCanAddValue);
         } else {
-            infos = await yomichan.api.getAnkiNoteInfo(notes);
+            infos = await yomichan.api.getAnkiNoteInfo(notes, fetchAdditionalInfo);
         }
 
         const results = [];

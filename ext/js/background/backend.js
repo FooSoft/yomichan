@@ -458,7 +458,7 @@ class Backend {
         return await this._anki.addNote(note);
     }
 
-    async _onApiGetAnkiNoteInfo({notes}) {
+    async _onApiGetAnkiNoteInfo({notes, fetchAdditionalInfo}) {
         const results = [];
         const cannotAdd = [];
         const canAddArray = await this._anki.canAddNotes(notes);
@@ -482,7 +482,9 @@ class Backend {
                 const noteIds = noteIdsArray[i];
                 if (noteIds.length > 0) {
                     cannotAdd[i].info.noteIds = noteIds;
-                    cannotAdd[i].info.noteInfos = await this._anki.notesInfo(noteIds);
+                    if (fetchAdditionalInfo) {
+                        cannotAdd[i].info.noteInfos = await this._anki.notesInfo(noteIds);
+                    }
                 }
             }
         }
