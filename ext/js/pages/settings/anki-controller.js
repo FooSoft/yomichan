@@ -61,8 +61,6 @@ class AnkiController {
         this._ankiEnableCheckbox = document.querySelector('[data-setting="anki.enable"]');
         this._ankiCardPrimary = document.querySelector('#anki-card-primary');
         const ankiCardPrimaryTypeRadios = document.querySelectorAll('input[type=radio][name=anki-card-primary-type]');
-        this._ankiShowCustomTagsToggle = document.querySelector('#show-tags-enabled');
-        this._ankiFilterTagsEnabledMoreOptions = document.querySelector('#filter-tags-enabled-more-options');
 
         this._setupFieldMenus();
 
@@ -71,8 +69,6 @@ class AnkiController {
         for (const input of ankiCardPrimaryTypeRadios) {
             input.addEventListener('change', this._onAnkiCardPrimaryTypeRadioChange.bind(this), false);
         }
-
-        this._ankiShowCustomTagsToggle.addEventListener('change', this._onAnkiShowTagsChanged.bind(this));
 
         const options = await this._settingsController.getOptions();
         this._settingsController.on('optionsChanged', this._onOptionsChanged.bind(this));
@@ -169,8 +165,6 @@ class AnkiController {
 
         this._selectorObserver.disconnect();
         this._selectorObserver.observe(document.documentElement, true);
-
-        this._ankiShowTagsMoreOptions(anki.showTags);
     }
 
     _onAnkiErrorMessageDetailsToggleClick() {
@@ -334,15 +328,6 @@ class AnkiController {
     _sortStringArray(array) {
         const stringComparer = this._stringComparer;
         array.sort((a, b) => stringComparer.compare(a, b));
-    }
-
-    _onAnkiShowTagsChanged(e) {
-        const value = e.currentTarget.checked;
-        this._ankiShowTagsMoreOptions(value);
-    }
-
-    _ankiShowTagsMoreOptions(value) {
-        this._ankiFilterTagsEnabledMoreOptions.hidden = !value;
     }
 }
 
