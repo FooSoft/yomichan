@@ -644,7 +644,7 @@ button.action-button[hidden] {
         -webkit-filter var(--animation-duration) linear,
         background-color var(--animation-duration) linear;
 }
-button.collapsable-action-button[hidden] {
+button.collapsible-action-button[hidden] {
     display: none;
 }
 button.action-button:disabled {
