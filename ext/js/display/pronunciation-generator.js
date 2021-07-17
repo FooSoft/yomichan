@@ -39,10 +39,14 @@ class PronunciationGenerator {
             n1.dataset.pitch = highPitch ? 'high' : 'low';
             n1.dataset.pitchNext = highPitchNext ? 'high' : 'low';
 
-            const n2 = document.createElement('span');
-            n2.className = 'pronunciation-mora-inner';
-            n2.textContent = mora;
-            n1.appendChild(n2);
+            const characterNodes = [];
+            for (const character of mora) {
+                const n2 = document.createElement('span');
+                n2.className = 'pronunciation-character';
+                n2.textContent = character;
+                n1.appendChild(n2);
+                characterNodes.push(n2);
+            }
 
             if (devoice) {
                 n1.dataset.devoice = 'true';
@@ -50,10 +54,13 @@ class PronunciationGenerator {
                 n3.className = 'pronunciation-devoice-indicator';
                 n1.appendChild(n3);
             }
-            if (nasal) {
+            if (nasal && characterNodes.length > 0) {
+                const n2 = characterNodes[0];
+                const character = n2.textContent;
                 n1.dataset.nasal = 'true';
                 n1.dataset.originalText = mora;
-                n2.textContent = this._getPlainMora(mora);
+                n2.dataset.originalText = character;
+                n2.textContent = this._getPlainMora(n2.textContent);
                 let n3 = document.createElement('span');
                 n3.className = 'pronunciation-nasal-diacritic';
                 n3.textContent = '\u309a'; // Combining handakuten
