@@ -1947,7 +1947,7 @@ button.footer-notification-close-button {
 :root[data-show-pitch-accent-downstep-notation=false] .pronunciation-text-container {
     display: none;
 }
-:root[data-show-pitch-accent-position-notation=false] .pitch-accent-position {
+:root[data-show-pitch-accent-position-notation=false] .pronunciation-downstep-notation-container {
     display: none;
 }
 :root[data-show-pitch-accent-graph=false] .pronunciation-graph-container {

@@ -476,7 +476,7 @@ class DisplayGenerator {
         n = node.querySelector('.pitch-accent-disambiguation-list');
         this._createPitchAccentDisambiguations(n, exclusiveTerms, exclusiveReadings);
 
-        n = node.querySelector('.pitch-accent-position');
+        n = node.querySelector('.pronunciation-downstep-notation-container');
         n.appendChild(this._pronunciationGenerator.createPronunciationDownstepNotation(position));
 
         n = node.querySelector('.pronunciation-text-container');
