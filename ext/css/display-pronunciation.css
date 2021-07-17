@@ -92,9 +92,9 @@
 }
 
 .pitch-accent-graph {
-    display: block;
+    display: inline-block;
+    vertical-align: middle;
     height: 1.5em;
-    transform: translateY(-0.875em);
 }
 .pitch-accent-graph-line,
 .pitch-accent-graph-line-tail {

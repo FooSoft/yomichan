@@ -1479,10 +1479,7 @@ button.definition-item-expansion-button:focus:focus-visible+.definition-item-con
     margin-right: 0.375em;
 }
 .pitch-accent-details {
-    display: inline-block;
-    height: 0;
-    padding: 0 0.25em;
-    vertical-align: middle;
+    margin-left: 0.25em;
 }
 
 
