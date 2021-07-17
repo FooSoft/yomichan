@@ -83,6 +83,10 @@ class PronunciationGenerator {
                 group.insertBefore(n2, group.firstChild);
             }
 
+            const line = document.createElement('span');
+            line.className = 'pronunciation-mora-line';
+            n1.appendChild(line);
+
             fragment.appendChild(n1);
         }
         return fragment;

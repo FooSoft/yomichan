@@ -26,11 +26,10 @@
     display: inline-block;
     position: relative;
 }
-.pronunciation-mora::before {
+.pronunciation-mora-line {
     border-color: var(--pitch-accent-annotation-color);
 }
-.pronunciation-mora[data-pitch=high]::before {
-    content: '';
+.pronunciation-mora[data-pitch=high]>.pronunciation-mora-line {
     display: block;
     user-select: none;
     pointer-events: none;
@@ -42,7 +41,7 @@
     border-top-width: 0.1em;
     border-top-style: solid;
 }
-.pronunciation-mora[data-pitch=high][data-pitch-next=low]::before {
+.pronunciation-mora[data-pitch=high][data-pitch-next=low]>.pronunciation-mora-line {
     right: -0.1em;
     height: 0.4em;
     border-right-width: 0.1em;
