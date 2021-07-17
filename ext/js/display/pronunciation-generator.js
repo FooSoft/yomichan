@@ -56,15 +56,19 @@ class PronunciationGenerator {
             }
             if (nasal && characterNodes.length > 0) {
                 n1.dataset.nasal = 'true';
-                n1.dataset.originalText = mora;
 
                 const group = document.createElement('span');
                 group.className = 'pronunciation-character-group';
 
                 const n2 = characterNodes[0];
                 const character = n2.textContent;
-                n2.dataset.originalText = character;
-                n2.textContent = this._getPlainMora(character);
+
+                const characterInfo = jp.getKanaDiacriticInfo(character);
+                if (characterInfo !== null) {
+                    n1.dataset.originalText = mora;
+                    n2.dataset.originalText = character;
+                    n2.textContent = characterInfo.character;
+                }
 
                 let n3 = document.createElement('span');
                 n3.className = 'pronunciation-nasal-diacritic';
@@ -161,12 +165,5 @@ class PronunciationGenerator {
         node.setAttribute('cy', `${y}`);
         node.setAttribute('r', radius);
         return node;
-    }
-
-    _getPlainMora(mora) {
-        const first = mora[0];
-        const info = this._japaneseUtil.getKanaDiacriticInfo(first);
-        if (info === null) { return mora; }
-        return `${info.character}${mora.substring(1)}`;
     }
 }
