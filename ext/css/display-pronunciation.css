@@ -52,7 +52,7 @@
     padding-right: 0.1em;
     margin-right: 0.1em;
 }
-.pronunciation-mora-devoice-indicator {
+.pronunciation-devoice-indicator {
     display: block;
     position: absolute;
     left: 50%;
@@ -65,7 +65,7 @@
     z-index: 1;
     transform: translate(-50%, -50%);
 }
-.pronunciation-mora-nasal-indicator {
+.pronunciation-nasal-indicator {
     display: block;
     position: absolute;
     right: -0.125em;
@@ -77,7 +77,7 @@
     box-sizing: border-box;
     z-index: 1;
 }
-.pronunciation-mora-nasal-diacritic {
+.pronunciation-nasal-diacritic {
     position: absolute;
     width: 0;
     height: 0;
