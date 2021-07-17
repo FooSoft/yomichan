@@ -29,7 +29,7 @@
 .pitch-accent-character::before {
     border-color: var(--pitch-accent-annotation-color);
 }
-.pitch-accent-character[data-pitch='high']::before {
+.pitch-accent-character[data-pitch=high]::before {
     content: '';
     display: block;
     user-select: none;
@@ -42,13 +42,13 @@
     border-top-width: 0.1em;
     border-top-style: solid;
 }
-.pitch-accent-character[data-pitch='high'][data-pitch-next='low']::before {
+.pitch-accent-character[data-pitch=high][data-pitch-next=low]::before {
     right: -0.1em;
     height: 0.4em;
     border-right-width: 0.1em;
     border-right-style: solid;
 }
-.pitch-accent-character[data-pitch='high'][data-pitch-next='low'] {
+.pitch-accent-character[data-pitch=high][data-pitch-next=low] {
     padding-right: 0.1em;
     margin-right: 0.1em;
 }
