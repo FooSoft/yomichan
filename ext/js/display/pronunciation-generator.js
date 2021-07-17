@@ -54,7 +54,11 @@ class PronunciationGenerator {
                 n1.dataset.nasal = 'true';
                 n1.dataset.originalText = mora;
                 n2.textContent = this._getPlainMora(mora);
-                const n3 = document.createElement('span');
+                let n3 = document.createElement('span');
+                n3.className = 'pitch-accent-character-nasal-diacritic';
+                n3.textContent = '\u309a'; // Combining handakuten
+                n1.appendChild(n3);
+                n3 = document.createElement('span');
                 n3.className = 'pitch-accent-character-nasal-indicator';
                 n1.appendChild(n3);
             }
