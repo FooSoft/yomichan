@@ -22,14 +22,14 @@
     --pitch-accent-annotation-color: #ffffff;
 }
 
-.pitch-accent-character {
+.pronunciation-mora {
     display: inline-block;
     position: relative;
 }
-.pitch-accent-character::before {
+.pronunciation-mora::before {
     border-color: var(--pitch-accent-annotation-color);
 }
-.pitch-accent-character[data-pitch=high]::before {
+.pronunciation-mora[data-pitch=high]::before {
     content: '';
     display: block;
     user-select: none;
@@ -42,17 +42,17 @@
     border-top-width: 0.1em;
     border-top-style: solid;
 }
-.pitch-accent-character[data-pitch=high][data-pitch-next=low]::before {
+.pronunciation-mora[data-pitch=high][data-pitch-next=low]::before {
     right: -0.1em;
     height: 0.4em;
     border-right-width: 0.1em;
     border-right-style: solid;
 }
-.pitch-accent-character[data-pitch=high][data-pitch-next=low] {
+.pronunciation-mora[data-pitch=high][data-pitch-next=low] {
     padding-right: 0.1em;
     margin-right: 0.1em;
 }
-.pitch-accent-character-devoice-indicator {
+.pronunciation-mora-devoice-indicator {
     display: block;
     position: absolute;
     left: 50%;
@@ -65,7 +65,7 @@
     z-index: 1;
     transform: translate(-50%, -50%);
 }
-.pitch-accent-character-nasal-indicator {
+.pronunciation-mora-nasal-indicator {
     display: block;
     position: absolute;
     right: -0.125em;
@@ -77,7 +77,7 @@
     box-sizing: border-box;
     z-index: 1;
 }
-.pitch-accent-character-nasal-diacritic {
+.pronunciation-mora-nasal-diacritic {
     position: absolute;
     width: 0;
     height: 0;

@@ -34,20 +34,20 @@ class PronunciationGenerator {
             const devoice = devoicePositionsSet !== null && devoicePositionsSet.has(i1);
 
             const n1 = document.createElement('span');
-            n1.className = 'pitch-accent-character';
+            n1.className = 'pronunciation-mora';
             n1.dataset.position = `${i}`;
             n1.dataset.pitch = highPitch ? 'high' : 'low';
             n1.dataset.pitchNext = highPitchNext ? 'high' : 'low';
 
             const n2 = document.createElement('span');
-            n2.className = 'pitch-accent-character-inner';
+            n2.className = 'pronunciation-mora-inner';
             n2.textContent = mora;
             n1.appendChild(n2);
 
             if (devoice) {
                 n1.dataset.devoice = 'true';
                 const n3 = document.createElement('span');
-                n3.className = 'pitch-accent-character-devoice-indicator';
+                n3.className = 'pronunciation-mora-devoice-indicator';
                 n1.appendChild(n3);
             }
             if (nasal) {
@@ -55,11 +55,11 @@ class PronunciationGenerator {
                 n1.dataset.originalText = mora;
                 n2.textContent = this._getPlainMora(mora);
                 let n3 = document.createElement('span');
-                n3.className = 'pitch-accent-character-nasal-diacritic';
+                n3.className = 'pronunciation-mora-nasal-diacritic';
                 n3.textContent = '\u309a'; // Combining handakuten
                 n1.appendChild(n3);
                 n3 = document.createElement('span');
-                n3.className = 'pitch-accent-character-nasal-indicator';
+                n3.className = 'pronunciation-mora-nasal-indicator';
                 n1.appendChild(n3);
             }
 
