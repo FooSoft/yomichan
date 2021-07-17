@@ -1478,6 +1478,9 @@ button.definition-item-expansion-button:focus:focus-visible+.definition-item-con
 .pitch-accent-tag-list:not([data-count='0']) {
     margin-right: 0.375em;
 }
+.pronunciation-downstep-notation-container {
+    margin-left: 0.25em;
+}
 .pronunciation-graph-container {
     margin-left: 0.25em;
 }
