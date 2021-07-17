@@ -20,7 +20,7 @@ class PronunciationGenerator {
         this._japaneseUtil = japaneseUtil;
     }
 
-    createPitchAccentHtml(morae, downstepPosition, nasalPositions, devoicePositions) {
+    createPronunciationText(morae, downstepPosition, nasalPositions, devoicePositions) {
         const jp = this._japaneseUtil;
         const nasalPositionsSet = nasalPositions.length > 0 ? new Set(nasalPositions) : null;
         const devoicePositionsSet = devoicePositions.length > 0 ? new Set(devoicePositions) : null;
@@ -93,7 +93,7 @@ class PronunciationGenerator {
         return container;
     }
 
-    createPitchGraph(morae, downstepPosition) {
+    createPronunciationGraph(morae, downstepPosition) {
         const jp = this._japaneseUtil;
         const ii = morae.length;
 
