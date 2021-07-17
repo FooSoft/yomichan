@@ -83,6 +83,13 @@
     height: 0;
     opacity: 0;
 }
+.pronunciation-character {
+    display: inline;
+}
+.pronunciation-character-group {
+    display: inline-block;
+    position: relative;
+}
 
 .pitch-accent-position::before {
     content: ' [';

@@ -55,19 +55,28 @@ class PronunciationGenerator {
                 n1.appendChild(n3);
             }
             if (nasal && characterNodes.length > 0) {
-                const n2 = characterNodes[0];
-                const character = n2.textContent;
                 n1.dataset.nasal = 'true';
                 n1.dataset.originalText = mora;
+
+                const group = document.createElement('span');
+                group.className = 'pronunciation-character-group';
+
+                const n2 = characterNodes[0];
+                const character = n2.textContent;
                 n2.dataset.originalText = character;
-                n2.textContent = this._getPlainMora(n2.textContent);
+                n2.textContent = this._getPlainMora(character);
+
                 let n3 = document.createElement('span');
                 n3.className = 'pronunciation-nasal-diacritic';
                 n3.textContent = '\u309a'; // Combining handakuten
-                n1.appendChild(n3);
+                group.appendChild(n3);
+
                 n3 = document.createElement('span');
                 n3.className = 'pronunciation-nasal-indicator';
-                n1.appendChild(n3);
+                group.appendChild(n3);
+
+                n2.parentNode.replaceChild(group, n2);
+                group.insertBefore(n2, group.firstChild);
             }
 
             fragment.appendChild(n1);
