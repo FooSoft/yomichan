@@ -22,6 +22,10 @@
     --pitch-accent-annotation-color: #ffffff;
 }
 
+.pronunciation-downstep-notation {
+    display: inline;
+}
+
 .pronunciation-text {
     display: inline;
 }
@@ -91,13 +95,6 @@
 .pronunciation-character-group {
     display: inline-block;
     position: relative;
-}
-
-.pitch-accent-position::before {
-    content: ' [';
-}
-.pitch-accent-position::after {
-    content: ']';
 }
 
 .pronunciation-graph {

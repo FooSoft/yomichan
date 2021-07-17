@@ -470,14 +470,14 @@ class DisplayGenerator {
         if (devoicePositions.length > 0) { node.dataset.devoiceMoraPosition = devoicePositions.join(' '); }
         node.dataset.tagCount = `${tags.length}`;
 
-        let n = node.querySelector('.pitch-accent-position');
-        this._setTextContent(n, `${position}`, '');
-
-        n = node.querySelector('.pitch-accent-tag-list');
+        let n = node.querySelector('.pitch-accent-tag-list');
         this._appendMultiple(n, this._createTag.bind(this), tags);
 
         n = node.querySelector('.pitch-accent-disambiguation-list');
         this._createPitchAccentDisambiguations(n, exclusiveTerms, exclusiveReadings);
+
+        n = node.querySelector('.pitch-accent-position');
+        n.appendChild(this._pronunciationGenerator.createPronunciationDownstepNotation(position));
 
         n = node.querySelector('.pronunciation-text-container');
         n.lang = 'ja';

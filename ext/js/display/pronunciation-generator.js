@@ -144,6 +144,31 @@ class PronunciationGenerator {
         return svg;
     }
 
+    createPronunciationDownstepNotation(downstepPosition) {
+        downstepPosition = `${downstepPosition}`;
+
+        const n1 = document.createElement('span');
+        n1.className = 'pronunciation-downstep-notation';
+        n1.dataset.downstepPosition = downstepPosition;
+
+        let n2 = document.createElement('span');
+        n2.className = 'pronunciation-downstep-notation-prefix';
+        n2.textContent = '[';
+        n1.appendChild(n2);
+
+        n2 = document.createElement('span');
+        n2.className = 'pronunciation-downstep-notation-number';
+        n2.textContent = downstepPosition;
+        n1.appendChild(n2);
+
+        n2 = document.createElement('span');
+        n2.className = 'pronunciation-downstep-notation-suffix';
+        n2.textContent = ']';
+        n1.appendChild(n2);
+
+        return n1;
+    }
+
     // Private
 
     _addGraphDot(container, svgns, x, y) {
