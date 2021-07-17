@@ -35,16 +35,14 @@ class PronunciationGenerator {
 
             const n1 = document.createElement('span');
             n1.className = 'pitch-accent-character';
-
-            const n2 = document.createElement('span');
-            n2.className = 'pitch-accent-character-inner';
-
-            n1.appendChild(n2);
-
             n1.dataset.position = `${i}`;
             n1.dataset.pitch = highPitch ? 'high' : 'low';
             n1.dataset.pitchNext = highPitchNext ? 'high' : 'low';
+
+            const n2 = document.createElement('span');
+            n2.className = 'pitch-accent-character-inner';
             n2.textContent = mora;
+            n1.appendChild(n2);
 
             if (devoice) {
                 n1.dataset.devoice = 'true';
