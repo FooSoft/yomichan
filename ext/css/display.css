@@ -1944,7 +1944,7 @@ button.footer-notification-close-button {
 :root[data-show-pitch-accent-downstep-notation=true] .pitch-accent-disambiguation[data-type=reading] {
     display: none;
 }
-:root[data-show-pitch-accent-downstep-notation=false] .pitch-accent-characters {
+:root[data-show-pitch-accent-downstep-notation=false] .pronunciation-text-container {
     display: none;
 }
 :root[data-show-pitch-accent-position-notation=false] .pitch-accent-position {

@@ -479,7 +479,7 @@ class DisplayGenerator {
         n = node.querySelector('.pitch-accent-disambiguation-list');
         this._createPitchAccentDisambiguations(n, exclusiveTerms, exclusiveReadings);
 
-        n = node.querySelector('.pitch-accent-characters');
+        n = node.querySelector('.pronunciation-text-container');
         n.lang = 'ja';
         n.appendChild(this._pronunciationGenerator.createPronunciationText(morae, position, nasalPositions, devoicePositions));
 
