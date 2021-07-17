@@ -24,7 +24,8 @@ class PronunciationGenerator {
         const jp = this._japaneseUtil;
         const nasalPositionsSet = nasalPositions.length > 0 ? new Set(nasalPositions) : null;
         const devoicePositionsSet = devoicePositions.length > 0 ? new Set(devoicePositions) : null;
-        const fragment = document.createDocumentFragment();
+        const container = document.createElement('span');
+        container.className = 'pronunciation-text';
         for (let i = 0, ii = morae.length; i < ii; ++i) {
             const i1 = i + 1;
             const mora = morae[i];
@@ -87,9 +88,9 @@ class PronunciationGenerator {
             line.className = 'pronunciation-mora-line';
             n1.appendChild(line);
 
-            fragment.appendChild(n1);
+            container.appendChild(n1);
         }
-        return fragment;
+        return container;
     }
 
     createPitchGraph(morae, downstepPosition) {

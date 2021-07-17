@@ -22,6 +22,9 @@
     --pitch-accent-annotation-color: #ffffff;
 }
 
+.pronunciation-text {
+    display: inline;
+}
 .pronunciation-mora {
     display: inline-block;
     position: relative;
