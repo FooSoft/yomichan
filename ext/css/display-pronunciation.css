@@ -91,34 +91,34 @@
     content: ']';
 }
 
-.pitch-accent-graph {
+.pronunciation-graph {
     display: inline-block;
     vertical-align: middle;
     height: 1.5em;
 }
-.pitch-accent-graph-line,
-.pitch-accent-graph-line-tail {
+.pronunciation-graph-line,
+.pronunciation-graph-line-tail {
     fill: none;
     stroke: var(--pitch-accent-annotation-color);
     stroke-width: 5;
 }
-.pitch-accent-graph-line-tail {
+.pronunciation-graph-line-tail {
     stroke-dasharray: 5 5;
 }
-.pitch-accent-graph-dot {
+.pronunciation-graph-dot {
     fill: var(--pitch-accent-annotation-color);
     stroke: var(--pitch-accent-annotation-color);
     stroke-width: 5;
 }
-.pitch-accent-graph-dot-downstep1 {
+.pronunciation-graph-dot-downstep1 {
     fill: none;
     stroke: var(--pitch-accent-annotation-color);
     stroke-width: 5;
 }
-.pitch-accent-graph-dot-downstep2 {
+.pronunciation-graph-dot-downstep2 {
     fill: var(--pitch-accent-annotation-color);
 }
-.pitch-accent-graph-triangle {
+.pronunciation-graph-triangle {
     fill: none;
     stroke: var(--pitch-accent-annotation-color);
     stroke-width: 5;

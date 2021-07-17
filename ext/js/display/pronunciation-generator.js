@@ -75,7 +75,7 @@ class PronunciationGenerator {
         const svgns = 'http://www.w3.org/2000/svg';
         const svg = document.createElementNS(svgns, 'svg');
         svg.setAttribute('xmlns', svgns);
-        svg.setAttribute('class', 'pitch-accent-graph');
+        svg.setAttribute('class', 'pronunciation-graph');
         svg.setAttribute('focusable', 'false');
         svg.setAttribute('viewBox', `0 0 ${50 * (ii + 1)} 100`);
 
@@ -101,7 +101,7 @@ class PronunciationGenerator {
             pathPoints.push(`${x} ${y}`);
         }
 
-        path1.setAttribute('class', 'pitch-accent-graph-line');
+        path1.setAttribute('class', 'pronunciation-graph-line');
         path1.setAttribute('d', `M${pathPoints.join(' L')}`);
 
         pathPoints.splice(0, ii - 1);
@@ -113,7 +113,7 @@ class PronunciationGenerator {
             pathPoints.push(`${x} ${y}`);
         }
 
-        path2.setAttribute('class', 'pitch-accent-graph-line-tail');
+        path2.setAttribute('class', 'pronunciation-graph-line-tail');
         path2.setAttribute('d', `M${pathPoints.join(' L')}`);
 
         return svg;
@@ -122,17 +122,17 @@ class PronunciationGenerator {
     // Private
 
     _addGraphDot(container, svgns, x, y) {
-        container.appendChild(this._createGraphCircle(svgns, 'pitch-accent-graph-dot', x, y, '15'));
+        container.appendChild(this._createGraphCircle(svgns, 'pronunciation-graph-dot', x, y, '15'));
     }
 
     _addGraphDotDownstep(container, svgns, x, y) {
-        container.appendChild(this._createGraphCircle(svgns, 'pitch-accent-graph-dot-downstep1', x, y, '15'));
-        container.appendChild(this._createGraphCircle(svgns, 'pitch-accent-graph-dot-downstep2', x, y, '5'));
+        container.appendChild(this._createGraphCircle(svgns, 'pronunciation-graph-dot-downstep1', x, y, '15'));
+        container.appendChild(this._createGraphCircle(svgns, 'pronunciation-graph-dot-downstep2', x, y, '5'));
     }
 
     _addGraphTriangle(container, svgns, x, y) {
         const node = document.createElementNS(svgns, 'path');
-        node.setAttribute('class', 'pitch-accent-graph-triangle');
+        node.setAttribute('class', 'pronunciation-graph-triangle');
         node.setAttribute('d', 'M0 13 L15 -13 L-15 -13 Z');
         node.setAttribute('transform', `translate(${x},${y})`);
         container.appendChild(node);

@@ -483,7 +483,7 @@ class DisplayGenerator {
         n.lang = 'ja';
         n.appendChild(this._pronunciationGenerator.createPitchAccentHtml(morae, position, nasalPositions, devoicePositions));
 
-        node.querySelector('.pitch-accent-graph-container').appendChild(this._pronunciationGenerator.createPitchGraph(morae, position));
+        node.querySelector('.pronunciation-graph-container').appendChild(this._pronunciationGenerator.createPitchGraph(morae, position));
 
         return node;
     }

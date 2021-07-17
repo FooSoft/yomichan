@@ -1478,7 +1478,7 @@ button.definition-item-expansion-button:focus:focus-visible+.definition-item-con
 .pitch-accent-tag-list:not([data-count='0']) {
     margin-right: 0.375em;
 }
-.pitch-accent-graph-container {
+.pronunciation-graph-container {
     margin-left: 0.25em;
 }
 
@@ -1950,7 +1950,7 @@ button.footer-notification-close-button {
 :root[data-show-pitch-accent-position-notation=false] .pitch-accent-position {
     display: none;
 }
-:root[data-show-pitch-accent-graph=false] .pitch-accent-graph-container {
+:root[data-show-pitch-accent-graph=false] .pronunciation-graph-container {
     display: none;
 }
 
