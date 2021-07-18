@@ -26,6 +26,11 @@ function getTargets() {
             cssFile: path.join(__dirname, '..', 'ext/css/structured-content.css'),
             overridesCssFile: path.join(__dirname, 'data/structured-content-overrides.css'),
             outputPath: path.join(__dirname, '..', 'ext/data/structured-content-style.json')
+        },
+        {
+            cssFile: path.join(__dirname, '..', 'ext/css/display-pronunciation.css'),
+            overridesCssFile: path.join(__dirname, 'data/display-pronunciation-overrides.css'),
+            outputPath: path.join(__dirname, '..', 'ext/data/pronunciation-style.json')
         }
     ];
 }
