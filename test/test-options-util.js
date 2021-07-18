@@ -1136,7 +1136,7 @@ async function testFieldTemplatesUpdate(extDir) {
             expected: `
 {{! Pitch Accents }}
 {{#*inline "pitch-accent-item"}}
-    {{~#pronunciation format=format reading=reading downstepPosition=position~}}{{~/pronunciation~}}
+    {{~#pronunciation format=format reading=reading downstepPosition=position nasalPositions=nasalPositions devoicePositions=devoicePositions~}}{{~/pronunciation~}}
 {{/inline}}
 
 {{#*inline "pitch-accent-item-disambiguation"}}
