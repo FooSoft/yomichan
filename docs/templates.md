@@ -742,6 +742,39 @@ These functions are used together in order to request media and other types of o
 </details>
 
 
+### `pronunciation`
+
+Converts pronunciation information into a formatted HTML content string. The display layout is the
+same as the system used for generating popup and search page dictionary entries.
+
+<details>
+  <summary>Syntax:</summary>
+
+  <code>{{#pronunciation <i>format=string</i> <i>reading=string</i> <i>downstepPosition=integer</i> <i>[nasalPositions=array]</i> <i>[devoicePositions=array]</i>}}{{/pronunciation}}</code><br>
+
+  * _`format`_ <br>
+    The format of the HTML to generate. This can be any of the following values:
+    * `'text'`
+    * `'graph'`
+    * `'position'`
+  * _`reading`_ <br>
+    The kana reading of the term.
+  * _`downstepPosition`_ <br>
+    The mora position of the downstep in the reading.
+  * _`nasalPositions`_ _(optional)_ <br>
+    An array of indices of mora that have a nasal pronunciation.
+  * _`devoicePositions`_ _(optional)_ <br>
+    An array of indices of mora that are devoiced.
+</details>
+<details>
+  <summary>Example:</summary>
+
+  ```handlebars
+  {{~#pronunciation format='text' reading='よむ' downstepPosition=1~}}{{~/pronunciation~}}
+  ```
+</details>
+
+
 ## Legacy Helpers
 
 Yomichan has historically used Handlebars templates to generate the HTML used on the search page and results popup.
