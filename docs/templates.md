@@ -689,7 +689,7 @@ These functions are used together in order to request media and other types of o
     The type of media to check for.
   * _`args`_ <br>
     Additional arguments for the media. The arguments depend on the media type.
-  * _`escape`_ <br>
+  * _`escape`_ _(optional)_ <br>
     Whether or not the resulting text should be HTML-escaped. If omitted, defaults to `true`.
 
   **Available media types and arguments**
