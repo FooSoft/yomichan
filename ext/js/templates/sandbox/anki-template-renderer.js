@@ -572,7 +572,7 @@ class AnkiTemplateRenderer {
         const morae = this._japaneseUtil.getKanaMorae(reading);
 
         switch (format) {
-            case 'downstep-notation':
+            case 'text':
                 return this._getHtml(
                     this._pronunciationGenerator.createPronunciationText(morae, downstepPosition, nasalPositions, devoicePositions),
                     this._pronunciationStyleApplier
