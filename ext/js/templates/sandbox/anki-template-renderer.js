@@ -35,7 +35,7 @@ class AnkiTemplateRenderer {
      * Creates a new instance of the class.
      */
     constructor() {
-        this._cssStyleApplier = new CssStyleApplier('/data/structured-content-style.json');
+        this._structuredContentStyleApplier = new CssStyleApplier('/data/structured-content-style.json');
         this._japaneseUtil = new JapaneseUtil(null);
         this._templateRenderer = new TemplateRenderer();
         this._ankiNoteDataCreator = new AnkiNoteDataCreator(this._japaneseUtil);
@@ -93,7 +93,7 @@ class AnkiTemplateRenderer {
             this._onRenderSetup.bind(this),
             this._onRenderCleanup.bind(this)
         );
-        await this._cssStyleApplier.prepare();
+        await this._structuredContentStyleApplier.prepare();
     }
 
     // Private
@@ -479,7 +479,7 @@ class AnkiTemplateRenderer {
                     break;
             }
         }
-        this._cssStyleApplier.applyClassStyles(elements);
+        this._structuredContentStyleApplier.applyClassStyles(elements);
         for (const element of elements) {
             const {dataset} = element;
             for (const key of Object.keys(dataset)) {
