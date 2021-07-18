@@ -18,7 +18,7 @@
 const fs = require('fs');
 const assert = require('assert');
 const {testMain} = require('../dev/util');
-const {generateRulesJson, getOutputPath} = require('../dev/generate-structured-content-style');
+const {generateRulesJson, getOutputPath} = require('../dev/generate-css-json');
 
 
 function main() {
