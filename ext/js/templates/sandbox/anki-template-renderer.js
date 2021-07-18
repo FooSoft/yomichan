@@ -26,7 +26,14 @@
  * TemplateRendererMediaProvider
  */
 
+/**
+ * This class contains all Anki-specific template rendering functionality. It is built on
+ * the generic TemplateRenderer class and various other Anki-related classes.
+ */
 class AnkiTemplateRenderer {
+    /**
+     * Creates a new instance of the class.
+     */
     constructor() {
         this._cssStyleApplier = new CssStyleApplier('/data/structured-content-style.json');
         this._japaneseUtil = new JapaneseUtil(null);
@@ -39,10 +46,16 @@ class AnkiTemplateRenderer {
         this._temporaryElement = null;
     }
 
+    /**
+     * Gets the generic TemplateRenderer instance.
+     */
     get templateRenderer() {
         return this._templateRenderer;
     }
 
+    /**
+     * Prepares the data that is necessary before the template renderer can be safely used.
+     */
     async prepare() {
         this._templateRenderer.registerHelpers([
             ['dumpObject',       this._dumpObject.bind(this)],
