@@ -21,6 +21,7 @@
  * DictionaryDataUtil
  * Handlebars
  * JapaneseUtil
+ * PronunciationGenerator
  * StructuredContentGenerator
  * TemplateRenderer
  * TemplateRendererMediaProvider
@@ -36,10 +37,12 @@ class AnkiTemplateRenderer {
      */
     constructor() {
         this._structuredContentStyleApplier = new CssStyleApplier('/data/structured-content-style.json');
+        this._pronunciationStyleApplier = new CssStyleApplier('/data/pronunciation-style.json');
         this._japaneseUtil = new JapaneseUtil(null);
         this._templateRenderer = new TemplateRenderer();
         this._ankiNoteDataCreator = new AnkiNoteDataCreator(this._japaneseUtil);
         this._mediaProvider = new TemplateRendererMediaProvider();
+        this._pronunciationGenerator = new PronunciationGenerator();
         this._stateStack = null;
         this._requirements = null;
         this._cleanupCallbacks = null;
@@ -93,7 +96,10 @@ class AnkiTemplateRenderer {
             this._onRenderSetup.bind(this),
             this._onRenderCleanup.bind(this)
         );
-        await this._structuredContentStyleApplier.prepare();
+        await Promise.all([
+            this._structuredContentStyleApplier.prepare(),
+            this._pronunciationStyleApplier.prepare()
+        ]);
     }
 
     // Private
