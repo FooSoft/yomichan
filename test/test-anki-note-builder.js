@@ -235,6 +235,9 @@ async function getRenderResults(dictionaryEntries, type, mode, template, AnkiNot
             compactTags: false
         });
         if (!write) {
+            for (const error of errors) {
+                console.error(error);
+            }
             assert.strictEqual(errors.length, 0);
         }
         results.push(noteFields);
