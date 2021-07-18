@@ -44,6 +44,7 @@ async function createVM() {
         'js/data/anki-note-builder.js',
         'js/data/anki-util.js',
         'js/dom/sandbox/css-style-applier.js',
+        'js/display/sandbox/pronunciation-generator.js',
         'js/display/sandbox/structured-content-generator.js',
         'js/templates/sandbox/anki-template-renderer.js',
         'js/templates/sandbox/template-renderer.js',
