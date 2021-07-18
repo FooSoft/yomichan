@@ -42,7 +42,7 @@ class AnkiTemplateRenderer {
         this._templateRenderer = new TemplateRenderer();
         this._ankiNoteDataCreator = new AnkiNoteDataCreator(this._japaneseUtil);
         this._mediaProvider = new TemplateRendererMediaProvider();
-        this._pronunciationGenerator = new PronunciationGenerator();
+        this._pronunciationGenerator = new PronunciationGenerator(this._japaneseUtil);
         this._stateStack = null;
         this._requirements = null;
         this._cleanupCallbacks = null;
