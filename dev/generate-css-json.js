@@ -18,26 +18,23 @@
 const fs = require('fs');
 const path = require('path');
 const {testMain} = require('./util');
-const {formatRulesJson, generateRules: generateRulesGeneric} = require('./css-to-json-util');
+const {formatRulesJson, generateRules} = require('./css-to-json-util');
 
-function generateRules() {
-    const cssFile = path.join(__dirname, '..', 'ext/css/structured-content.css');
-    const cssFileOverrides = path.join(__dirname, 'data/structured-content-overrides.css');
-    return generateRulesGeneric(cssFile, cssFileOverrides);
-}
-
-function generateRulesJson() {
-    return formatRulesJson(generateRules());
-}
-
-function getOutputPath() {
-    return path.join(__dirname, '..', 'ext/data/structured-content-style.json');
+function getTargets() {
+    return [
+        {
+            cssFile: path.join(__dirname, '..', 'ext/css/structured-content.css'),
+            overridesCssFile: path.join(__dirname, 'data/structured-content-overrides.css'),
+            outputPath: path.join(__dirname, '..', 'ext/data/structured-content-style.json')
+        }
+    ];
 }
 
 function main() {
-    const outputFileName = getOutputPath();
-    const json = generateRulesJson();
-    fs.writeFileSync(outputFileName, json, {encoding: 'utf8'});
+    for (const {cssFile, overridesCssFile, outputPath} of getTargets()) {
+        const json = formatRulesJson(generateRules(cssFile, overridesCssFile));
+        fs.writeFileSync(outputPath, json, {encoding: 'utf8'});
+    }
 }
 
 
@@ -47,7 +44,5 @@ if (require.main === module) {
 
 
 module.exports = {
-    generateRules,
-    generateRulesJson,
-    getOutputPath
+    getTargets
 };
