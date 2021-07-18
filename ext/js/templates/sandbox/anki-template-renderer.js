@@ -86,7 +86,8 @@ class AnkiTemplateRenderer {
             ['pitchCategories',  this._pitchCategories.bind(this)],
             ['formatGlossary',   this._formatGlossary.bind(this)],
             ['hasMedia',         this._hasMedia.bind(this)],
-            ['getMedia',         this._getMedia.bind(this)]
+            ['getMedia',         this._getMedia.bind(this)],
+            ['pronunciation',    this._pronunciation.bind(this)]
         ]);
         this._templateRenderer.registerDataType('ankiNote', {
             modifier: ({marker, commonData}) => this._ankiNoteDataCreator.create(marker, commonData),
@@ -557,5 +558,34 @@ class AnkiTemplateRenderer {
         const ii = args.length - 1;
         const options = args[ii];
         return this._mediaProvider.getMedia(options.data.root, args.slice(0, ii), options.hash);
+    }
+
+    _pronunciation(context, ...args) {
+        const ii = args.length - 1;
+        const options = args[ii];
+        let {format, reading, downstepPosition, nasalPositions, devoicePositions} = options.hash;
+
+        if (typeof reading !== 'string' || reading.length === 0) { return ''; }
+        if (typeof downstepPosition !== 'number') { return ''; }
+        if (!Array.isArray(nasalPositions)) { nasalPositions = []; }
+        if (!Array.isArray(devoicePositions)) { devoicePositions = []; }
+        const morae = this._japaneseUtil.getKanaMorae(reading);
+
+        switch (format) {
+            case 'downstep-notation':
+                return this._getHtml(
+                    this._pronunciationGenerator.createPronunciationText(morae, downstepPosition, nasalPositions, devoicePositions)
+                );
+            case 'graph':
+                return this._getHtml(
+                    this._pronunciationGenerator.createPronunciationGraph(morae, downstepPosition)
+                );
+            case 'position':
+                return this._getHtml(
+                    this._pronunciationGenerator.createPronunciationDownstepPosition(downstepPosition)
+                );
+            default:
+                return '';
+        }
     }
 }
