@@ -1422,60 +1422,60 @@ button.definition-item-expansion-button:focus:focus-visible+.definition-item-con
 
 
 /* Pitch accent styles */
-.pitch-accent-group-list {
+.pronunciation-group-list {
     margin: 0;
     padding: 0 0 0 var(--list-padding1);
     list-style-type: decimal;
 }
-.pitch-accent-group-list[data-count='0'],
-.pitch-accent-group-list[data-count='1'] {
+.pronunciation-group-list[data-count='0'],
+.pronunciation-group-list[data-count='1'] {
     padding-left: 0;
     list-style-type: none;
 }
-.pitch-accent-list {
+.pronunciation-list {
     margin: 0;
     padding: 0 0 0 var(--list-padding2);
     list-style-type: circle;
     display: block;
 }
-.pitch-accent-list[data-count='0'],
-.pitch-accent-list[data-count='1'] {
+.pronunciation-list[data-count='0'],
+.pronunciation-list[data-count='1'] {
     padding-left: 0;
     list-style-type: none;
     display: inline;
 }
-.pitch-accent-group::marker,
-.pitch-accent::marker {
+.pronunciation-group::marker,
+.pronunciation::marker {
     color: var(--text-color-light3);
 }
-.pitch-accent {
+.pronunciation {
     display: list-item;
     line-height: 1.5;
 }
-.pitch-accent-list[data-count='0'] .pitch-accent,
-.pitch-accent-list[data-count='1'] .pitch-accent {
+.pronunciation-list[data-count='0'] .pronunciation,
+.pronunciation-list[data-count='1'] .pronunciation {
     display: inline;
 }
-.pitch-accent-group-tag-list {
+.pronunciation-group-tag-list {
     margin-right: 0.375em;
 }
-.pitch-accent-disambiguation-list {
+.pronunciation-disambiguation-list {
     color: var(--text-color-light3);
     padding-right: var(--disambiguation-space);
 }
-.pitch-accent-disambiguation-list::before {
+.pronunciation-disambiguation-list::before {
     content: var(--disambiguation-prefix);
 }
-.pitch-accent-disambiguation-list::after {
+.pronunciation-disambiguation-list::after {
     content: var(--disambiguation-suffix);
 }
-.pitch-accent-disambiguation+.pitch-accent-disambiguation::before {
+.pronunciation-disambiguation+.pronunciation-disambiguation::before {
     content: var(--disambiguation-separator);
 }
-.pitch-accent-disambiguation-list[data-count='0'] {
+.pronunciation-disambiguation-list[data-count='0'] {
     display: none;
 }
-.pitch-accent-tag-list:not([data-count='0']) {
+.pronunciation-tag-list:not([data-count='0']) {
     margin-right: 0.375em;
 }
 .pronunciation-downstep-notation-container {
@@ -1943,8 +1943,8 @@ button.footer-notification-close-button {
     display: inline;
 }
 
-:root[data-show-pitch-accent-downstep-notation=true] .pitch-accent-disambiguation-list[data-term-count='0'],
-:root[data-show-pitch-accent-downstep-notation=true] .pitch-accent-disambiguation[data-type=reading] {
+:root[data-show-pitch-accent-downstep-notation=true] .pronunciation-disambiguation-list[data-term-count='0'],
+:root[data-show-pitch-accent-downstep-notation=true] .pronunciation-disambiguation[data-type=reading] {
     display: none;
 }
 :root[data-show-pitch-accent-downstep-notation=false] .pronunciation-text-container {
@@ -1957,15 +1957,15 @@ button.footer-notification-close-button {
     display: none;
 }
 
-:root[data-glossary-layout-mode=compact][data-show-pitch-accent-graph=false] .pitch-accent-list:not([data-has-tags=true]) {
+:root[data-glossary-layout-mode=compact][data-show-pitch-accent-graph=false] .pronunciation-list:not([data-has-tags=true]) {
     display: inline;
     list-style: none;
     padding-left: 0;
 }
-:root[data-glossary-layout-mode=compact][data-show-pitch-accent-graph=false] .pitch-accent-list:not([data-has-tags=true]) .pitch-accent {
+:root[data-glossary-layout-mode=compact][data-show-pitch-accent-graph=false] .pronunciation-list:not([data-has-tags=true]) .pronunciation {
     display: inline;
 }
-:root[data-glossary-layout-mode=compact][data-show-pitch-accent-graph=false] .pitch-accent-list:not([data-has-tags=true]) .pitch-accent:not(:first-child)::before {
+:root[data-glossary-layout-mode=compact][data-show-pitch-accent-graph=false] .pronunciation-list:not([data-has-tags=true]) .pronunciation:not(:first-child)::before {
     white-space: pre-wrap;
     content: var(--compact-list-separator);
     display: inline;
