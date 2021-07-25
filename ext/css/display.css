@@ -1943,29 +1943,29 @@ button.footer-notification-close-button {
     display: inline;
 }
 
-:root[data-show-pitch-accent-downstep-notation=true] .pronunciation-disambiguation-list[data-term-count='0'],
-:root[data-show-pitch-accent-downstep-notation=true] .pronunciation-disambiguation[data-type=reading] {
+:root[data-show-pronunciation-text=true] .pronunciation-disambiguation-list[data-term-count='0'],
+:root[data-show-pronunciation-text=true] .pronunciation-disambiguation[data-type=reading] {
     display: none;
 }
-:root[data-show-pitch-accent-downstep-notation=false] .pronunciation-text-container {
+:root[data-show-pronunciation-text=false] .pronunciation-text-container {
     display: none;
 }
-:root[data-show-pitch-accent-position-notation=false] .pronunciation-downstep-notation-container {
+:root[data-show-pronunciation-downstep-position=false] .pronunciation-downstep-notation-container {
     display: none;
 }
-:root[data-show-pitch-accent-graph=false] .pronunciation-graph-container {
+:root[data-show-pronunciation-graph=false] .pronunciation-graph-container {
     display: none;
 }
 
-:root[data-glossary-layout-mode=compact][data-show-pitch-accent-graph=false] .pronunciation-list:not([data-has-tags=true]) {
+:root[data-glossary-layout-mode=compact][data-show-pronunciation-graph=false] .pronunciation-list:not([data-has-tags=true]) {
     display: inline;
     list-style: none;
     padding-left: 0;
 }
-:root[data-glossary-layout-mode=compact][data-show-pitch-accent-graph=false] .pronunciation-list:not([data-has-tags=true]) .pronunciation {
+:root[data-glossary-layout-mode=compact][data-show-pronunciation-graph=false] .pronunciation-list:not([data-has-tags=true]) .pronunciation {
     display: inline;
 }
-:root[data-glossary-layout-mode=compact][data-show-pitch-accent-graph=false] .pronunciation-list:not([data-has-tags=true]) .pronunciation:not(:first-child)::before {
+:root[data-glossary-layout-mode=compact][data-show-pronunciation-graph=false] .pronunciation-list:not([data-has-tags=true]) .pronunciation:not(:first-child)::before {
     white-space: pre-wrap;
     content: var(--compact-list-separator);
     display: inline;
