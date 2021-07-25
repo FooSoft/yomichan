@@ -463,7 +463,7 @@ class DisplayGenerator {
         const {reading, position, nasalPositions, devoicePositions, tags, exclusiveTerms, exclusiveReadings} = details;
         const morae = jp.getKanaMorae(reading);
 
-        const node = this._templates.instantiate('pitch-accent');
+        const node = this._templates.instantiate('pronunciation');
 
         node.dataset.pitchAccentDownstepPosition = `${position}`;
         if (nasalPositions.length > 0) { node.dataset.nasalMoraPosition = nasalPositions.join(' '); }
