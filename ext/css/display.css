@@ -825,7 +825,7 @@ button.action-button[data-icon=source-term]::before {
 }
 .entry[data-definition-count='0'] .entry-body-section[data-section-type=definitions],
 .entry[data-frequency-count='0'] .entry-body-section[data-section-type=frequencies],
-.entry[data-pitch-accent-count='0'] .entry-body-section[data-section-type=pronunciations] {
+.entry[data-pronunciation-count='0'] .entry-body-section[data-section-type=pronunciations] {
     display: none;
 }
 

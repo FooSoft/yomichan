@@ -72,8 +72,8 @@ class DisplayGenerator {
         node.dataset.format = type;
         node.dataset.headwordCount = `${headwords.length}`;
         node.dataset.definitionCount = `${definitions.length}`;
-        node.dataset.pitchAccentDictionaryCount = `${pitches.length}`;
-        node.dataset.pitchAccentCount = `${pitchCount}`;
+        node.dataset.pronunciationDictionaryCount = `${pitches.length}`;
+        node.dataset.pronunciationCount = `${pitchCount}`;
         node.dataset.uniqueTermCount = `${uniqueTerms.size}`;
         node.dataset.uniqueReadingCount = `${uniqueReadings.size}`;
         node.dataset.frequencyCount = `${frequencies.length}`;
@@ -242,9 +242,9 @@ class DisplayGenerator {
         node.dataset.frequency = DictionaryDataUtil.getTermFrequency(tags);
 
         const {wordClasses} = headword;
-        const pitchAccentCategories = this._getPitchAccentCategories(reading, pronunciations, wordClasses, headwordIndex);
-        if (pitchAccentCategories !== null) {
-            node.dataset.pitchAccentCategories = pitchAccentCategories;
+        const pronunciationCategories = this._getPronunciationCategories(reading, pronunciations, wordClasses, headwordIndex);
+        if (pronunciationCategories !== null) {
+            node.dataset.pronunciationCategories = pronunciationCategories;
         }
         if (wordClasses.length > 0) {
             node.dataset.wordClasses = wordClasses.join(' ');
@@ -465,7 +465,7 @@ class DisplayGenerator {
 
         const node = this._templates.instantiate('pitch-accent');
 
-        node.dataset.pitchAccentPosition = `${position}`;
+        node.dataset.pitchAccentDownstepPosition = `${position}`;
         if (nasalPositions.length > 0) { node.dataset.nasalMoraPosition = nasalPositions.join(' '); }
         if (devoicePositions.length > 0) { node.dataset.devoiceMoraPosition = devoicePositions.join(' '); }
         node.dataset.tagCount = `${tags.length}`;
@@ -668,7 +668,7 @@ class DisplayGenerator {
         }
     }
 
-    _getPitchAccentCategories(reading, pronunciations, wordClasses, headwordIndex) {
+    _getPronunciationCategories(reading, pronunciations, wordClasses, headwordIndex) {
         if (pronunciations.length === 0) { return null; }
         const isVerbOrAdjective = DictionaryDataUtil.isNonNounVerbOrAdjective(wordClasses);
         const categories = new Set();
