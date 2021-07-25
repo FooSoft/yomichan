@@ -474,7 +474,7 @@ class DisplayGenerator {
         this._appendMultiple(n, this._createTag.bind(this), tags);
 
         n = node.querySelector('.pronunciation-disambiguation-list');
-        this._createPitchAccentDisambiguations(n, exclusiveTerms, exclusiveReadings);
+        this._createPronunciationDisambiguations(n, exclusiveTerms, exclusiveReadings);
 
         n = node.querySelector('.pronunciation-downstep-notation-container');
         n.appendChild(this._pronunciationGenerator.createPronunciationDownstepPosition(position));
@@ -488,7 +488,7 @@ class DisplayGenerator {
         return node;
     }
 
-    _createPitchAccentDisambiguations(container, exclusiveTerms, exclusiveReadings) {
+    _createPronunciationDisambiguations(container, exclusiveTerms, exclusiveReadings) {
         const templateName = 'pronunciation-disambiguation';
         for (const term of exclusiveTerms) {
             const node = this._templates.instantiate(templateName);
