@@ -440,7 +440,7 @@ class DisplayGenerator {
         node.dataset.pitchesMulti = 'true';
         node.dataset.pitchesCount = `${pitches.length}`;
 
-        const tag = this._createTag(this._createTagData(dictionary, 'pitch-accent-dictionary'));
+        const tag = this._createTag(this._createTagData(dictionary, 'pronunciation-dictionary'));
         node.querySelector('.pitch-accent-group-tag-list').appendChild(tag);
 
         let hasTags = false;

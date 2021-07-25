@@ -144,7 +144,7 @@
     --tag-frequency-background-color: #5cb85c;
     --tag-part-of-speech-background-color: #565656;
     --tag-search-background-color: #8a8a91;
-    --tag-pitch-accent-dictionary-background-color: #6640be;
+    --tag-pronunciation-dictionary-background-color: #6640be;
 
     --sidebar-background-color: #f8f9fa;
 
@@ -212,7 +212,7 @@
     --tag-frequency-background-color: #489148;
     --tag-part-of-speech-background-color: #565656;
     --tag-search-background-color: #69696e;
-    --tag-pitch-accent-dictionary-background-color: #6640be;
+    --tag-pronunciation-dictionary-background-color: #6640be;
 
     --sidebar-background-color: #282828;
 
@@ -807,8 +807,8 @@ button.action-button[data-icon=source-term]::before {
 .tag[data-category=search] {
     --tag-color: var(--tag-search-background-color);
 }
-.tag[data-category=pitch-accent-dictionary] {
-    --tag-color: var(--tag-pitch-accent-dictionary-background-color);
+.tag[data-category=pronunciation-dictionary] {
+    --tag-color: var(--tag-pronunciation-dictionary-background-color);
 }
 
 
