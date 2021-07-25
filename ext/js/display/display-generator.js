@@ -57,7 +57,7 @@ class DisplayGenerator {
         const headwordTagsContainer = node.querySelector('.headword-list-tag-list');
 
         const {headwords, type, inflections, definitions, frequencies, pronunciations} = dictionaryEntry;
-        const pitches = DictionaryDataUtil.getPitchAccentInfos(dictionaryEntry);
+        const pitches = DictionaryDataUtil.getGroupedPronunciations(dictionaryEntry);
         const pitchCount = pitches.reduce((i, v) => i + v.pitches.length, 0);
         const groupedFrequencies = DictionaryDataUtil.groupTermFrequencies(dictionaryEntry);
         const termTags = DictionaryDataUtil.groupTermTags(dictionaryEntry);
