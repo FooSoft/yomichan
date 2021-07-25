@@ -51,14 +51,14 @@ class DisplayGenerator {
 
         const headwordsContainer = node.querySelector('.headword-list');
         const inflectionsContainer = node.querySelector('.inflection-list');
-        const pitchesContainer = node.querySelector('.pronunciation-group-list');
+        const groupedPronunciationsContainer = node.querySelector('.pronunciation-group-list');
         const frequencyGroupListContainer = node.querySelector('.frequency-group-list');
         const definitionsContainer = node.querySelector('.definition-list');
         const headwordTagsContainer = node.querySelector('.headword-list-tag-list');
 
         const {headwords, type, inflections, definitions, frequencies, pronunciations} = dictionaryEntry;
-        const pitches = DictionaryDataUtil.getGroupedPronunciations(dictionaryEntry);
-        const pitchCount = pitches.reduce((i, v) => i + v.pitches.length, 0);
+        const groupedPronunciations = DictionaryDataUtil.getGroupedPronunciations(dictionaryEntry);
+        const pronunciationCount = groupedPronunciations.reduce((i, v) => i + v.pitches.length, 0);
         const groupedFrequencies = DictionaryDataUtil.groupTermFrequencies(dictionaryEntry);
         const termTags = DictionaryDataUtil.groupTermTags(dictionaryEntry);
 
@@ -72,8 +72,8 @@ class DisplayGenerator {
         node.dataset.format = type;
         node.dataset.headwordCount = `${headwords.length}`;
         node.dataset.definitionCount = `${definitions.length}`;
-        node.dataset.pronunciationDictionaryCount = `${pitches.length}`;
-        node.dataset.pronunciationCount = `${pitchCount}`;
+        node.dataset.pronunciationDictionaryCount = `${groupedPronunciations.length}`;
+        node.dataset.pronunciationCount = `${pronunciationCount}`;
         node.dataset.uniqueTermCount = `${uniqueTerms.size}`;
         node.dataset.uniqueReadingCount = `${uniqueReadings.size}`;
         node.dataset.frequencyCount = `${frequencies.length}`;
@@ -88,7 +88,7 @@ class DisplayGenerator {
 
         this._appendMultiple(inflectionsContainer, this._createTermInflection.bind(this), inflections);
         this._appendMultiple(frequencyGroupListContainer, this._createFrequencyGroup.bind(this), groupedFrequencies, false);
-        this._appendMultiple(pitchesContainer, this._createPitches.bind(this), pitches);
+        this._appendMultiple(groupedPronunciationsContainer, this._createGroupedPronunciation.bind(this), groupedPronunciations);
         this._appendMultiple(headwordTagsContainer, this._createTermTag.bind(this), termTags, headwords.length);
 
         for (const term of uniqueTerms) {
@@ -432,7 +432,7 @@ class DisplayGenerator {
         return this._createTag(this._createTagData(text, 'search'));
     }
 
-    _createPitches(details) {
+    _createGroupedPronunciation(details) {
         const {dictionary, pitches} = details;
 
         const node = this._templates.instantiate('pronunciation-group');
@@ -453,12 +453,12 @@ class DisplayGenerator {
 
         const n = node.querySelector('.pronunciation-list');
         n.dataset.hasTags = `${hasTags}`;
-        this._appendMultiple(n, this._createPitch.bind(this), pitches);
+        this._appendMultiple(n, this._createPronunciation.bind(this), pitches);
 
         return node;
     }
 
-    _createPitch(details) {
+    _createPronunciation(details) {
         const jp = this._japaneseUtil;
         const {reading, position, nasalPositions, devoicePositions, tags, exclusiveTerms, exclusiveReadings} = details;
         const morae = jp.getKanaMorae(reading);
