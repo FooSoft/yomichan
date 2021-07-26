@@ -142,8 +142,8 @@ class DictionaryDataUtil {
         }
 
         const results2 = [];
-        for (const [dictionary, pitches] of groupedPronunciationsMap.entries()) {
-            results2.push({dictionary, pitches});
+        for (const [dictionary, pronunciations2] of groupedPronunciationsMap.entries()) {
+            results2.push({dictionary, pronunciations: pronunciations2});
         }
         return results2;
     }

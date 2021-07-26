@@ -58,7 +58,7 @@ class DisplayGenerator {
 
         const {headwords, type, inflections, definitions, frequencies, pronunciations} = dictionaryEntry;
         const groupedPronunciations = DictionaryDataUtil.getGroupedPronunciations(dictionaryEntry);
-        const pronunciationCount = groupedPronunciations.reduce((i, v) => i + v.pitches.length, 0);
+        const pronunciationCount = groupedPronunciations.reduce((i, v) => i + v.pronunciations.length, 0);
         const groupedFrequencies = DictionaryDataUtil.groupTermFrequencies(dictionaryEntry);
         const termTags = DictionaryDataUtil.groupTermTags(dictionaryEntry);
 
@@ -433,18 +433,18 @@ class DisplayGenerator {
     }
 
     _createGroupedPronunciation(details) {
-        const {dictionary, pitches} = details;
+        const {dictionary, pronunciations} = details;
 
         const node = this._templates.instantiate('pronunciation-group');
         node.dataset.dictionary = dictionary;
-        node.dataset.pitchesMulti = 'true';
-        node.dataset.pitchesCount = `${pitches.length}`;
+        node.dataset.pronunciationsMulti = 'true';
+        node.dataset.pronunciationsCount = `${pronunciations.length}`;
 
         const tag = this._createTag(this._createTagData(dictionary, 'pronunciation-dictionary'));
         node.querySelector('.pronunciation-group-tag-list').appendChild(tag);
 
         let hasTags = false;
-        for (const {tags} of pitches) {
+        for (const {tags} of pronunciations) {
             if (tags.length > 0) {
                 hasTags = true;
                 break;
@@ -453,7 +453,7 @@ class DisplayGenerator {
 
         const n = node.querySelector('.pronunciation-list');
         n.dataset.hasTags = `${hasTags}`;
-        this._appendMultiple(n, this._createPronunciation.bind(this), pitches);
+        this._appendMultiple(n, this._createPronunciation.bind(this), pronunciations);
 
         return node;
     }
