@@ -501,18 +501,16 @@ class JsonSchema {
     }
 
     _validateSingleSchema(value) {
+        const {type: schemaType, const: schemaConst, enum: schemaEnum} = this._schema;
         const type = this._getValueType(value);
-        const schemaType = this._schema.type;
         if (!this._isValueTypeAny(value, type, schemaType)) {
             throw this._createError(`Value type ${type} does not match schema type ${schemaType}`);
         }
 
-        const schemaConst = this._schema.const;
         if (typeof schemaConst !== 'undefined' && !this._valuesAreEqual(value, schemaConst)) {
             throw this._createError('Invalid constant value');
         }
 
-        const schemaEnum = this._schema.enum;
         if (Array.isArray(schemaEnum) && !this._valuesAreEqualAny(value, schemaEnum)) {
             throw this._createError('Invalid enum value');
         }
@@ -534,44 +532,38 @@ class JsonSchema {
     }
 
     _validateNumber(value) {
-        const {multipleOf} = this._schema;
+        const {multipleOf, minimum, exclusiveMinimum, maximum, exclusiveMaximum} = this._schema;
         if (typeof multipleOf === 'number' && Math.floor(value / multipleOf) * multipleOf !== value) {
             throw this._createError(`Number is not a multiple of ${multipleOf}`);
         }
 
-        const {minimum} = this._schema;
         if (typeof minimum === 'number' && value < minimum) {
             throw this._createError(`Number is less than ${minimum}`);
         }
 
-        const {exclusiveMinimum} = this._schema;
         if (typeof exclusiveMinimum === 'number' && value <= exclusiveMinimum) {
             throw this._createError(`Number is less than or equal to ${exclusiveMinimum}`);
         }
 
-        const {maximum} = this._schema;
         if (typeof maximum === 'number' && value > maximum) {
             throw this._createError(`Number is greater than ${maximum}`);
         }
 
-        const {exclusiveMaximum} = this._schema;
         if (typeof exclusiveMaximum === 'number' && value >= exclusiveMaximum) {
             throw this._createError(`Number is greater than or equal to ${exclusiveMaximum}`);
         }
     }
 
     _validateString(value) {
-        const {minLength} = this._schema;
+        const {minLength, maxLength, pattern} = this._schema;
         if (typeof minLength === 'number' && value.length < minLength) {
             throw this._createError('String length too short');
         }
 
-        const {maxLength} = this._schema;
         if (typeof maxLength === 'number' && value.length > maxLength) {
             throw this._createError('String length too long');
         }
 
-        const {pattern} = this._schema;
         if (typeof pattern === 'string') {
             let {patternFlags} = this._schema;
             if (typeof patternFlags !== 'string') { patternFlags = ''; }
@@ -590,14 +582,13 @@ class JsonSchema {
     }
 
     _validateArray(value) {
+        const {minItems, maxItems} = this._schema;
         const {length} = value;
 
-        const {minItems} = this._schema;
         if (typeof minItems === 'number' && length < minItems) {
             throw this._createError('Array length too short');
         }
 
-        const {maxItems} = this._schema;
         if (typeof maxItems === 'number' && length > maxItems) {
             throw this._createError('Array length too long');
         }
@@ -648,10 +639,10 @@ class JsonSchema {
     }
 
     _validateObject(value) {
+        const {required, minProperties, maxProperties} = this._schema;
         const properties = Object.getOwnPropertyNames(value);
         const {length} = properties;
 
-        const {required} = this._schema;
         if (Array.isArray(required)) {
             for (const property of required) {
                 if (!Object.prototype.hasOwnProperty.call(value, property)) {
@@ -660,12 +651,10 @@ class JsonSchema {
             }
         }
 
-        const {minProperties} = this._schema;
         if (typeof minProperties === 'number' && length < minProperties) {
             throw this._createError('Not enough object properties');
         }
 
-        const {maxProperties} = this._schema;
         if (typeof maxProperties === 'number' && length > maxProperties) {
             throw this._createError('Too many object properties');
         }
