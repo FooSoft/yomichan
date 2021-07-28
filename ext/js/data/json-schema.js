@@ -648,28 +648,30 @@ class JsonSchema {
     }
 
     _validateObject(value) {
-        const properties = new Set(Object.getOwnPropertyNames(value));
+        const properties = Object.getOwnPropertyNames(value);
+        const {length} = properties;
 
         const {required} = this._schema;
         if (Array.isArray(required)) {
             for (const property of required) {
-                if (!properties.has(property)) {
+                if (!Object.prototype.hasOwnProperty.call(value, property)) {
                     throw this._createError(`Missing property ${property}`);
                 }
             }
         }
 
         const {minProperties} = this._schema;
-        if (typeof minProperties === 'number' && properties.length < minProperties) {
+        if (typeof minProperties === 'number' && length < minProperties) {
             throw this._createError('Not enough object properties');
         }
 
         const {maxProperties} = this._schema;
-        if (typeof maxProperties === 'number' && properties.length > maxProperties) {
+        if (typeof maxProperties === 'number' && length > maxProperties) {
             throw this._createError('Too many object properties');
         }
 
-        for (const property of properties) {
+        for (let i = 0; i < length; ++i) {
+            const property = properties[i];
             const schemaInfo = this._getObjectPropertySchemaInfo(property);
             if (schemaInfo === null) {
                 throw this._createError(`No schema found for ${property}`);
