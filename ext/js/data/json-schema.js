@@ -28,6 +28,9 @@ class JsonSchema {
         this._refCache = null;
         this._valueStack = [];
         this._schemaStack = [];
+        this._progress = null;
+        this._progressCounter = 0;
+        this._progressInterval = 1;
 
         this._schemaPush(null, null);
         this._valuePush(null, null);
@@ -39,6 +42,22 @@ class JsonSchema {
 
     get rootSchema() {
         return this._rootSchema;
+    }
+
+    get progress() {
+        return this._progress;
+    }
+
+    set progress(value) {
+        this._progress = value;
+    }
+
+    get progressInterval() {
+        return this._progressInterval;
+    }
+
+    set progressInterval(value) {
+        this._progressInterval = value;
     }
 
     createProxy(value) {
@@ -347,6 +366,12 @@ class JsonSchema {
     }
 
     _validate(value) {
+        if (this._progress !== null) {
+            const counter = (this._progressCounter + 1) % this._progressInterval;
+            this._progressCounter = counter;
+            if (counter === 0) { this._progress(this); }
+        }
+
         const ref = this._schema.$ref;
         const schemaInfo = (typeof ref === 'string') ? this._getReference(ref) : null;
 
