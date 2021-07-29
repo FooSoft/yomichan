@@ -119,6 +119,8 @@ class JsonSchema {
         return Array.isArray(required) && required.includes(property);
     }
 
+    // Internal state functions for error construction and progress callback
+
     getValueStack() {
         const valueStack = [];
         for (let i = 1, ii = this._valueStack.length; i < ii; ++i) {
@@ -135,6 +137,24 @@ class JsonSchema {
             schemaStack.push({schema, path});
         }
         return schemaStack;
+    }
+
+    getValueStackLength() {
+        return this._valueStack.length - 1;
+    }
+
+    getValueStackItem(index) {
+        const {value, path} = this._valueStack[index + 1];
+        return {value, path};
+    }
+
+    getSchemaStackLength() {
+        return this._schemaStack.length - 1;
+    }
+
+    getSchemaStackItem(index) {
+        const {schema, path} = this._schemaStack[index + 1];
+        return {schema, path};
     }
 
     // Stack
