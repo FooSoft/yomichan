@@ -119,6 +119,24 @@ class JsonSchema {
         return Array.isArray(required) && required.includes(property);
     }
 
+    getValueStack() {
+        const valueStack = [];
+        for (let i = 1, ii = this._valueStack.length; i < ii; ++i) {
+            const {value, path} = this._valueStack[i];
+            valueStack.push({value, path});
+        }
+        return valueStack;
+    }
+
+    getSchemaStack() {
+        const schemaStack = [];
+        for (let i = 1, ii = this._schemaStack.length; i < ii; ++i) {
+            const {schema, path} = this._schemaStack[i];
+            schemaStack.push({schema, path});
+        }
+        return schemaStack;
+    }
+
     // Stack
 
     _valuePush(value, path) {
@@ -142,21 +160,11 @@ class JsonSchema {
     // Private
 
     _createError(message) {
-        const valueStack = [];
-        for (let i = 1, ii = this._valueStack.length; i < ii; ++i) {
-            const {value, path} = this._valueStack[i];
-            valueStack.push({value, path});
-        }
-
-        const schemaStack = [];
-        for (let i = 1, ii = this._schemaStack.length; i < ii; ++i) {
-            const {schema, path} = this._schemaStack[i];
-            schemaStack.push({schema, path});
-        }
-
+        const valueStack = this.getValueStack();
+        const schemaStack = this.getSchemaStack();
         const error = new Error(message);
         error.value = valueStack[valueStack.length - 1].value;
-        error.schema = this._schema;
+        error.schema = schemaStack[schemaStack.length - 1].schema;
         error.valueStack = valueStack;
         error.schemaStack = schemaStack;
         return error;
