@@ -472,10 +472,12 @@ class DictionaryImporter {
             const image = new Image();
             const eventListeners = new EventListenerCollection();
             eventListeners.addEventListener(image, 'load', () => {
+                URL.revokeObjectURL(url);
                 eventListeners.removeAllEventListeners();
                 resolve(image);
             }, false);
             eventListeners.addEventListener(image, 'error', () => {
+                URL.revokeObjectURL(url);
                 eventListeners.removeAllEventListeners();
                 reject(new Error('Image failed to load'));
             }, false);
