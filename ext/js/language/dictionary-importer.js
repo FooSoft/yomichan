@@ -65,40 +65,19 @@ class DictionaryImporter {
         }
 
         // Data format converters
-        const convertTermBankEntry = (entry) => {
-            if (version === 1) {
-                const [expression, reading, definitionTags, rules, score, ...glossary] = entry;
-                return {expression, reading, definitionTags, rules, score, glossary};
-            } else {
-                const [expression, reading, definitionTags, rules, score, glossary, sequence, termTags] = entry;
-                return {expression, reading, definitionTags, rules, score, glossary, sequence, termTags};
-            }
-        };
-
-        const convertTermMetaBankEntry = (entry) => {
-            const [expression, mode, data] = entry;
-            return {expression, mode, data};
-        };
-
-        const convertKanjiBankEntry = (entry) => {
-            if (version === 1) {
-                const [character, onyomi, kunyomi, tags, ...meanings] = entry;
-                return {character, onyomi, kunyomi, tags, meanings};
-            } else {
-                const [character, onyomi, kunyomi, tags, meanings, stats] = entry;
-                return {character, onyomi, kunyomi, tags, meanings, stats};
-            }
-        };
-
-        const convertKanjiMetaBankEntry = (entry) => {
-            const [character, mode, data] = entry;
-            return {character, mode, data};
-        };
-
-        const convertTagBankEntry = (entry) => {
-            const [name, category, order, notes, score] = entry;
-            return {name, category, order, notes, score};
-        };
+        const convertTermBankEntry = (
+            version === 1 ?
+            this._convertTermBankEntryV1.bind(this) :
+            this._convertTermBankEntryV3.bind(this)
+        );
+        const convertTermMetaBankEntry = this._convertTermMetaBankEntry.bind(this);
+        const convertKanjiBankEntry = (
+            version === 1 ?
+            this._convertKanjiBankEntryV1.bind(this) :
+            this._convertKanjiBankEntryV3.bind(this)
+        );
+        const convertKanjiMetaBankEntry = this._convertKanjiMetaBankEntry.bind(this);
+        const convertTagBankEntry = this._convertTagBankEntry.bind(this);
 
         // Archive file reading
         const readFileSequence = async (fileNameFormat, convertEntry, schema) => {
@@ -500,5 +479,40 @@ class DictionaryImporter {
             throw new Error(`Failed to fetch ${url}: ${response.status}`);
         }
         return await response.json();
+    }
+
+    _convertTermBankEntryV1(entry) {
+        const [expression, reading, definitionTags, rules, score, ...glossary] = entry;
+        return {expression, reading, definitionTags, rules, score, glossary};
+    }
+
+    _convertTermBankEntryV3(entry) {
+        const [expression, reading, definitionTags, rules, score, glossary, sequence, termTags] = entry;
+        return {expression, reading, definitionTags, rules, score, glossary, sequence, termTags};
+    }
+
+    _convertTermMetaBankEntry(entry) {
+        const [expression, mode, data] = entry;
+        return {expression, mode, data};
+    }
+
+    _convertKanjiBankEntryV1(entry) {
+        const [character, onyomi, kunyomi, tags, ...meanings] = entry;
+        return {character, onyomi, kunyomi, tags, meanings};
+    }
+
+    _convertKanjiBankEntryV3(entry) {
+        const [character, onyomi, kunyomi, tags, meanings, stats] = entry;
+        return {character, onyomi, kunyomi, tags, meanings, stats};
+    }
+
+    _convertKanjiMetaBankEntry(entry) {
+        const [character, mode, data] = entry;
+        return {character, mode, data};
+    }
+
+    _convertTagBankEntry(entry) {
+        const [name, category, order, notes, score] = entry;
+        return {name, category, order, notes, score};
     }
 }
