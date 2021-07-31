@@ -103,10 +103,10 @@ class DictionaryImporter {
         const requirements = [];
         for (const entry of termList) {
             const glossaryList = entry.glossary;
-            for (let i = 0, ii = glossaryList.length; i < ii; ++i) {
-                const glossary = glossaryList[i];
+            for (let j = 0, jj = glossaryList.length; j < jj; ++j) {
+                const glossary = glossaryList[j];
                 if (typeof glossary !== 'object' || glossary === null) { continue; }
-                glossaryList[i] = this._formatDictionaryTermGlossaryObject(glossary, entry, requirements);
+                glossaryList[j] = this._formatDictionaryTermGlossaryObject(glossary, entry, requirements);
             }
         }
 
