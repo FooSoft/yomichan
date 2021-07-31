@@ -42,7 +42,7 @@ class DictionaryImporter {
 
         // Read and validate index
         const indexFileName = 'index.json';
-        const indexFile = archive.files[indexFileName];
+        const indexFile = archive.file(indexFileName);
         if (!indexFile) {
             throw new Error('No dictionary index found in archive');
         }
@@ -84,7 +84,7 @@ class DictionaryImporter {
             const results = [];
             for (let i = 1; true; ++i) {
                 const fileName = fileNameFormat.replace(/\?/, `${i}`);
-                const file = archive.files[fileName];
+                const file = archive.file(fileName);
                 if (!file) { break; }
 
                 const entries = JSON.parse(await file.async('string'));
