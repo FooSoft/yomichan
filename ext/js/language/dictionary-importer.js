@@ -101,7 +101,8 @@ class DictionaryImporter {
 
         // Extended data support
         const requirements = [];
-        for (const entry of termList) {
+        for (let i = 0, ii = termList.length; i < ii; ++i) {
+            const entry = termList[i];
             const glossaryList = entry.glossary;
             for (let j = 0, jj = glossaryList.length; j < jj; ++j) {
                 const glossary = glossaryList[j];
