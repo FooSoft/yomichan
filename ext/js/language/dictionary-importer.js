@@ -88,15 +88,7 @@ class DictionaryImporter {
         const kanjiList     = await this._readFileSequence(kanjiFiles,     convertKanjiBankEntry,     dataBankSchemas[2], dictionaryTitle);
         const kanjiMetaList = await this._readFileSequence(kanjiMetaFiles, convertKanjiMetaBankEntry, dataBankSchemas[3], dictionaryTitle);
         const tagList       = await this._readFileSequence(tagFiles,       convertTagBankEntry,       dataBankSchemas[4], dictionaryTitle);
-
-        // Old tags
-        const indexTagMeta = index.tagMeta;
-        if (typeof indexTagMeta === 'object' && indexTagMeta !== null) {
-            for (const name of Object.keys(indexTagMeta)) {
-                const {category, order, notes, score} = indexTagMeta[name];
-                tagList.push({name, category, order, notes, score});
-            }
-        }
+        this._addOldIndexTags(index, tagList, dictionaryTitle);
 
         // Prefix wildcard support
         const prefixWildcardsSupported = !!details.prefixWildcardsSupported;
@@ -493,6 +485,15 @@ class DictionaryImporter {
     _convertTagBankEntry(entry, dictionary) {
         const [name, category, order, notes, score] = entry;
         return {name, category, order, notes, score, dictionary};
+    }
+
+    _addOldIndexTags(index, results, dictionary) {
+        const {tagMeta} = index;
+        if (typeof tagMeta !== 'object' || tagMeta === null) { return; }
+        for (const name of Object.keys(tagMeta)) {
+            const {category, order, notes, score} = tagMeta[name];
+            results.push({name, category, order, notes, score, dictionary});
+        }
     }
 
     _getArchiveFiles(archive, fileNameFormat) {
