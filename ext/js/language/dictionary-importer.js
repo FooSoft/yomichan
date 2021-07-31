@@ -79,36 +79,23 @@ class DictionaryImporter {
         const convertKanjiMetaBankEntry = this._convertKanjiMetaBankEntry.bind(this);
         const convertTagBankEntry = this._convertTagBankEntry.bind(this);
 
-        // Archive file reading
-        const readFileSequence = async (fileNameFormat, convertEntry, schema) => {
-            const results = [];
-            for (let i = 1; true; ++i) {
-                const fileName = fileNameFormat.replace(/\?/, `${i}`);
-                const file = archive.file(fileName);
-                if (!file) { break; }
-
-                const entries = JSON.parse(await file.async('string'));
-                this._validateJsonSchema(entries, schema, fileName);
-
-                for (let entry of entries) {
-                    entry = convertEntry(entry);
-                    entry.dictionary = dictionaryTitle;
-                    results.push(entry);
-                }
-            }
-            return results;
-        };
-
         // Load schemas
         const dataBankSchemaPaths = this._getDataBankSchemaPaths(version);
         const dataBankSchemas = await Promise.all(dataBankSchemaPaths.map((path) => this._getSchema(path)));
 
+        // Files
+        const termFiles      = this._getArchiveFiles(archive, 'term_bank_?.json');
+        const termMetaFiles  = this._getArchiveFiles(archive, 'term_meta_bank_?.json');
+        const kanjiFiles     = this._getArchiveFiles(archive, 'kanji_bank_?.json');
+        const kanjiMetaFiles = this._getArchiveFiles(archive, 'kanji_meta_bank_?.json');
+        const tagFiles       = this._getArchiveFiles(archive, 'tag_bank_?.json');
+
         // Load data
-        const termList      = await readFileSequence('term_bank_?.json',       convertTermBankEntry,      dataBankSchemas[0]);
-        const termMetaList  = await readFileSequence('term_meta_bank_?.json',  convertTermMetaBankEntry,  dataBankSchemas[1]);
-        const kanjiList     = await readFileSequence('kanji_bank_?.json',      convertKanjiBankEntry,     dataBankSchemas[2]);
-        const kanjiMetaList = await readFileSequence('kanji_meta_bank_?.json', convertKanjiMetaBankEntry, dataBankSchemas[3]);
-        const tagList       = await readFileSequence('tag_bank_?.json',        convertTagBankEntry,       dataBankSchemas[4]);
+        const termList      = await this._readFileSequence(termFiles,      convertTermBankEntry,      dataBankSchemas[0], dictionaryTitle);
+        const termMetaList  = await this._readFileSequence(termMetaFiles,  convertTermMetaBankEntry,  dataBankSchemas[1], dictionaryTitle);
+        const kanjiList     = await this._readFileSequence(kanjiFiles,     convertKanjiBankEntry,     dataBankSchemas[2], dictionaryTitle);
+        const kanjiMetaList = await this._readFileSequence(kanjiMetaFiles, convertKanjiMetaBankEntry, dataBankSchemas[3], dictionaryTitle);
+        const tagList       = await this._readFileSequence(tagFiles,       convertTagBankEntry,       dataBankSchemas[4], dictionaryTitle);
 
         // Old tags
         const indexTagMeta = index.tagMeta;
@@ -514,5 +501,34 @@ class DictionaryImporter {
     _convertTagBankEntry(entry) {
         const [name, category, order, notes, score] = entry;
         return {name, category, order, notes, score};
+    }
+
+    _getArchiveFiles(archive, fileNameFormat) {
+        const indexPosition = fileNameFormat.indexOf('?');
+        const prefix = fileNameFormat.substring(0, indexPosition);
+        const suffix = fileNameFormat.substring(indexPosition + 1);
+        const results = [];
+        for (let i = 1; true; ++i) {
+            const fileName = `${prefix}${i}${suffix}`;
+            const file = archive.file(fileName);
+            if (!file) { break; }
+            results.push(file);
+        }
+        return results;
+    }
+
+    async _readFileSequence(files, convertEntry, schema, dictionaryTitle) {
+        const results = [];
+        for (const file of files) {
+            const entries = JSON.parse(await file.async('string'));
+            this._validateJsonSchema(entries, schema, file.name);
+
+            for (let entry of entries) {
+                entry = convertEntry(entry);
+                entry.dictionary = dictionaryTitle;
+                results.push(entry);
+            }
+        }
+        return results;
     }
 }
