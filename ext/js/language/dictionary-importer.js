@@ -26,7 +26,7 @@ class DictionaryImporter {
         this._schemas = new Map();
     }
 
-    async importDictionary(dictionaryDatabase, archiveSource, details, onProgress) {
+    async importDictionary(dictionaryDatabase, archiveContent, details, onProgress) {
         if (!dictionaryDatabase) {
             throw new Error('Invalid database');
         }
@@ -37,7 +37,7 @@ class DictionaryImporter {
         const hasOnProgress = (typeof onProgress === 'function');
 
         // Read archive
-        const archive = await JSZip.loadAsync(archiveSource);
+        const archive = await JSZip.loadAsync(archiveContent);
 
         // Read and validate index
         const indexFileName = 'index.json';
