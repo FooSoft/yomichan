@@ -65,17 +65,9 @@ class DictionaryImporter {
         }
 
         // Data format converters
-        const convertTermBankEntry = (
-            version === 1 ?
-            this._convertTermBankEntryV1.bind(this) :
-            this._convertTermBankEntryV3.bind(this)
-        );
+        const convertTermBankEntry = (version === 1 ? this._convertTermBankEntryV1.bind(this) : this._convertTermBankEntryV3.bind(this));
         const convertTermMetaBankEntry = this._convertTermMetaBankEntry.bind(this);
-        const convertKanjiBankEntry = (
-            version === 1 ?
-            this._convertKanjiBankEntryV1.bind(this) :
-            this._convertKanjiBankEntryV3.bind(this)
-        );
+        const convertKanjiBankEntry = (version === 1 ? this._convertKanjiBankEntryV1.bind(this) : this._convertKanjiBankEntryV3.bind(this));
         const convertKanjiMetaBankEntry = this._convertKanjiMetaBankEntry.bind(this);
         const convertTagBankEntry = this._convertTagBankEntry.bind(this);
 
