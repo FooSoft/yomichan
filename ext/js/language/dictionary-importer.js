@@ -488,7 +488,7 @@ class DictionaryImporter {
     }
 
     async _fetchJsonAsset(url) {
-        const response = await fetch(chrome.runtime.getURL(url), {
+        const response = await fetch(url, {
             method: 'GET',
             mode: 'no-cors',
             cache: 'default',
