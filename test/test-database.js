@@ -28,16 +28,24 @@ vm.execute([
     'js/data/json-schema.js',
     'js/media/media-util.js',
     'js/language/dictionary-importer.js',
+    'js/language/dictionary-importer-media-loader.js',
     'js/data/database.js',
     'js/language/dictionary-database.js'
 ]);
 const DictionaryImporter = vm.get('DictionaryImporter');
+const DictionaryImporterMediaLoader = vm.get('DictionaryImporterMediaLoader');
 const DictionaryDatabase = vm.get('DictionaryDatabase');
 
 
 function createTestDictionaryArchive(dictionary, dictionaryName) {
     const dictionaryDirectory = path.join(__dirname, 'data', 'dictionaries', dictionary);
     return createDictionaryArchive(dictionaryDirectory, dictionaryName);
+}
+
+
+function createDictionaryImporter() {
+    const dictionaryImporterMediaLoader = new DictionaryImporterMediaLoader();
+    return new DictionaryImporter(dictionaryImporterMediaLoader);
 }
 
 
@@ -125,7 +133,7 @@ async function testDatabase1() {
     ];
 
     // Setup database
-    const dictionaryImporter = new DictionaryImporter();
+    const dictionaryImporter = createDictionaryImporter();
     const dictionaryDatabase = new DictionaryDatabase();
     await dictionaryDatabase.prepare();
 
@@ -775,7 +783,7 @@ async function testDatabase2() {
     ]);
 
     // Setup database
-    const dictionaryImporter = new DictionaryImporter();
+    const dictionaryImporter = createDictionaryImporter();
     const dictionaryDatabase = new DictionaryDatabase();
 
     // Error: not prepared
@@ -817,7 +825,7 @@ async function testDatabase3() {
     ];
 
     // Setup database
-    const dictionaryImporter = new DictionaryImporter();
+    const dictionaryImporter = createDictionaryImporter();
     const dictionaryDatabase = new DictionaryDatabase();
     await dictionaryDatabase.prepare();
 
