@@ -24,7 +24,6 @@
 class DictionaryImporter {
     constructor(mediaLoader) {
         this._mediaLoader = mediaLoader;
-        this._schemas = new Map();
     }
 
     async importDictionary(dictionaryDatabase, archiveContent, details, onProgress) {
@@ -178,17 +177,6 @@ class DictionaryImporter {
     }
 
     async _getSchema(fileName) {
-        let schemaPromise = this._schemas.get(fileName);
-        if (typeof schemaPromise !== 'undefined') {
-            return schemaPromise;
-        }
-
-        schemaPromise = this._createSchema(fileName);
-        this._schemas.set(fileName, schemaPromise);
-        return schemaPromise;
-    }
-
-    async _createSchema(fileName) {
         const schema = await this._fetchJsonAsset(fileName);
         return new JsonSchema(schema);
     }
