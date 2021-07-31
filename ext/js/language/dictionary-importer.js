@@ -460,39 +460,39 @@ class DictionaryImporter {
         return await response.json();
     }
 
-    _convertTermBankEntryV1(entry) {
+    _convertTermBankEntryV1(entry, dictionary) {
         const [expression, reading, definitionTags, rules, score, ...glossary] = entry;
-        return {expression, reading, definitionTags, rules, score, glossary};
+        return {expression, reading, definitionTags, rules, score, glossary, dictionary};
     }
 
-    _convertTermBankEntryV3(entry) {
+    _convertTermBankEntryV3(entry, dictionary) {
         const [expression, reading, definitionTags, rules, score, glossary, sequence, termTags] = entry;
-        return {expression, reading, definitionTags, rules, score, glossary, sequence, termTags};
+        return {expression, reading, definitionTags, rules, score, glossary, sequence, termTags, dictionary};
     }
 
-    _convertTermMetaBankEntry(entry) {
+    _convertTermMetaBankEntry(entry, dictionary) {
         const [expression, mode, data] = entry;
-        return {expression, mode, data};
+        return {expression, mode, data, dictionary};
     }
 
-    _convertKanjiBankEntryV1(entry) {
+    _convertKanjiBankEntryV1(entry, dictionary) {
         const [character, onyomi, kunyomi, tags, ...meanings] = entry;
-        return {character, onyomi, kunyomi, tags, meanings};
+        return {character, onyomi, kunyomi, tags, meanings, dictionary};
     }
 
-    _convertKanjiBankEntryV3(entry) {
+    _convertKanjiBankEntryV3(entry, dictionary) {
         const [character, onyomi, kunyomi, tags, meanings, stats] = entry;
-        return {character, onyomi, kunyomi, tags, meanings, stats};
+        return {character, onyomi, kunyomi, tags, meanings, stats, dictionary};
     }
 
-    _convertKanjiMetaBankEntry(entry) {
+    _convertKanjiMetaBankEntry(entry, dictionary) {
         const [character, mode, data] = entry;
-        return {character, mode, data};
+        return {character, mode, data, dictionary};
     }
 
-    _convertTagBankEntry(entry) {
+    _convertTagBankEntry(entry, dictionary) {
         const [name, category, order, notes, score] = entry;
-        return {name, category, order, notes, score};
+        return {name, category, order, notes, score, dictionary};
     }
 
     _getArchiveFiles(archive, fileNameFormat) {
@@ -514,11 +514,8 @@ class DictionaryImporter {
         for (const file of files) {
             const entries = JSON.parse(await file.async('string'));
             this._validateJsonSchema(entries, schema, file.name);
-
-            for (let entry of entries) {
-                entry = convertEntry(entry);
-                entry.dictionary = dictionaryTitle;
-                results.push(entry);
+            for (const entry of entries) {
+                results.push(convertEntry(entry, dictionaryTitle));
             }
         }
         return results;
