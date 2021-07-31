@@ -22,11 +22,12 @@
  */
 
 class DictionaryImporter {
-    constructor(mediaLoader) {
+    constructor(mediaLoader, onProgress) {
         this._mediaLoader = mediaLoader;
+        this._onProgress = onProgress;
     }
 
-    async importDictionary(dictionaryDatabase, archiveContent, details, onProgress) {
+    async importDictionary(dictionaryDatabase, archiveContent, details) {
         if (!dictionaryDatabase) {
             throw new Error('Invalid database');
         }
@@ -34,7 +35,7 @@ class DictionaryImporter {
             throw new Error('Database is not ready');
         }
 
-        const hasOnProgress = (typeof onProgress === 'function');
+        const hasOnProgress = (typeof this._onProgress === 'function');
 
         // Read archive
         const archive = await JSZip.loadAsync(archiveContent);
@@ -142,7 +143,7 @@ class DictionaryImporter {
 
                 loadedCount += count;
                 if (hasOnProgress) {
-                    onProgress(total, loadedCount);
+                    this._onProgress(total, loadedCount);
                 }
             }
         };

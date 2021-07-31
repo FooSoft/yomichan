@@ -41,9 +41,9 @@ function createTestDictionaryArchive(dictionary, dictionaryName) {
 }
 
 
-function createDictionaryImporter() {
+function createDictionaryImporter(onProgress) {
     const dictionaryImporterMediaLoader = new DatabaseVMDictionaryImporterMediaLoader();
-    return new DictionaryImporter(dictionaryImporterMediaLoader);
+    return new DictionaryImporter(dictionaryImporterMediaLoader, onProgress);
 }
 
 
@@ -145,14 +145,11 @@ async function testDatabase1() {
 
         // Import data
         let progressEvent = false;
-        const dictionaryImporter = createDictionaryImporter();
+        const dictionaryImporter = createDictionaryImporter(() => { progressEvent = true; });
         const {result, errors} = await dictionaryImporter.importDictionary(
             dictionaryDatabase,
             testDictionarySource,
-            {prefixWildcardsSupported: true},
-            () => {
-                progressEvent = true;
-            }
+            {prefixWildcardsSupported: true}
         );
         vm.assert.deepStrictEqual(errors, []);
         vm.assert.deepStrictEqual(result, expectedSummary);
@@ -795,17 +792,17 @@ async function testDatabase2() {
     await assert.rejects(async () => await dictionaryDatabase.findTagForTitle('tag', title));
     await assert.rejects(async () => await dictionaryDatabase.getDictionaryInfo());
     await assert.rejects(async () => await dictionaryDatabase.getDictionaryCounts(titles, true));
-    await assert.rejects(async () => await createDictionaryImporter().importDictionary(dictionaryDatabase, testDictionarySource, {}, () => {}));
+    await assert.rejects(async () => await createDictionaryImporter().importDictionary(dictionaryDatabase, testDictionarySource, {}));
 
     await dictionaryDatabase.prepare();
 
     // Error: already prepared
     await assert.rejects(async () => await dictionaryDatabase.prepare());
 
-    await createDictionaryImporter().importDictionary(dictionaryDatabase, testDictionarySource, {}, () => {});
+    await createDictionaryImporter().importDictionary(dictionaryDatabase, testDictionarySource, {});
 
     // Error: dictionary already imported
-    await assert.rejects(async () => await createDictionaryImporter().importDictionary(dictionaryDatabase, testDictionarySource, {}, () => {}));
+    await assert.rejects(async () => await createDictionaryImporter().importDictionary(dictionaryDatabase, testDictionarySource, {}));
 
     await dictionaryDatabase.close();
 }
@@ -831,8 +828,7 @@ async function testDatabase3() {
 
         let error = null;
         try {
-            const dictionaryImporter = createDictionaryImporter();
-            await dictionaryImporter.importDictionary(dictionaryDatabase, testDictionarySource, {}, () => {});
+            await createDictionaryImporter().importDictionary(dictionaryDatabase, testDictionarySource, {});
         } catch (e) {
             error = e;
         }

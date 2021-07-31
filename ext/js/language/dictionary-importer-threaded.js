@@ -20,7 +20,11 @@
  */
 
 class DictionaryImporterThreaded {
-    importDictionary(archiveContent, details, onProgress) {
+    constructor(onProgress) {
+        this._onProgress = onProgress;
+    }
+
+    importDictionary(archiveContent, details) {
         return new Promise((resolve, reject) => {
             const dictionaryImporterMediaLoader = new DictionaryImporterMediaLoader();
             const worker = new Worker('/js/language/dictionary-importer-worker-main.js', {});
@@ -33,7 +37,7 @@ class DictionaryImporterThreaded {
                         this._onMessageComplete(params, resolve, reject);
                         break;
                     case 'progress':
-                        this._onMessageProgress(params, onProgress);
+                        this._onMessageProgress(params);
                         break;
                     case 'getImageResolution':
                         this._onMessageGetImageResolution(params, worker, dictionaryImporterMediaLoader);
@@ -59,10 +63,10 @@ class DictionaryImporterThreaded {
         }
     }
 
-    _onMessageProgress(params, onProgress) {
-        if (typeof onProgress !== 'function') { return; }
+    _onMessageProgress(params) {
+        if (typeof this._onProgress !== 'function') { return; }
         const {args} = params;
-        onProgress(...args);
+        this._onProgress(...args);
     }
 
     async _onMessageGetImageResolution(params, worker, dictionaryImporterMediaLoader) {
