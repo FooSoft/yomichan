@@ -18,7 +18,7 @@
 const fs = require('fs');
 const path = require('path');
 const assert = require('assert');
-const {DatabaseVM} = require('./database-vm');
+const {DatabaseVM, DatabaseVMDictionaryImporterMediaLoader} = require('./database-vm');
 const {createDictionaryArchive} = require('./util');
 
 function clone(value) {
@@ -50,7 +50,6 @@ class TranslatorVM extends DatabaseVM {
             'js/language/deinflector.js',
             'js/language/sandbox/dictionary-data-util.js',
             'js/language/dictionary-importer.js',
-            'js/language/dictionary-importer-media-loader.js',
             'js/language/dictionary-database.js',
             'js/language/sandbox/japanese-util.js',
             'js/language/translator.js',
@@ -58,14 +57,12 @@ class TranslatorVM extends DatabaseVM {
         ]);
         const [
             DictionaryImporter,
-            DictionaryImporterMediaLoader,
             DictionaryDatabase,
             JapaneseUtil,
             Translator,
             AnkiNoteDataCreator
         ] = this.get([
             'DictionaryImporter',
-            'DictionaryImporterMediaLoader',
             'DictionaryDatabase',
             'JapaneseUtil',
             'Translator',
@@ -78,7 +75,7 @@ class TranslatorVM extends DatabaseVM {
         const testDictionaryContent = await testDictionary.generateAsync({type: 'arraybuffer'});
 
         // Setup database
-        const dictionaryImporterMediaLoader = new DictionaryImporterMediaLoader();
+        const dictionaryImporterMediaLoader = new DatabaseVMDictionaryImporterMediaLoader();
         const dictionaryImporter = new DictionaryImporter(dictionaryImporterMediaLoader);
         const dictionaryDatabase = new DictionaryDatabase();
         await dictionaryDatabase.prepare();

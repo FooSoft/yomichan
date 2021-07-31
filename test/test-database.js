@@ -18,7 +18,7 @@
 const path = require('path');
 const assert = require('assert');
 const {createDictionaryArchive, testMain} = require('../dev/util');
-const {DatabaseVM} = require('../dev/database-vm');
+const {DatabaseVM, DatabaseVMDictionaryImporterMediaLoader} = require('../dev/database-vm');
 
 
 const vm = new DatabaseVM();
@@ -28,12 +28,10 @@ vm.execute([
     'js/data/json-schema.js',
     'js/media/media-util.js',
     'js/language/dictionary-importer.js',
-    'js/language/dictionary-importer-media-loader.js',
     'js/data/database.js',
     'js/language/dictionary-database.js'
 ]);
 const DictionaryImporter = vm.get('DictionaryImporter');
-const DictionaryImporterMediaLoader = vm.get('DictionaryImporterMediaLoader');
 const DictionaryDatabase = vm.get('DictionaryDatabase');
 
 
@@ -44,7 +42,7 @@ function createTestDictionaryArchive(dictionary, dictionaryName) {
 
 
 function createDictionaryImporter() {
-    const dictionaryImporterMediaLoader = new DictionaryImporterMediaLoader();
+    const dictionaryImporterMediaLoader = new DatabaseVMDictionaryImporterMediaLoader();
     return new DictionaryImporter(dictionaryImporterMediaLoader);
 }
 

@@ -127,6 +127,14 @@ class DatabaseVM extends VM {
     }
 }
 
+class DatabaseVMDictionaryImporterMediaLoader {
+    async getImageResolution() {
+        // Placeholder values
+        return {width: 100, height: 100};
+    }
+}
+
 module.exports = {
-    DatabaseVM
+    DatabaseVM,
+    DatabaseVMDictionaryImporterMediaLoader
 };
