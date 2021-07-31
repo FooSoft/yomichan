@@ -26,6 +26,11 @@ function loadEslint() {
     return JSON.parse(fs.readFileSync(path.join(__dirname, '..', '.eslintrc.json'), {encoding: 'utf8'}));
 }
 
+function filterScriptPaths(scriptPaths) {
+    const extDirName = 'ext';
+    return scriptPaths.filter((src) => !src.startsWith('/lib/')).map((src) => `${extDirName}${src}`);
+}
+
 function getAllHtmlScriptPaths(fileName) {
     const domSource = fs.readFileSync(fileName, {encoding: 'utf8'});
     const dom = new JSDOM(domSource);
@@ -63,17 +68,14 @@ function getImportedScripts(scriptPath, fields) {
 
 function testServiceWorker() {
     // Verify that sw.js scripts match background.html scripts
-    const rootDir = path.join(__dirname, '..');
-    const extDirName = 'ext';
-    const extDir = path.join(rootDir, extDirName);
-
+    const extDir = path.join(__dirname, '..', 'ext');
     const scripts = getAllHtmlScriptPaths(path.join(extDir, 'background.html'));
     convertBackgroundScriptsToServiceWorkerScripts(scripts);
     const importedScripts = getImportedScripts('sw.js', {});
     assert.deepStrictEqual(scripts, importedScripts);
 
     // Verify that eslint config lists files correctly
-    const expectedSwRulesFiles = scripts.filter((src) => !src.startsWith('/lib/')).map((src) => `${extDirName}${src}`);
+    const expectedSwRulesFiles = filterScriptPaths(scripts);
     const eslintConfig = loadEslint();
     const swRules = eslintConfig.overrides.find((item) => (
         typeof item.env === 'object' &&
