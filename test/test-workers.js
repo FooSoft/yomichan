@@ -22,6 +22,10 @@ const {VM} = require('../dev/vm');
 const assert = require('assert');
 
 
+function loadEslint() {
+    return JSON.parse(fs.readFileSync(path.join(__dirname, '..', '.eslintrc.json'), {encoding: 'utf8'}));
+}
+
 function getAllHtmlScriptPaths(fileName) {
     const domSource = fs.readFileSync(fileName, {encoding: 'utf8'});
     const dom = new JSDOM(domSource);
@@ -70,7 +74,7 @@ function testServiceWorker() {
 
     // Verify that eslint config lists files correctly
     const expectedSwRulesFiles = scripts.filter((src) => !src.startsWith('/lib/')).map((src) => `${extDirName}${src}`);
-    const eslintConfig = JSON.parse(fs.readFileSync(path.join(rootDir, '.eslintrc.json'), {encoding: 'utf8'}));
+    const eslintConfig = loadEslint();
     const swRules = eslintConfig.overrides.find((item) => (
         typeof item.env === 'object' &&
         item.env !== null &&
