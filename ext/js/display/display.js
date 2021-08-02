@@ -132,7 +132,8 @@ class Display extends EventDispatcher {
             ['clearAutoPlayTimer', {async: false, handler: this._onMessageClearAutoPlayTimer.bind(this)}],
             ['setCustomCss',       {async: false, handler: this._onMessageSetCustomCss.bind(this)}],
             ['setContentScale',    {async: false, handler: this._onMessageSetContentScale.bind(this)}],
-            ['configure',          {async: true,  handler: this._onMessageConfigure.bind(this)}]
+            ['configure',          {async: true,  handler: this._onMessageConfigure.bind(this)}],
+            ['visibilityChanged',  {async: false, handler: this._onMessageVisibilityChanged.bind(this)}]
         ]);
         this.registerWindowMessageHandlers([
             ['extensionUnloaded', {async: false, handler: this._onMessageExtensionUnloaded.bind(this)}]
@@ -518,6 +519,13 @@ class Display extends EventDispatcher {
         this._childrenSupported = childrenSupported;
         this._setContentScale(scale);
         await this.setOptionsContext(optionsContext);
+    }
+
+    _onMessageVisibilityChanged({value}) {
+        if (!value) {
+            this._displayAudio.clearAutoPlayTimer();
+            this._displayAudio.stopAudio();
+        }
     }
 
     _onMessageExtensionUnloaded() {
