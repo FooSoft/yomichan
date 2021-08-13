@@ -76,22 +76,14 @@ class Database {
                 return;
             }
 
-            const end = start + count;
-            let completedCount = 0;
-            const onError = (e) => reject(e.target.error);
-            const onSuccess = () => {
-                if (++completedCount >= count) {
-                    resolve();
-                }
-            };
-
             const transaction = this.transaction([objectStoreName], 'readwrite');
+            transaction.onerror = (e) => reject(e.target.error);
+            transaction.oncomplete = () => resolve();
             const objectStore = transaction.objectStore(objectStoreName);
-            for (let i = start; i < end; ++i) {
-                const request = objectStore.add(items[i]);
-                request.onerror = onError;
-                request.onsuccess = onSuccess;
+            for (let i = start, ii = start + count; i < ii; ++i) {
+                objectStore.add(items[i]);
             }
+            transaction.commit();
         });
     }
 
