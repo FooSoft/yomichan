@@ -173,6 +173,9 @@ class Database {
     bulkDelete(objectStoreName, indexName, query, filterKeys=null, onProgress=null) {
         return new Promise((resolve, reject) => {
             const transaction = this.transaction([objectStoreName], 'readwrite');
+            transaction.onerror = (e) => reject(e.target.error);
+            transaction.oncomplete = () => resolve();
+
             const objectStore = transaction.objectStore(objectStoreName);
             const objectStoreOrIndex = indexName !== null ? objectStore.index(indexName) : objectStore;
 
@@ -181,7 +184,8 @@ class Database {
                     if (typeof filterKeys === 'function') {
                         keys = filterKeys(keys);
                     }
-                    this._bulkDeleteInternal(objectStore, keys, onProgress, resolve, reject);
+                    this._bulkDeleteInternal(objectStore, keys, onProgress);
+                    transaction.commit();
                 } catch (e) {
                     reject(e);
                 }
@@ -301,35 +305,26 @@ class Database {
         };
     }
 
-    _bulkDeleteInternal(objectStore, keys, onProgress, resolve, reject) {
+    _bulkDeleteInternal(objectStore, keys, onProgress) {
         const count = keys.length;
-        if (count === 0) {
-            resolve();
-            return;
-        }
+        if (count === 0) { return; }
 
         let completedCount = 0;
-        const hasProgress = (typeof onProgress === 'function');
-
-        const onError = (e) => reject(e.target.error);
         const onSuccess = () => {
             ++completedCount;
-            if (hasProgress) {
-                try {
-                    onProgress(completedCount, count);
-                } catch (e) {
-                    // NOP
-                }
-            }
-            if (completedCount >= count) {
-                resolve();
+            try {
+                onProgress(completedCount, count);
+            } catch (e) {
+                // NOP
             }
         };
 
+        const hasProgress = (typeof onProgress === 'function');
         for (const key of keys) {
             const request = objectStore.delete(key);
-            request.onerror = onError;
-            request.onsuccess = onSuccess;
+            if (hasProgress) {
+                request.onsuccess = onSuccess;
+            }
         }
     }
 }
