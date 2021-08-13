@@ -162,10 +162,11 @@ class Database {
     delete(objectStoreName, key) {
         return new Promise((resolve, reject) => {
             const transaction = this.transaction([objectStoreName], 'readwrite');
+            transaction.onerror = (e) => reject(e.target.error);
+            transaction.oncomplete = () => resolve();
             const objectStore = transaction.objectStore(objectStoreName);
-            const request = objectStore.delete(key);
-            request.onerror = (e) => reject(e.target.error);
-            request.onsuccess = () => resolve();
+            objectStore.delete(key);
+            transaction.commit();
         });
     }
 
