@@ -104,7 +104,7 @@ class Database {
     }
 
     getAllKeys(objectStoreOrIndex, query, resolve, reject) {
-        if (typeof objectStoreOrIndex.getAll === 'function') {
+        if (typeof objectStoreOrIndex.getAllKeys === 'function') {
             this._getAllKeysFast(objectStoreOrIndex, query, resolve, reject);
         } else {
             this._getAllKeysUsingCursor(objectStoreOrIndex, query, resolve, reject);
