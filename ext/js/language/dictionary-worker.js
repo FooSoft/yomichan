@@ -35,8 +35,8 @@ class DictionaryWorker {
     _onMessage(e) {
         const {action, params} = e.data;
         switch (action) {
-            case 'import':
-                this._onImport(params);
+            case 'importDictionary':
+                this._onImportDictionary(params);
                 break;
             case 'getImageResolution.response':
                 this._mediaLoader.handleMessage(params);
@@ -44,7 +44,7 @@ class DictionaryWorker {
         }
     }
 
-    async _onImport({details, archiveContent}) {
+    async _onImportDictionary({details, archiveContent}) {
         const onProgress = (...args) => {
             self.postMessage({
                 action: 'progress',

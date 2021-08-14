@@ -25,7 +25,7 @@ class DictionaryDatabaseModifier {
     }
 
     importDictionary(archiveContent, details) {
-        return this._invoke('import', {details, archiveContent}, [archiveContent]);
+        return this._invoke('importDictionary', {details, archiveContent}, [archiveContent]);
     }
 
     // Private
