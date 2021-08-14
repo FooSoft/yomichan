@@ -25,34 +25,35 @@ class DictionaryDatabaseModifier {
     }
 
     importDictionary(archiveContent, details) {
+        return this._invoke('import', {details, archiveContent}, [archiveContent]);
+    }
+
+    // Private
+
+    _invoke(action, params, transfer) {
         return new Promise((resolve, reject) => {
             const dictionaryImporterMediaLoader = new DictionaryImporterMediaLoader();
             const worker = new Worker('/js/language/dictionary-worker-main.js', {});
             const onMessage = (e) => {
-                const {action, params} = e.data;
-                switch (action) {
+                const {action: action2, params: params2} = e.data;
+                switch (action2) {
                     case 'complete':
                         worker.removeEventListener('message', onMessage);
                         worker.terminate();
-                        this._onMessageComplete(params, resolve, reject);
+                        this._onMessageComplete(params2, resolve, reject);
                         break;
                     case 'progress':
-                        this._onMessageProgress(params);
+                        this._onMessageProgress(params2);
                         break;
                     case 'getImageResolution':
-                        this._onMessageGetImageResolution(params, worker, dictionaryImporterMediaLoader);
+                        this._onMessageGetImageResolution(params2, worker, dictionaryImporterMediaLoader);
                         break;
                 }
             };
             worker.addEventListener('message', onMessage);
-            worker.postMessage({
-                action: 'import',
-                params: {details, archiveContent}
-            }, [archiveContent]);
+            worker.postMessage({action, params}, transfer);
         });
     }
-
-    // Private
 
     _onMessageComplete(params, resolve, reject) {
         const {error} = params;
