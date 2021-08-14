@@ -17,7 +17,7 @@
 
 /* global
  * DictionaryController
- * DictionaryImporterThreaded
+ * DictionaryDatabaseModifier
  */
 
 class DictionaryImportController {
@@ -212,7 +212,7 @@ class DictionaryImportController {
     }
 
     async _importDictionary(file, importDetails, onProgress) {
-        const dictionaryImporter = new DictionaryImporterThreaded(onProgress);
+        const dictionaryImporter = new DictionaryDatabaseModifier(onProgress);
         const archiveContent = await this._readFile(file);
         const {result, errors} = await dictionaryImporter.importDictionary(archiveContent, importDetails);
         yomichan.api.triggerDatabaseUpdated('dictionary', 'import');

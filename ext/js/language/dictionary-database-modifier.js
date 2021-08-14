@@ -19,7 +19,7 @@
  * DictionaryImporterMediaLoader
  */
 
-class DictionaryImporterThreaded {
+class DictionaryDatabaseModifier {
     constructor(onProgress) {
         this._onProgress = onProgress;
     }
