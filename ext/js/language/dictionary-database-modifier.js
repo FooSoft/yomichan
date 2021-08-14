@@ -20,18 +20,17 @@
  */
 
 class DictionaryDatabaseModifier {
-    constructor(onProgress) {
+    constructor() {
         this._dictionaryImporterMediaLoader = new DictionaryImporterMediaLoader();
-        this._onProgress = onProgress;
     }
 
-    importDictionary(archiveContent, details) {
-        return this._invoke('importDictionary', {details, archiveContent}, [archiveContent]);
+    importDictionary(archiveContent, details, onProgress) {
+        return this._invoke('importDictionary', {details, archiveContent}, [archiveContent], onProgress);
     }
 
     // Private
 
-    _invoke(action, params, transfer) {
+    _invoke(action, params, transfer, onProgress) {
         return new Promise((resolve, reject) => {
             const worker = new Worker('/js/language/dictionary-worker-main.js', {});
             const details = {
@@ -39,7 +38,8 @@ class DictionaryDatabaseModifier {
                 worker,
                 resolve,
                 reject,
-                onMessage: null
+                onMessage: null,
+                onProgress
             };
             const onMessage = this._onMessage.bind(this, details);
             details.onMessage = onMessage;
@@ -66,7 +66,7 @@ class DictionaryDatabaseModifier {
                 }
                 break;
             case 'progress':
-                this._onMessageProgress(params);
+                this._onMessageProgress(params, details.onProgress);
                 break;
             case 'getImageResolution':
                 this._onMessageGetImageResolution(params, details.worker);
@@ -83,10 +83,10 @@ class DictionaryDatabaseModifier {
         }
     }
 
-    _onMessageProgress(params) {
-        if (typeof this._onProgress !== 'function') { return; }
+    _onMessageProgress(params, onProgress) {
+        if (typeof onProgress !== 'function') { return; }
         const {args} = params;
-        this._onProgress(...args);
+        onProgress(...args);
     }
 
     async _onMessageGetImageResolution(params, worker) {
