@@ -34,25 +34,44 @@ class DictionaryDatabaseModifier {
     _invoke(action, params, transfer) {
         return new Promise((resolve, reject) => {
             const worker = new Worker('/js/language/dictionary-worker-main.js', {});
-            const onMessage = (e) => {
-                const {action: action2, params: params2} = e.data;
-                switch (action2) {
-                    case 'complete':
-                        worker.removeEventListener('message', onMessage);
-                        worker.terminate();
-                        this._onMessageComplete(params2, resolve, reject);
-                        break;
-                    case 'progress':
-                        this._onMessageProgress(params2);
-                        break;
-                    case 'getImageResolution':
-                        this._onMessageGetImageResolution(params2, worker);
-                        break;
-                }
+            const details = {
+                complete: false,
+                worker,
+                resolve,
+                reject,
+                onMessage: null
             };
+            const onMessage = this._onMessage.bind(this, details);
+            details.onMessage = onMessage;
             worker.addEventListener('message', onMessage);
             worker.postMessage({action, params}, transfer);
         });
+    }
+
+    _onMessage(details, e) {
+        if (details.complete) { return; }
+        const {action, params} = e.data;
+        switch (action) {
+            case 'complete':
+                {
+                    const {worker, resolve, reject, onMessage} = details;
+                    details.complete = true;
+                    details.worker = null;
+                    details.resolve = null;
+                    details.reject = null;
+                    details.onMessage = null;
+                    worker.removeEventListener('message', onMessage);
+                    worker.terminate();
+                    this._onMessageComplete(params, resolve, reject);
+                }
+                break;
+            case 'progress':
+                this._onMessageProgress(params);
+                break;
+            case 'getImageResolution':
+                this._onMessageGetImageResolution(params, details.worker);
+                break;
+        }
     }
 
     _onMessageComplete(params, resolve, reject) {
