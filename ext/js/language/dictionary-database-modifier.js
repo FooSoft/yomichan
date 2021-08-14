@@ -21,6 +21,7 @@
 
 class DictionaryDatabaseModifier {
     constructor(onProgress) {
+        this._dictionaryImporterMediaLoader = new DictionaryImporterMediaLoader();
         this._onProgress = onProgress;
     }
 
@@ -32,7 +33,6 @@ class DictionaryDatabaseModifier {
 
     _invoke(action, params, transfer) {
         return new Promise((resolve, reject) => {
-            const dictionaryImporterMediaLoader = new DictionaryImporterMediaLoader();
             const worker = new Worker('/js/language/dictionary-worker-main.js', {});
             const onMessage = (e) => {
                 const {action: action2, params: params2} = e.data;
@@ -46,7 +46,7 @@ class DictionaryDatabaseModifier {
                         this._onMessageProgress(params2);
                         break;
                     case 'getImageResolution':
-                        this._onMessageGetImageResolution(params2, worker, dictionaryImporterMediaLoader);
+                        this._onMessageGetImageResolution(params2, worker);
                         break;
                 }
             };
@@ -70,11 +70,11 @@ class DictionaryDatabaseModifier {
         this._onProgress(...args);
     }
 
-    async _onMessageGetImageResolution(params, worker, dictionaryImporterMediaLoader) {
+    async _onMessageGetImageResolution(params, worker) {
         const {id, mediaType, content} = params;
         let response;
         try {
-            const result = await dictionaryImporterMediaLoader.getImageResolution(mediaType, content);
+            const result = await this._dictionaryImporterMediaLoader.getImageResolution(mediaType, content);
             response = {id, result};
         } catch (e) {
             response = {id, error: serializeError(e)};
