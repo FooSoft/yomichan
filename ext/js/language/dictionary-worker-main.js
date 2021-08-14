@@ -16,7 +16,7 @@
  */
 
 /* global
- * DictionaryImporterWorker
+ * DictionaryWorker
  */
 
 self.importScripts(
@@ -34,7 +34,7 @@ self.importScripts(
 
 (() => {
     try {
-        const dictionaryImporterWorker = new DictionaryImporterWorker();
+        const dictionaryImporterWorker = new DictionaryWorker();
         dictionaryImporterWorker.prepare();
     } catch (e) {
         log.error(e);

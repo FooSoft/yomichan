@@ -18,12 +18,12 @@
 /* global
  * DictionaryDatabase
  * DictionaryImporter
- * DictionaryImporterWorkerMediaLoader
+ * DictionaryWorkerMediaLoader
  */
 
-class DictionaryImporterWorker {
+class DictionaryWorker {
     constructor() {
-        this._mediaLoader = new DictionaryImporterWorkerMediaLoader();
+        this._mediaLoader = new DictionaryWorkerMediaLoader();
     }
 
     prepare() {
