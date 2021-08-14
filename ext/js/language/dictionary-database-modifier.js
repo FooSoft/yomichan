@@ -28,6 +28,10 @@ class DictionaryDatabaseModifier {
         return this._invoke('importDictionary', {details, archiveContent}, [archiveContent], onProgress);
     }
 
+    deleteDictionary(dictionaryTitle, onProgress) {
+        return this._invoke('deleteDictionary', {dictionaryTitle}, [], onProgress);
+    }
+
     // Private
 
     _invoke(action, params, transfer, onProgress) {

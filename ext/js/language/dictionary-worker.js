@@ -38,6 +38,9 @@ class DictionaryWorker {
             case 'importDictionary':
                 this._onMessageWithProgress(params, this._importDictionary.bind(this));
                 break;
+            case 'deleteDictionary':
+                this._onMessageWithProgress(params, this._deleteDictionary.bind(this));
+                break;
             case 'getImageResolution.response':
                 this._mediaLoader.handleMessage(params);
                 break;
@@ -70,6 +73,15 @@ class DictionaryWorker {
                 result,
                 errors: errors.map((error) => serializeError(error))
             };
+        } finally {
+            dictionaryDatabase.close();
+        }
+    }
+
+    async _deleteDictionary({dictionaryTitle}, onProgress) {
+        const dictionaryDatabase = await this._getPreparedDictionaryDatabase();
+        try {
+            return await dictionaryDatabase.deleteDictionary(dictionaryTitle, {rate: 1000}, onProgress);
         } finally {
             dictionaryDatabase.close();
         }
