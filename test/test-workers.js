@@ -96,7 +96,7 @@ function testServiceWorker() {
 
 function testWorkers() {
     testWorker(
-        'js/language/dictionary-importer-worker-main.js',
+        'js/language/dictionary-worker-main.js',
         {DictionaryImporterWorker: StubClass}
     );
 }

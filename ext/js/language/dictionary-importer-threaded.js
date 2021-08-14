@@ -27,7 +27,7 @@ class DictionaryImporterThreaded {
     importDictionary(archiveContent, details) {
         return new Promise((resolve, reject) => {
             const dictionaryImporterMediaLoader = new DictionaryImporterMediaLoader();
-            const worker = new Worker('/js/language/dictionary-importer-worker-main.js', {});
+            const worker = new Worker('/js/language/dictionary-worker-main.js', {});
             const onMessage = (e) => {
                 const {action, params} = e.data;
                 switch (action) {
