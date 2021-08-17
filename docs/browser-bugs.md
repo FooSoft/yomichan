@@ -88,6 +88,6 @@ This page lists several of the browser bugs that have affected Yomichan over the
 * **Links**: [Report](https://bugzilla.mozilla.org/show_bug.cgi?id=1714883)
 
 ## IndexedDB writes from a Worker thread do not persist if worker is terminated
-* **Browser**: Chrome, Firefox _(warning only)_
+* **Browser**: ~~Chrome~~, Firefox _(warning only)_
 * **Date**: 2021-08-07
-* **Links**: [Chrome Report](https://bugs.chromium.org/p/chromium/issues/detail?id=1237686), [Firefox Report](https://bugzilla.mozilla.org/show_bug.cgi?id=1724602)
+* **Links**: ~~[Chrome Report](https://bugs.chromium.org/p/chromium/issues/detail?id=1237686)~~, [Firefox Report](https://bugzilla.mozilla.org/show_bug.cgi?id=1724602)
