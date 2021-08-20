@@ -831,6 +831,16 @@ button.input-suffix:not(:last-child) {
 .input-suffix:not(button) {
     background-color: var(--input-background-color);
 }
+input[type=text]:invalid~.input-suffix:not(button),
+input[type=number]:invalid~.input-suffix:not(button),
+input[type=text][data-invalid=true]~.input-suffix:not(button),
+input[type=number][data-invalid=true]~.input-suffix:not(button) {
+    border-color: var(--danger-color);
+    border-width: var(--thin-border-size);
+    border-style: solid;
+    border-left-style: none;
+    border-right-style: none;
+}
 
 
 /* Material design button */
@@ -1058,10 +1068,10 @@ button.input-suffix.input-suffix-icon-button>.icon {
     height: 100%;
     background-color: var(--button-current-content-color);
 }
-input[type=text]:invalid+button.input-suffix,
-input[type=number]:invalid+button.input-suffix,
-input[type=text][data-invalid=true]+button.input-suffix,
-input[type=number][data-invalid=true]+button.input-suffix {
+input[type=text]:invalid~button.input-suffix,
+input[type=number]:invalid~button.input-suffix,
+input[type=text][data-invalid=true]~button.input-suffix,
+input[type=number][data-invalid=true]~button.input-suffix {
     --button-border-color: var(--danger-color);
     --button-hover-border-color: var(--danger-color);
     --button-active-border-color: var(--danger-color);
