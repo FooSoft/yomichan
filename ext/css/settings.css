@@ -397,6 +397,7 @@ a.heading-link-light {
     padding: 0 1.5em;
     cursor: pointer;
     transition: background-color var(--animation-duration) ease-in-out;
+    box-sizing: border-box;
 }
 .outline-item,
 .outline-item:hover {
