@@ -42,7 +42,6 @@
     --font-size-no-units: 14;
     --font-size: calc(1px * var(--font-size-no-units));
     --font-size-small: 12px;
-    --line-height-default: calc(20 / var(--font-size-no-units));
     --outline-item-height: 40px;
     --outline-item-icon-size: 32px;
     --input-short-width: calc(var(--input-width-large) / 2 - var(--padding) / 2);
@@ -101,19 +100,7 @@
 
 
 /* Common styles */
-:root {
-    height: 100%;
-}
 body {
-    background-color: var(--background-color);
-    margin: 0;
-    padding: 0;
-    border: none;
-    font-size: var(--font-size);
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    color: var(--text-color);
-    line-height: var(--line-height-default);
-    height: 100%;
     overflow: hidden;
 }
 p {

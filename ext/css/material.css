@@ -23,6 +23,9 @@
     --font-size-small-no-units: 12;
     --font-size-small: calc(1em * var(--font-size-small-no-units) / var(--font-size-no-units));
 
+    --line-height-no-units: 20;
+    --line-height: calc(var(--line-height-no-units) / var(--font-size-no-units));
+
     --animation-duration: 0.125s;
     --animation-duration2: calc(var(--animation-duration) * 2);
 
@@ -177,6 +180,26 @@
 
     --menu-item-hover-color: #333333;
     --menu-item-active-color: #444444;
+}
+
+
+/* Root styles */
+:root {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: var(--font-size);
+    line-height: var(--line-height);
+    height: 100%;
+}
+body {
+    margin: 0;
+    border: 0;
+    padding: 0;
+    height: 100%;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 
