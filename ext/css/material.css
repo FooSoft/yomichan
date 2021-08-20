@@ -810,14 +810,22 @@ button.input-suffix {
     flex-flow: row nowrap;
     align-items: center;
     border-radius: var(--input-border-radius);
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
     border-style: none;
     border-width: 0;
     height: var(--input-height);
     box-sizing: border-box;
     padding: 0 0.5em;
     position: relative;
+}
+.input-suffix:not(:first-child),
+button.input-suffix:not(:first-child) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.input-suffix:not(:last-child),
+button.input-suffix:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
 .input-suffix:not(button) {
     background-color: var(--input-background-color);
