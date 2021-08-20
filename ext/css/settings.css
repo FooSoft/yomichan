@@ -655,7 +655,7 @@ input[type=number].short-height,
 select.short-height {
     height: var(--input-short-height);
     margin-top: calc(var(--settings-group-right-max-height) - var(--input-short-height) - var(--font-size-small));
-    line-height: var(--input-short-height);
+    line-height: var(--line-height);
 }
 .settings-item-button-group-container {
     max-height: none;
