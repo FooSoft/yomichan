@@ -717,7 +717,7 @@ input[type=text],
 input[type=number] {
     width: var(--input-width);
     height: var(--input-height);
-    line-height: var(--input-height);
+    line-height: var(--line-height);
     color: var(--text-color);
     font-size: var(--input-font-size);
     background-color: var(--input-background-color);
