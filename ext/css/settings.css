@@ -394,7 +394,6 @@ a.heading-link-light {
     align-items: center;
     width: 100%;
     height: var(--outline-item-height);
-    line-height: var(--outline-item-height);
     padding: 0 1.5em;
     cursor: pointer;
     transition: background-color var(--animation-duration) ease-in-out;
@@ -410,6 +409,7 @@ a.heading-link-light {
     min-width: var(--outline-item-icon-size);
     min-height: var(--outline-item-icon-size);
     position: relative;
+    line-height: var(--outline-item-height);
 }
 .outline-item-left-warning-badge {
     position: absolute;
