@@ -1679,7 +1679,7 @@ code.anki-field-marker {
     padding: 0 var(--modal-padding-horizontal);
     box-sizing: border-box;
 }
-.scan-input-suffix-cell {
+.scan-input-menu-button-cell {
     grid-area: 1/4/2/5;
 }
 .scan-input-index-cell {
