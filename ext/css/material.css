@@ -785,14 +785,6 @@ input[type=number][data-invalid=true]:focus {
     box-shadow: 0 0 0 calc(2em / var(--font-size-no-units)) var(--danger-color);
     outline: none;
 }
-input[type=text].input-with-suffix-button,
-input[type=number].input-with-suffix-button {
-    flex: 1 1 auto;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-right-style: none;
-    z-index: 1;
-}
 input[type=text].code,
 input[type=number].code {
     font-family: 'Courier New', Courier, monospace;
@@ -803,6 +795,15 @@ input[type=number].code {
     display: flex;
     flex-flow: row nowrap;
     align-items: stretch;
+}
+.input-group>input[type=text],
+.input-group>input[type=number],
+.input-group>button.input-button {
+    flex: 1 1 auto;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right-style: none;
+    z-index: 1;
 }
 .input-suffix,
 button.input-suffix {
@@ -1035,13 +1036,6 @@ button.input-button {
     line-height: var(--input-height);
     box-sizing: border-box;
     position: relative;
-}
-button.input-button.input-with-suffix-button {
-    flex: 1 1 auto;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-right-style: none;
-    z-index: 1;
 }
 
 /* Input suffix button */
