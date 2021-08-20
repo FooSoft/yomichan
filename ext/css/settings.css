@@ -1544,10 +1544,7 @@ select.profile-condition-operator {
     flex: 1 1 auto;
 }
 .anki-card-field-value-container {
-    display: flex;
-    flex-flow: row nowrap;
     width: 100%;
-    align-items: stretch;
     margin-top: 0.25em;
 }
 input.anki-card-field-value {
@@ -1597,10 +1594,7 @@ code.anki-field-marker {
     flex: 0 1 auto;
 }
 .anki-card-templates-test-input-container {
-    display: flex;
-    flex-flow: row nowrap;
     width: 100%;
-    align-items: stretch;
 }
 .anki-card-templates-test-container {
     flex: 0 1 auto;
@@ -1697,10 +1691,7 @@ code.anki-field-marker {
     white-space: nowrap;
 }
 .scan-input-content-cell {
-    display: flex;
-    flex-flow: row nowrap;
     width: 100%;
-    align-items: stretch;
 }
 .scan-input-prefix-cell[data-property=include] {
     grid-area: 1/2/2/3;
@@ -2008,9 +1999,6 @@ input.sentence-termination-character-input2 {
     flex: 1 1 auto;
 }
 .hotkey-list-item-enabled-button-container {
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: stretch;
     margin-left: 0.375em;
 }
 button.hotkey-list-item-enabled-button {
