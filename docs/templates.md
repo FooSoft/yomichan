@@ -539,8 +539,8 @@ Returns the type of a value.
 <details>
   <summary>Syntax:</summary>
 
-  <code>{{#typeof <i>value</i>}}{{/get}}</code><br>
-  <code>{{#typeof}}<i>value</i>{{/get}}</code><br>
+  <code>{{#typeof <i>value</i>}}{{/typeof}}</code><br>
+  <code>{{#typeof}}<i>value</i>{{/typeof}}</code><br>
 
   * _`value`_ <br>
     The value to check.
