@@ -34,8 +34,8 @@ self.importScripts(
 
 (() => {
     try {
-        const dictionaryImporterWorker = new DictionaryWorkerHandler();
-        dictionaryImporterWorker.prepare();
+        const dictionaryWorkerHandler = new DictionaryWorkerHandler();
+        dictionaryWorkerHandler.prepare();
     } catch (e) {
         log.error(e);
     }
