@@ -21,7 +21,7 @@
  * DictionaryWorkerMediaLoader
  */
 
-class DictionaryWorker {
+class DictionaryWorkerHandler {
     constructor() {
         this._mediaLoader = new DictionaryWorkerMediaLoader();
     }
