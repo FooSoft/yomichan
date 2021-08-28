@@ -27,7 +27,7 @@ self.importScripts(
     '/js/general/cache-map.js',
     '/js/language/dictionary-database.js',
     '/js/language/dictionary-importer.js',
-    '/js/language/dictionary-worker.js',
+    '/js/language/dictionary-worker-handler.js',
     '/js/language/dictionary-worker-media-loader.js',
     '/js/media/media-util.js'
 );
