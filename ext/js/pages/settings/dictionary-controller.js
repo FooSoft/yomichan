@@ -679,8 +679,7 @@ class DictionaryController {
     }
 
     async _deleteDictionaryInternal(dictionaryTitle, onProgress) {
-        const dictionaryDatabaseModifier = new DictionaryDatabaseModifier();
-        await dictionaryDatabaseModifier.deleteDictionary(dictionaryTitle, onProgress);
+        await new DictionaryDatabaseModifier().deleteDictionary(dictionaryTitle, onProgress);
         yomichan.api.triggerDatabaseUpdated('dictionary', 'delete');
     }
 
