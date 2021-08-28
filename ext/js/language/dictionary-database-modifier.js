@@ -19,7 +19,7 @@
  * DictionaryImporterMediaLoader
  */
 
-class DictionaryDatabaseModifier {
+class DictionaryWorker {
     constructor() {
         this._dictionaryImporterMediaLoader = new DictionaryImporterMediaLoader();
     }
