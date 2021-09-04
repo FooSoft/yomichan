@@ -31,6 +31,7 @@
  * PermissionsUtil
  * ProfileConditionsUtil
  * RequestBuilder
+ * StringUtil
  * Translator
  * wanakana
  */
@@ -621,7 +622,14 @@ class Backend {
     }
 
     async _onApiGetMedia({targets}) {
-        return await this._dictionaryDatabase.getMedia(targets);
+        const results = await this._dictionaryDatabase.getMedia(targets);
+        for (const item of results) {
+            const {content} = item;
+            if (content instanceof ArrayBuffer) {
+                item.content = StringUtil.arrayBufferToBase64(content);
+            }
+        }
+        return results;
     }
 
     _onApiLog({error, level, context}) {
