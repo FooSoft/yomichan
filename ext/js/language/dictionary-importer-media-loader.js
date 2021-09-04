@@ -31,7 +31,7 @@ class DictionaryImporterMediaLoader {
      * @returns A Promise which resolves with {width, height} on success,
      *   otherwise an error is thrown.
      */
-    getImageResolution(mediaType, content) {
+    getImageDetails(mediaType, content) {
         return new Promise((resolve, reject) => {
             const image = new Image();
             const eventListeners = new EventListenerCollection();

@@ -52,12 +52,12 @@ class DictionaryWorkerMediaLoader {
      * @returns A Promise which resolves with {width, height} on success,
      *   otherwise an error is thrown.
      */
-    getImageResolution(mediaType, content) {
+    getImageDetails(mediaType, content) {
         return new Promise((resolve, reject) => {
             const id = generateId(16);
             this._requests.set(id, {resolve, reject});
             self.postMessage({
-                action: 'getImageResolution',
+                action: 'getImageDetails',
                 params: {id, mediaType, content}
             });
         });
