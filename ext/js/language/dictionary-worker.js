@@ -117,14 +117,15 @@ class DictionaryWorker {
 
     async _onMessageGetImageDetails(params, worker) {
         const {id, content, mediaType} = params;
+        const transfer = [];
         let response;
         try {
-            const result = await this._dictionaryImporterMediaLoader.getImageDetails(content, mediaType);
+            const result = await this._dictionaryImporterMediaLoader.getImageDetails(content, mediaType, transfer);
             response = {id, result};
         } catch (e) {
             response = {id, error: serializeError(e)};
         }
-        worker.postMessage({action: 'getImageDetails.response', params: response});
+        worker.postMessage({action: 'getImageDetails.response', params: response}, transfer);
     }
 
     _formatimportDictionaryResult(result) {

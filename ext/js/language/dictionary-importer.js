@@ -422,7 +422,7 @@ class DictionaryImporter {
         }
 
         // Load file content
-        const content = await file.async('base64');
+        let content = await file.async('arraybuffer');
         const mediaType = MediaUtil.getImageMediaTypeFromFileName(path);
         if (mediaType === null) {
             throw createError('Could not determine media type for image');
@@ -432,7 +432,7 @@ class DictionaryImporter {
         let width;
         let height;
         try {
-            ({width, height} = await this._mediaLoader.getImageDetails(content, mediaType));
+            ({content, width, height} = await this._mediaLoader.getImageDetails(content, mediaType));
         } catch (e) {
             throw createError('Could not load image');
         }
