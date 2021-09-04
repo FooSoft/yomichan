@@ -328,12 +328,9 @@ class DictionaryImporter {
         const media = new Map();
         const context = {archive, media};
 
-        const promises = [];
         for (const requirement of requirements) {
-            promises.push(this._resolveAsyncRequirement(context, requirement));
+            await this._resolveAsyncRequirement(context, requirement);
         }
-
-        await Promise.all(promises);
 
         return {
             media: [...media.values()]
