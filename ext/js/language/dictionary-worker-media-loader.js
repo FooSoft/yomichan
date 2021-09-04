@@ -47,18 +47,18 @@ class DictionaryWorkerMediaLoader {
     /**
      * Attempts to load an image using a base64 encoded content and a media type
      * and returns its resolution.
-     * @param mediaType The media type for the image content.
      * @param content The binary content for the image, encoded in base64.
+     * @param mediaType The media type for the image content.
      * @returns A Promise which resolves with {width, height} on success,
      *   otherwise an error is thrown.
      */
-    getImageDetails(mediaType, content) {
+    getImageDetails(content, mediaType) {
         return new Promise((resolve, reject) => {
             const id = generateId(16);
             this._requests.set(id, {resolve, reject});
             self.postMessage({
                 action: 'getImageDetails',
-                params: {id, mediaType, content}
+                params: {id, content, mediaType}
             });
         });
     }

@@ -432,7 +432,7 @@ class DictionaryImporter {
         let width;
         let height;
         try {
-            ({width, height} = await this._mediaLoader.getImageDetails(mediaType, content));
+            ({width, height} = await this._mediaLoader.getImageDetails(content, mediaType));
         } catch (e) {
             throw createError('Could not load image');
         }

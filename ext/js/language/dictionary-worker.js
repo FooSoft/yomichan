@@ -116,10 +116,10 @@ class DictionaryWorker {
     }
 
     async _onMessageGetImageDetails(params, worker) {
-        const {id, mediaType, content} = params;
+        const {id, content, mediaType} = params;
         let response;
         try {
-            const result = await this._dictionaryImporterMediaLoader.getImageDetails(mediaType, content);
+            const result = await this._dictionaryImporterMediaLoader.getImageDetails(content, mediaType);
             response = {id, result};
         } catch (e) {
             response = {id, error: serializeError(e)};
