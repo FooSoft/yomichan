@@ -139,8 +139,10 @@ class DictionaryDatabase {
         return result;
     }
 
-    async deleteDictionary(dictionaryName, progressSettings, onProgress) {
-        const {rate} = progressSettings;
+    async deleteDictionary(dictionaryName, progressRate, onProgress) {
+        if (typeof progressRate !== 'number') {
+            progressRate = 1;
+        }
         if (typeof onProgress !== 'function') {
             onProgress = () => {};
         }
@@ -180,7 +182,7 @@ class DictionaryDatabase {
         const onProgress2 = () => {
             const processed = progressData.processed + 1;
             progressData.processed = processed;
-            if ((processed % rate) === 0 || processed === progressData.count) {
+            if ((processed % progressRate) === 0 || processed === progressData.count) {
                 onProgress(progressData);
             }
         };
