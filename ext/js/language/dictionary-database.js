@@ -141,6 +141,9 @@ class DictionaryDatabase {
 
     async deleteDictionary(dictionaryName, progressSettings, onProgress) {
         const {rate} = progressSettings;
+        if (typeof onProgress !== 'function') {
+            onProgress = () => {};
+        }
 
         const targetGroups = [
             [

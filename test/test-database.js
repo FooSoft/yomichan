@@ -788,7 +788,7 @@ async function testDatabase2() {
     const dictionaryDatabase = new DictionaryDatabase();
 
     // Error: not prepared
-    await assert.rejects(async () => await dictionaryDatabase.deleteDictionary(title, {rate: 1000}, () => {}));
+    await assert.rejects(async () => await dictionaryDatabase.deleteDictionary(title, {rate: 1000}));
     await assert.rejects(async () => await dictionaryDatabase.findTermsBulk(['?'], titles, null));
     await assert.rejects(async () => await dictionaryDatabase.findTermsExactBulk([{term: '?', reading: '?'}], titles));
     await assert.rejects(async () => await dictionaryDatabase.findTermsBySequenceBulk([{query: 1, dictionary: title}]));
