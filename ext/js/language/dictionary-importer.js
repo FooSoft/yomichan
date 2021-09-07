@@ -128,7 +128,15 @@ class DictionaryImporter {
         // Add dictionary descriptor
         this._progressNextStep(termList.length + termMetaList.length + kanjiList.length + kanjiMetaList.length + tagList.length + media.length);
 
-        const summary = this._createSummary(dictionaryTitle, version, index, {prefixWildcardsSupported});
+        const counts = {
+            terms: {total: termList.length},
+            termMeta: this._getMetaCounts(termMetaList),
+            kanji: {total: kanjiList.length},
+            kanjiMeta: this._getMetaCounts(kanjiMetaList),
+            tagMeta: {total: tagList.length},
+            media: {total: media.length}
+        };
+        const summary = this._createSummary(dictionaryTitle, version, index, {prefixWildcardsSupported, counts});
         dictionaryDatabase.bulkAdd('dictionaries', [summary], 0, 1);
 
         // Add data
@@ -555,5 +563,20 @@ class DictionaryImporter {
             }
         }
         return results;
+    }
+
+    _getMetaCounts(metaList) {
+        const countsMap = new Map();
+        for (const {mode} of metaList) {
+            let count = countsMap.get(mode);
+            count = typeof count !== 'undefined' ? count + 1 : 1;
+            countsMap.set(mode, count);
+        }
+        const counts = {};
+        for (const [key, value] of countsMap.entries()) {
+            counts[key] = value;
+        }
+        counts.total = metaList.length;
+        return counts;
     }
 }
