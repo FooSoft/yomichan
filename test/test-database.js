@@ -147,7 +147,15 @@ async function testDatabase1() {
             revision: 'test',
             sequenced: true,
             version: 3,
-            prefixWildcardsSupported: true
+            prefixWildcardsSupported: true,
+            counts: {
+                kanji: {total: 2},
+                kanjiMeta: {total: 2, freq: 2},
+                media: {total: 4},
+                tagMeta: {total: 15},
+                termMeta: {total: 16, freq: 9, pitch: 7},
+                terms: {total: 20}
+            }
         };
 
         // Import data
