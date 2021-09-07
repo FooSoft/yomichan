@@ -573,11 +573,11 @@ class DictionaryImporter {
             count = typeof count !== 'undefined' ? count + 1 : 1;
             countsMap.set(mode, count);
         }
-        const counts = {};
+        const counts = {total: metaList.length};
         for (const [key, value] of countsMap.entries()) {
+            if (Object.prototype.hasOwnProperty.call(counts, key)) { continue; }
             counts[key] = value;
         }
-        counts.total = metaList.length;
         return counts;
     }
 }
