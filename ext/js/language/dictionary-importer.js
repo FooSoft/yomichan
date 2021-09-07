@@ -197,7 +197,8 @@ class DictionaryImporter {
             title: dictionaryTitle,
             revision: index.revision,
             sequenced: index.sequenced,
-            version
+            version,
+            importDate: Date.now()
         };
 
         const {author, url, description, attribution} = index;
