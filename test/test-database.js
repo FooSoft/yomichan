@@ -147,6 +147,7 @@ async function testDatabase1() {
             revision: 'test',
             sequenced: true,
             version: 3,
+            importDate: 0,
             prefixWildcardsSupported: true,
             counts: {
                 kanji: {total: 2},
@@ -166,6 +167,7 @@ async function testDatabase1() {
             testDictionarySource,
             {prefixWildcardsSupported: true}
         );
+        expectedSummary.importDate = result.importDate;
         vm.assert.deepStrictEqual(errors, []);
         vm.assert.deepStrictEqual(result, expectedSummary);
         assert.ok(progressEvent);
