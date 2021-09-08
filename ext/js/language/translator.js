@@ -176,6 +176,48 @@ class Translator {
         return dictionaryEntries;
     }
 
+    /**
+     * Gets a list of frequency information for a given list of term-reading pairs
+     * and a list of dictionaries.
+     * @param termReadingList An array of `{term, reading}` pairs. If reading is null,
+     *   the reading won't be compared.
+     * @param dictionaries An array of dictionary names.
+     * @returns An array of objects with the format
+     *   `{term, reading, dictionary, hasReading, frequency}`.
+     */
+    async getTermFrequencies(termReadingList, dictionaries) {
+        const dictionarySet = new Set();
+        for (const dictionary of dictionaries) {
+            dictionarySet.add(dictionary);
+        }
+
+        const termList = termReadingList.map(({term}) => term);
+        const metas = await this._database.findTermMetaBulk(termList, dictionarySet);
+
+        const results = [];
+        for (const {mode, data, dictionary, index} of metas) {
+            if (mode !== 'freq') { continue; }
+            let {term, reading} = termReadingList[index];
+            let frequency = data;
+            const hasReading = (data !== null && typeof data === 'object');
+            if (hasReading) {
+                if (data.reading !== reading) {
+                    if (reading !== null) { continue; }
+                    reading = data.reading;
+                }
+                frequency = data.frequency;
+            }
+            results.push({
+                term,
+                reading,
+                dictionary,
+                hasReading,
+                frequency
+            });
+        }
+        return results;
+    }
+
     // Find terms internal implementation
 
     async _findTermsInternal(text, enabledDictionaryMap, options) {
