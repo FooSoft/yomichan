@@ -64,6 +64,8 @@ class Translator {
      *   {
      *     wildcard: (enum: null, 'prefix', 'suffix'),
      *     mainDictionary: (string),
+     *     sortFrequencyDictionary: (null or string),
+     *     sortFrequencyDictionaryOrder: (enum: 'ascending', 'descending'),
      *     removeNonJapaneseCharacters: (boolean),
      *     convertHalfWidthCharacters: (enum: 'false', 'true', 'variant'),
      *     convertNumericCharacters: (enum: 'false', 'true', 'variant'),
@@ -92,7 +94,7 @@ class Translator {
      * @returns An object of the structure `{dictionaryEntries, originalTextLength}`.
      */
     async findTerms(mode, text, options) {
-        const {enabledDictionaryMap, excludeDictionaryDefinitions} = options;
+        const {enabledDictionaryMap, excludeDictionaryDefinitions, sortFrequencyDictionary, sortFrequencyDictionaryOrder} = options;
         let {dictionaryEntries, originalTextLength} = await this._findTermsInternal(text, enabledDictionaryMap, options);
 
         switch (mode) {
@@ -115,6 +117,9 @@ class Translator {
             await this._expandTermTags(dictionaryEntries);
         }
 
+        if (sortFrequencyDictionary !== null) {
+            this._updateSortFrequencies(dictionaryEntries, sortFrequencyDictionary, sortFrequencyDictionaryOrder === 'ascending');
+        }
         if (dictionaryEntries.length > 1) {
             this._sortTermDictionaryEntries(dictionaryEntries);
         }
@@ -1077,7 +1082,20 @@ class Translator {
     }
 
     _createTermDefinition(index, headwordIndices, dictionary, dictionaryIndex, dictionaryPriority, id, score, sequences, isPrimary, tags, entries) {
-        return {index, headwordIndices, dictionary, dictionaryIndex, dictionaryPriority, id, score, sequences, isPrimary, tags, entries};
+        return {
+            index,
+            headwordIndices,
+            dictionary,
+            dictionaryIndex,
+            dictionaryPriority,
+            id,
+            score,
+            frequencyOrder: 0,
+            sequences,
+            isPrimary,
+            tags,
+            entries
+        };
     }
 
     _createTermPronunciation(index, headwordIndex, dictionary, dictionaryIndex, dictionaryPriority, pitches) {
@@ -1094,6 +1112,7 @@ class Translator {
             isPrimary,
             inflections,
             score,
+            frequencyOrder: 0,
             dictionaryIndex,
             dictionaryPriority,
             sourceTermExactMatchCount,
@@ -1356,6 +1375,10 @@ class Translator {
             i = v2.dictionaryPriority - v1.dictionaryPriority;
             if (i !== 0) { return i; }
 
+            // Sort by frequency order
+            i = v1.frequencyOrder - v2.frequencyOrder;
+            if (i !== 0) { return i; }
+
             // Sort by term score
             i = v2.score - v1.score;
             if (i !== 0) { return i; }
@@ -1385,6 +1408,10 @@ class Translator {
         const compareFunction = (v1, v2) => {
             // Sort by dictionary priority
             let i = v2.dictionaryPriority - v1.dictionaryPriority;
+            if (i !== 0) { return i; }
+
+            // Sort by frequency order
+            i = v1.frequencyOrder - v2.frequencyOrder;
             if (i !== 0) { return i; }
 
             // Sort by term score
@@ -1456,6 +1483,37 @@ class Translator {
 
         for (const {frequencies} of dictionaryEntries) {
             frequencies.sort(compare);
+        }
+    }
+
+    _updateSortFrequencies(dictionaryEntries, dictionary, ascending) {
+        const frequencyMap = new Map();
+        for (const dictionaryEntry of dictionaryEntries) {
+            const {definitions, frequencies} = dictionaryEntry;
+            let frequencyMin = Number.MAX_SAFE_INTEGER;
+            let frequencyMax = Number.MIN_SAFE_INTEGER;
+            for (const item of frequencies) {
+                if (item.dictionary !== dictionary) { continue; }
+                const {headwordIndex, frequency} = item;
+                if (typeof frequency !== 'number') { continue; }
+                frequencyMap.set(headwordIndex, frequency);
+                frequencyMin = Math.min(frequencyMin, frequency);
+                frequencyMax = Math.max(frequencyMax, frequency);
+            }
+            dictionaryEntry.frequencyOrder = (frequencyMin <= frequencyMax ? (ascending ? frequencyMin : -frequencyMax) : 0);
+            for (const definition of definitions) {
+                frequencyMin = Number.MAX_SAFE_INTEGER;
+                frequencyMax = Number.MIN_SAFE_INTEGER;
+                const {headwordIndices} = definition;
+                for (const headwordIndex of headwordIndices) {
+                    const frequency = frequencyMap.get(headwordIndex);
+                    if (typeof frequency !== 'number') { continue; }
+                    frequencyMin = Math.min(frequencyMin, frequency);
+                    frequencyMax = Math.max(frequencyMax, frequency);
+                }
+                definition.frequencyOrder = (frequencyMin <= frequencyMax ? (ascending ? frequencyMin : -frequencyMax) : 0);
+            }
+            frequencyMap.clear();
         }
     }
 }

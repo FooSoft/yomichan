@@ -1958,7 +1958,7 @@ class Backend {
         const {wildcard} = details;
         const enabledDictionaryMap = this._getTranslatorEnabledDictionaryMap(options);
         const {
-            general: {mainDictionary},
+            general: {mainDictionary, sortFrequencyDictionary, sortFrequencyDictionaryOrder},
             scanning: {alphanumeric},
             translation: {
                 convertHalfWidthCharacters,
@@ -1984,6 +1984,8 @@ class Backend {
         return {
             wildcard,
             mainDictionary,
+            sortFrequencyDictionary,
+            sortFrequencyDictionaryOrder,
             removeNonJapaneseCharacters: !alphanumeric,
             convertHalfWidthCharacters,
             convertNumericCharacters,
