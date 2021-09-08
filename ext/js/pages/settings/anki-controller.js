@@ -135,16 +135,6 @@ class AnkiController {
         }
     }
 
-    getFieldMarkersHtml(markers) {
-        const fragment = document.createDocumentFragment();
-        for (const marker of markers) {
-            const markerNode = this._settingsController.instantiateTemplate('anki-card-field-marker');
-            markerNode.querySelector('.marker-link').textContent = marker;
-            fragment.appendChild(markerNode);
-        }
-        return fragment;
-    }
-
     async getAnkiData() {
         let promise = this._getAnkiDataPromise;
         if (promise === null) {
@@ -430,12 +420,6 @@ class AnkiCardController {
         }
     }
 
-    _onFieldMarkerLinkClick(e) {
-        e.preventDefault();
-        const link = e.currentTarget;
-        this._setFieldMarker(link, link.textContent);
-    }
-
     _validateField(node, index) {
         let valid = (node.dataset.hasPermissions !== 'false');
         if (valid && index === 0 && !AnkiUtil.stringContainsAnyFieldMarker(node.value)) {
@@ -461,7 +445,6 @@ class AnkiCardController {
     _setupFields() {
         this._fieldEventListeners.removeAllEventListeners();
 
-        const markers = this._ankiController.getFieldMarkers(this._cardType);
         const totalFragment = document.createDocumentFragment();
         this._fieldEntries = [];
         let index = 0;
@@ -485,15 +468,6 @@ class AnkiCardController {
             this._fieldEventListeners.addEventListener(inputField, 'input', this._onFieldInput.bind(this, index), false);
             this._fieldEventListeners.addEventListener(inputField, 'settingChanged', this._onFieldSettingChanged.bind(this, index), false);
             this._validateField(inputField, index);
-
-            const markerList = content.querySelector('.anki-card-field-marker-list');
-            if (markerList !== null) {
-                const markersFragment = this._ankiController.getFieldMarkersHtml(markers);
-                for (const element of markersFragment.querySelectorAll('.marker-link')) {
-                    this._fieldEventListeners.addEventListener(element, 'click', this._onFieldMarkerLinkClick.bind(this), false);
-                }
-                markerList.appendChild(markersFragment);
-            }
 
             const menuButton = content.querySelector('.anki-card-field-value-menu-button');
             if (menuButton !== null) {
