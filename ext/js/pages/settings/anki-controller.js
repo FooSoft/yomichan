@@ -412,6 +412,23 @@ class AnkiCardController {
         this._validateFieldPermissions(node, index, false);
     }
 
+    _onFieldMenuOpen({currentTarget: button, detail: {menu}}) {
+        let {index, fieldName} = button.dataset;
+        index = Number.parseInt(index, 10);
+
+        const defaultValue = this._getDefaultFieldValue(fieldName, index, this._cardType, null);
+        if (defaultValue === '') { return; }
+
+        const match = /^\{([\w\W]+)\}$/.exec(defaultValue);
+        if (match === null) { return; }
+
+        const defaultMarker = match[1];
+        const item = menu.bodyNode.querySelector(`.popup-menu-item[data-marker="${defaultMarker}"]`);
+        if (item === null) { return; }
+
+        item.classList.add('popup-menu-item-bold');
+    }
+
     _onFieldMenuClose({currentTarget: button, detail: {action, item}}) {
         switch (action) {
             case 'setFieldMarker':
@@ -476,6 +493,9 @@ class AnkiCardController {
                 } else {
                     delete menuButton.dataset.menu;
                 }
+                menuButton.dataset.index = `${index}`;
+                menuButton.dataset.fieldName = fieldName;
+                this._fieldEventListeners.addEventListener(menuButton, 'menuOpen', this._onFieldMenuOpen.bind(this), false);
                 this._fieldEventListeners.addEventListener(menuButton, 'menuClose', this._onFieldMenuClose.bind(this), false);
             }
 
