@@ -658,6 +658,7 @@ button.action-button:active {
 .icon[data-icon=add-term-kana]  { background-image: url('/images/add-term-kana.svg'); }
 .icon[data-icon=play-audio]     { background-image: url('/images/play-audio.svg'); }
 .icon[data-icon=source-term]    { background-image: url('/images/source-term.svg'); }
+.icon[data-icon=entry-current]  { background-image: url('/images/entry-current.svg'); }
 .action-icon {
     display: block;
     width: var(--action-button-size);
@@ -1031,14 +1032,10 @@ button.action-button:active {
 :root:not([data-popup-current-indicator-mode=asterisk]) .entry-current-indicator-icon {
     display: none;
 }
-.entry-current-indicator-icon::before {
-    content: '';
+.entry-current-indicator-icon>.icon {
     width: var(--action-button-size);
     height: var(--action-button-size);
     display: block;
-    background-color: transparent;
-    background-repeat: no-repeat;
-    background-size: contain;
     background-image: url('/images/entry-current.svg');
 }
 
