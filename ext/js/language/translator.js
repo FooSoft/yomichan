@@ -1500,7 +1500,11 @@ class Translator {
                 frequencyMin = Math.min(frequencyMin, frequency);
                 frequencyMax = Math.max(frequencyMax, frequency);
             }
-            dictionaryEntry.frequencyOrder = (frequencyMin <= frequencyMax ? (ascending ? frequencyMin : -frequencyMax) : 0);
+            dictionaryEntry.frequencyOrder = (
+                frequencyMin <= frequencyMax ?
+                (ascending ? frequencyMin : -frequencyMax) :
+                (ascending ? Number.MAX_SAFE_INTEGER : 0)
+            );
             for (const definition of definitions) {
                 frequencyMin = Number.MAX_SAFE_INTEGER;
                 frequencyMax = Number.MIN_SAFE_INTEGER;
@@ -1511,7 +1515,11 @@ class Translator {
                     frequencyMin = Math.min(frequencyMin, frequency);
                     frequencyMax = Math.max(frequencyMax, frequency);
                 }
-                definition.frequencyOrder = (frequencyMin <= frequencyMax ? (ascending ? frequencyMin : -frequencyMax) : 0);
+                definition.frequencyOrder = (
+                    frequencyMin <= frequencyMax ?
+                    (ascending ? frequencyMin : -frequencyMax) :
+                    (ascending ? Number.MAX_SAFE_INTEGER : 0)
+                );
             }
             frequencyMap.clear();
         }
