@@ -320,7 +320,7 @@ class DocumentUtil {
             case 'SELECT':
                 return true;
             default:
-                return false;
+                return element.contentEditable;
         }
     }
 
