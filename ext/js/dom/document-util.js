@@ -321,7 +321,7 @@ class DocumentUtil {
             case 'SELECT':
                 return true;
             default:
-                return element.contentEditable;
+                return element.isContentEditable;
         }
     }
 
