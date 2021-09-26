@@ -311,7 +311,8 @@ class DocumentUtil {
         return !(browser === 'firefox' || browser === 'firefox-mobile') || os === 'mac';
     }
 
-    static isInputElement(element) {
+    static isInputElementFocused() {
+        const element = document.activeElement;
         if (element === null) { return false; }
         const type = element.nodeName.toUpperCase();
         switch (type) {

@@ -226,7 +226,7 @@ class HotkeyHandler extends EventDispatcher {
     _isHotkeyPermitted(modifiers, key) {
         return !(
             (modifiers.length === 0 || (modifiers.length === 1 && modifiers[0] === 'shift')) &&
-            DocumentUtil.isInputElement(document.activeElement) &&
+            DocumentUtil.isInputElementFocused() &&
             this._isKeyCharacterInput(key)
         );
     }

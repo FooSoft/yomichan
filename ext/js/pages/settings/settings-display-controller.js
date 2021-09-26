@@ -156,7 +156,7 @@ class SettingsDisplayController {
     _onKeyDown(e) {
         switch (e.code) {
             case 'Escape':
-                if (!DocumentUtil.isInputElement(document.activeElement)) {
+                if (!DocumentUtil.isInputElementFocused()) {
                     this._closeTopMenuOrModal();
                     e.preventDefault();
                 }
