@@ -167,7 +167,7 @@ class HotkeyHandler extends EventDispatcher {
 
     _invokeHandlers(modifiers, hotkeyInfo) {
         for (const {modifiers: handlerModifiers, action, argument} of hotkeyInfo.handlers) {
-            if (!this._areSame(handlerModifiers, modifiers)) { continue; }
+            if (!this._areSame(handlerModifiers, modifiers) || !this._isHotkeyPermitted(modifiers)) { continue; }
 
             const actionHandler = this._actions.get(action);
             if (typeof actionHandler !== 'undefined') {
@@ -222,5 +222,12 @@ class HotkeyHandler extends EventDispatcher {
         } else {
             this._eventListeners.removeAllEventListeners();
         }
+    }
+
+    _isHotkeyPermitted(modifiers) {
+        return !(
+            (modifiers.length === 0 || (modifiers.length === 1 && modifiers[0] === 'shift')) &&
+            DocumentUtil.isInputElement(document.activeElement)
+        );
     }
 }
