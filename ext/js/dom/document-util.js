@@ -311,6 +311,8 @@ class DocumentUtil {
         return !(browser === 'firefox' || browser === 'firefox-mobile') || os === 'mac';
     }
 
+    // Private
+
     static _getActiveButtons(event, array) {
         let {buttons} = event;
         if (typeof buttons === 'number' && buttons > 0) {
@@ -324,8 +326,6 @@ class DocumentUtil {
             }
         }
     }
-
-    // Private
 
     _setImposterStyle(style, propertyName, value) {
         style.setProperty(propertyName, value, 'important');
