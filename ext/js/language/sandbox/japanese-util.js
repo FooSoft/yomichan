@@ -297,7 +297,7 @@ const JapaneseUtil = (() => {
             return this._wanakana !== null;
         }
 
-        convertKatakanaToHiragana(text) {
+        convertKatakanaToHiragana(text, keepProlongedSoundMarks=false) {
             let result = '';
             const offset = (HIRAGANA_CONVERSION_RANGE[0] - KATAKANA_CONVERSION_RANGE[0]);
             for (let char of text) {
@@ -308,7 +308,7 @@ const JapaneseUtil = (() => {
                         // No change
                         break;
                     case KANA_PROLONGED_SOUND_MARK_CODE_POINT:
-                        if (result.length > 0) {
+                        if (!keepProlongedSoundMarks && result.length > 0) {
                             const char2 = getProlongedHiragana(result[result.length - 1]);
                             if (char2 !== null) { char = char2; }
                         }
