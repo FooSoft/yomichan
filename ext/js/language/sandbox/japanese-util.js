@@ -16,7 +16,6 @@
  */
 
 const JapaneseUtil = (() => {
-    const ITERATION_MARK_CODE_POINT = 0x3005;
     const HIRAGANA_SMALL_TSU_CODE_POINT = 0x3063;
     const KATAKANA_SMALL_TSU_CODE_POINT = 0x30c3;
     const KATAKANA_SMALL_KA_CODE_POINT = 0x30f5;
@@ -452,7 +451,7 @@ const JapaneseUtil = (() => {
             let isKanaPre = null;
             for (const c of term) {
                 const codePoint = c.codePointAt(0);
-                const isKana = !(this.isCodePointKanji(codePoint) || codePoint === ITERATION_MARK_CODE_POINT);
+                const isKana = this.isCodePointKana(codePoint);
                 if (isKana === isKanaPre) {
                     groupPre.text += c;
                 } else {
