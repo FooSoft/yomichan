@@ -608,8 +608,9 @@ class AnkiTemplateRenderer {
     _hiragana(context, ...args) {
         const ii = args.length - 1;
         const options = args[ii];
+        const {keepProlongedSoundMarks} = options.hash;
         const value = (ii > 0 ? args[0] : options.fn(context));
-        return this._japaneseUtil.convertKatakanaToHiragana(value);
+        return this._japaneseUtil.convertKatakanaToHiragana(value, keepProlongedSoundMarks === true);
     }
 
     _katakana(context, ...args) {
