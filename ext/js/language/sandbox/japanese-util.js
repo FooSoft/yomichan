@@ -40,7 +40,7 @@ const JapaneseUtil = (() => {
     const CJK_UNIFIED_IDEOGRAPHS_EXTENSION_F_RANGE = [0x2ceb0, 0x2ebef];
     const CJK_COMPATIBILITY_IDEOGRAPHS_RANGE = [0xf900, 0xfaff];
     const CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT_RANGE = [0x2f800, 0x2fa1f];
-    const CJK_UNIFIED_IDEOGRAPHS_RANGES = [
+    const CJK_IDEOGRAPH_RANGES = [
         CJK_UNIFIED_IDEOGRAPHS_RANGE,
         CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A_RANGE,
         CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B_RANGE,
@@ -57,7 +57,7 @@ const JapaneseUtil = (() => {
         HIRAGANA_RANGE,
         KATAKANA_RANGE,
 
-        ...CJK_UNIFIED_IDEOGRAPHS_RANGES,
+        ...CJK_IDEOGRAPH_RANGES,
 
         [0xff66, 0xff9f], // Halfwidth katakana
 
@@ -206,7 +206,7 @@ const JapaneseUtil = (() => {
         // Character code testing functions
 
         isCodePointKanji(codePoint) {
-            return isCodePointInRanges(codePoint, CJK_UNIFIED_IDEOGRAPHS_RANGES);
+            return isCodePointInRanges(codePoint, CJK_IDEOGRAPH_RANGES);
         }
 
         isCodePointKana(codePoint) {
