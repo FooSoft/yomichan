@@ -209,6 +209,10 @@ class Display extends EventDispatcher {
         return this._fullQuery;
     }
 
+    get queryOffset() {
+        return this._queryOffset;
+    }
+
     get frameVisible() {
         return this._frameVisible;
     }
