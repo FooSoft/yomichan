@@ -72,7 +72,6 @@ class Display extends EventDispatcher {
         this._defaultTitle = document.title;
         this._titleMaxLength = 1000;
         this._query = '';
-        this._rawQuery = '';
         this._fullQuery = '';
         this._documentUtil = new DocumentUtil();
         this._progressIndicator = document.querySelector('#progress-indicator');
@@ -418,7 +417,7 @@ class Display extends EventDispatcher {
     searchLast() {
         const type = this._contentType;
         if (type === 'clear') { return; }
-        const query = this._rawQuery;
+        const query = this._query;
         const state = (
             this._historyHasState() ?
             clone(this._history.state) :
@@ -584,7 +583,6 @@ class Display extends EventDispatcher {
             this._historyHasChanged = true;
             this._contentType = type;
             this._query = '';
-            this._rawQuery = '';
             const eventArgs = {type, urlSearchParams, token};
 
             // Set content
@@ -598,7 +596,6 @@ class Display extends EventDispatcher {
                         this._query = query;
                         clear = false;
                         const isTerms = (type === 'terms');
-                        this._rawQuery = query;
                         let queryFull = urlSearchParams.get('full');
                         queryFull = (queryFull !== null ? queryFull : query);
                         const wildcardsEnabled = (urlSearchParams.get('wildcards') !== 'off');
