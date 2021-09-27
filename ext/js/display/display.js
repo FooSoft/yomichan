@@ -73,6 +73,7 @@ class Display extends EventDispatcher {
         this._titleMaxLength = 1000;
         this._query = '';
         this._fullQuery = '';
+        this._queryOffset = 0;
         this._documentUtil = new DocumentUtil();
         this._progressIndicator = document.querySelector('#progress-indicator');
         this._progressIndicatorTimer = null;
@@ -432,7 +433,7 @@ class Display extends EventDispatcher {
         const details = {
             focus: false,
             historyMode: 'clear',
-            params: this._createSearchParams(type, query, false),
+            params: this._createSearchParams(type, query, false, this._queryOffset),
             state,
             content: {
                 dictionaryEntries: null,
@@ -598,9 +599,14 @@ class Display extends EventDispatcher {
                         const isTerms = (type === 'terms');
                         let queryFull = urlSearchParams.get('full');
                         queryFull = (queryFull !== null ? queryFull : query);
+                        let queryOffset = urlSearchParams.get('offset');
+                        if (queryOffset !== null) {
+                            queryOffset = Number.parseInt(queryOffset, 10);
+                            if (!Number.isFinite(queryOffset)) { queryOffset = null; }
+                        }
                         const wildcardsEnabled = (urlSearchParams.get('wildcards') !== 'off');
                         const lookup = (urlSearchParams.get('lookup') !== 'false');
-                        await this._setContentTermsOrKanji(token, isTerms, query, queryFull, lookup, wildcardsEnabled, eventArgs);
+                        await this._setContentTermsOrKanji(token, isTerms, query, queryFull, queryOffset, lookup, wildcardsEnabled, eventArgs);
                     }
                     break;
                 case 'unloaded':
@@ -633,7 +639,7 @@ class Display extends EventDispatcher {
         }
     }
 
-    _onQueryParserSearch({type, dictionaryEntries, sentence, inputInfo: {eventType}, textSource, optionsContext}) {
+    _onQueryParserSearch({type, dictionaryEntries, sentence, inputInfo: {eventType}, textSource, optionsContext, sentenceOffset}) {
         const query = textSource.text();
         const historyState = this._history.state;
         const historyMode = (
@@ -644,7 +650,7 @@ class Display extends EventDispatcher {
         const details = {
             focus: false,
             historyMode,
-            params: this._createSearchParams(type, query, false),
+            params: this._createSearchParams(type, query, false, sentenceOffset),
             state: {
                 sentence,
                 optionsContext,
@@ -724,7 +730,7 @@ class Display extends EventDispatcher {
             const details = {
                 focus: false,
                 historyMode: 'new',
-                params: this._createSearchParams('kanji', query, false),
+                params: this._createSearchParams('kanji', query, false, null),
                 state: {
                     focusEntry: 0,
                     optionsContext,
@@ -887,7 +893,7 @@ class Display extends EventDispatcher {
         }
     }
 
-    async _setContentTermsOrKanji(token, isTerms, query, queryFull, lookup, wildcardsEnabled, eventArgs) {
+    async _setContentTermsOrKanji(token, isTerms, query, queryFull, queryOffset, lookup, wildcardsEnabled, eventArgs) {
         let {state, content} = this._history;
         let changeHistory = false;
         if (!isObject(content)) {
@@ -912,7 +918,11 @@ class Display extends EventDispatcher {
             changeHistory = true;
         }
 
-        this._setFullQuery(queryFull);
+        if (queryOffset !== null) {
+            queryOffset = Math.max(0, Math.min(queryFull.length - query.length, queryOffset));
+        }
+
+        this._setFullQuery(queryFull, queryOffset);
         this._setTitleText(query);
 
         let {dictionaryEntries} = content;
@@ -1015,13 +1025,13 @@ class Display extends EventDispatcher {
         this._updateNavigation(false, false);
         this._setNoContentVisible(false);
         this._setTitleText('');
-        this._setFullQuery('');
+        this._setFullQuery('', 0);
     }
 
     _clearContent() {
         this._container.textContent = '';
         this._setTitleText('');
-        this._setFullQuery('');
+        this._setFullQuery('', 0);
     }
 
     _setNoContentVisible(visible) {
@@ -1032,8 +1042,9 @@ class Display extends EventDispatcher {
         }
     }
 
-    _setFullQuery(text) {
+    _setFullQuery(text, offset) {
         this._fullQuery = text;
+        this._queryOffset = offset;
         this._updateQueryParser();
     }
 
@@ -1200,12 +1211,17 @@ class Display extends EventDispatcher {
         }
     }
 
-    _createSearchParams(type, query, wildcards) {
+    _createSearchParams(type, query, wildcards, sentenceOffset) {
         const params = {};
-        if (query.length < this._fullQuery.length) {
-            params.full = this._fullQuery;
+        const fullQuery = this._fullQuery;
+        const includeFull = (query.length < fullQuery.length);
+        if (includeFull) {
+            params.full = fullQuery;
         }
         params.query = query;
+        if (includeFull && sentenceOffset !== null) {
+            params.offset = `${sentenceOffset}`;
+        }
         if (typeof type === 'string') {
             params.type = type;
         }
