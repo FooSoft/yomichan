@@ -116,8 +116,8 @@ class Display extends EventDispatcher {
             ['close',             () => { this._onHotkeyClose(); }],
             ['nextEntry',         this._onHotkeyActionMoveRelative.bind(this, 1)],
             ['previousEntry',     this._onHotkeyActionMoveRelative.bind(this, -1)],
-            ['lastEntry',         () => { this._focusEntry(this._dictionaryEntries.length - 1, true); }],
-            ['firstEntry',        () => { this._focusEntry(0, true); }],
+            ['lastEntry',         () => { this._focusEntry(this._dictionaryEntries.length - 1, 0, true); }],
+            ['firstEntry',        () => { this._focusEntry(0, 0, true); }],
             ['historyBackward',   () => { this._sourceTermView(); }],
             ['historyForward',    () => { this._nextTermView(); }],
             ['playAudio',         () => { this._playAudioCurrent(); }],
@@ -756,7 +756,7 @@ class Display extends EventDispatcher {
     _onWheel(e) {
         if (e.altKey) {
             if (e.deltaY !== 0) {
-                this._focusEntry(this._index + (e.deltaY > 0 ? 1 : -1), true);
+                this._focusEntry(this._index + (e.deltaY > 0 ? 1 : -1), 0, true);
                 e.preventDefault();
             }
         } else if (e.shiftKey) {
@@ -997,7 +997,7 @@ class Display extends EventDispatcher {
             this._displayAnki.setupEntry(entry, i);
             container.appendChild(entry);
             if (focusEntry === i) {
-                this._focusEntry(i, false);
+                this._focusEntry(i, 0, false);
             }
 
             this._elementOverflowController.addElements(entry);
@@ -1112,15 +1112,21 @@ class Display extends EventDispatcher {
         }
 
         this._index = index;
-
-        return entry;
     }
 
-    _focusEntry(index, smooth) {
+    _focusEntry(index, definitionIndex, smooth) {
         index = Math.max(Math.min(index, this._dictionaryEntries.length - 1), 0);
 
-        const entry = this._entrySetCurrent(index);
-        let target = index === 0 || entry === null ? 0 : this._getElementTop(entry);
+        this._entrySetCurrent(index);
+
+        let node = (index >= 0 && index < this._dictionaryEntryNodes.length ? this._dictionaryEntryNodes[index] : null);
+        if (definitionIndex > 0) {
+            const definitionNodes = this._getDictionaryEntryDefinitionNodes(index);
+            if (definitionIndex < definitionNodes.length) {
+                node = definitionNodes[definitionIndex];
+            }
+        }
+        let target = (index === 0 && definitionIndex <= 0) || node === null ? 0 : this._getElementTop(node);
 
         if (this._navigationHeader !== null) {
             target -= this._navigationHeader.getBoundingClientRect().height;
@@ -1156,8 +1162,12 @@ class Display extends EventDispatcher {
 
         if (index === this._index) { return false; }
 
-        this._focusEntry(index, smooth);
+        this._focusEntry(index, 0, smooth);
         return true;
+    }
+
+    _getDictionaryEntryDefinitionNodes(index) {
+        return this._dictionaryEntryNodes[index].querySelectorAll('.definition-item');
     }
 
     _sourceTermView() {
@@ -1529,7 +1539,7 @@ class Display extends EventDispatcher {
         let count = Number.parseInt(argument, 10);
         if (!Number.isFinite(count)) { count = 1; }
         count = Math.max(0, Math.floor(count));
-        this._focusEntry(this._index + count * sign, true);
+        this._focusEntry(this._index + count * sign, 0, true);
     }
 
     _onHotkeyActionPlayAudioFromSource(source) {
