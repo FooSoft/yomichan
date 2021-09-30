@@ -1141,29 +1141,62 @@ class Display extends EventDispatcher {
     }
 
     _focusEntryWithDifferentDictionary(offset, smooth) {
-        const offsetSign = Math.sign(offset);
-        if (offsetSign === 0) { return false; }
+        const sign = Math.sign(offset);
+        if (sign === 0) { return false; }
 
         let index = this._index;
-        const dictionaryEntryCount = this._dictionaryEntries.length;
-        if (index < 0 || index >= dictionaryEntryCount) { return false; }
+        const count = Math.min(this._dictionaryEntries.length, this._dictionaryEntryNodes.length);
+        if (index < 0 || index >= count) { return false; }
 
-        const {dictionary} = this._dictionaryEntries[index];
-        for (let indexNext = index + offsetSign; indexNext >= 0 && indexNext < dictionaryEntryCount; indexNext += offsetSign) {
-            const {dictionaryNames} = this._dictionaryEntries[indexNext];
-            if (dictionaryNames.length > 1 || !dictionaryNames.includes(dictionary)) {
-                offset -= offsetSign;
-                if (Math.sign(offsetSign) !== offset) {
-                    index = indexNext;
+        const dictionaryEntry = this._dictionaryEntries[index];
+        const visibleDefinitionIndex = this._getDictionaryEntryVisibleDefinitionIndex(index, sign);
+        if (visibleDefinitionIndex === null) { return false; }
+
+        const {dictionary} = dictionaryEntry.definitions[visibleDefinitionIndex];
+        let focusDefinitionIndex = null;
+        for (let i = index; i >= 0 && i < count; i += sign) {
+            const {definitions} = this._dictionaryEntries[i];
+            const jj = definitions.length;
+            let j = (i === index ? visibleDefinitionIndex + sign : (sign > 0 ? 0 : jj - 1));
+            for (; j >= 0 && j < jj; j += sign) {
+                if (definitions[j].dictionary !== dictionary) {
+                    focusDefinitionIndex = j;
+                    index = i;
+                    i = -2; // Terminate outer loop
                     break;
                 }
             }
         }
 
-        if (index === this._index) { return false; }
+        if (focusDefinitionIndex === null) { return false; }
 
-        this._focusEntry(index, 0, smooth);
+        this._focusEntry(index, focusDefinitionIndex, smooth);
         return true;
+    }
+
+    _getDictionaryEntryVisibleDefinitionIndex(index, sign) {
+        const {top: scrollTop, bottom: scrollBottom} = this._windowScroll.getRect();
+
+        const {definitions} = this._dictionaryEntries[index];
+        const nodes = this._getDictionaryEntryDefinitionNodes(index);
+        const definitionCount = Math.min(definitions.length, nodes.length);
+        if (definitionCount <= 0) { return null; }
+
+        let visibleIndex = null;
+        let visibleCoverage = 0;
+        for (let i = (sign > 0 ? 0 : definitionCount - 1); i >= 0 && i < definitionCount; i += sign) {
+            const {top, bottom} = nodes[i].getBoundingClientRect();
+            if (bottom <= scrollTop || top >= scrollBottom) { continue; }
+            const top2 = Math.max(scrollTop, Math.min(scrollBottom, top));
+            const bottom2 = Math.max(scrollTop, Math.min(scrollBottom, bottom));
+            const coverage = (bottom2 - top2) / (bottom - top);
+            if (coverage >= visibleCoverage) {
+                visibleCoverage = coverage;
+                visibleIndex = i;
+            }
+        }
+
+        return visibleIndex !== null ? visibleIndex : (sign > 0 ? definitionCount - 1 : 0);
     }
 
     _getDictionaryEntryDefinitionNodes(index) {
