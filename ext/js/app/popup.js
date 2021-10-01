@@ -142,7 +142,7 @@ class Popup extends EventDispatcher {
     async containsPoint(x, y) {
         for (let popup = this; popup !== null && popup.isVisibleSync(); popup = popup.child) {
             const rect = popup.getFrameRect();
-            if (x >= rect.left && y >= rect.top && x < rect.right && y < rect.bottom) {
+            if (rect.valid && x >= rect.x && y >= rect.y && x < rect.x + rect.width && y < rect.y + rect.height) {
                 return true;
             }
         }
@@ -203,7 +203,8 @@ class Popup extends EventDispatcher {
     }
 
     getFrameRect() {
-        return this._frame.getBoundingClientRect();
+        const {left, top, width, height} = this._frame.getBoundingClientRect();
+        return {x: left, y: top, width, height, valid: true};
     }
 
     async getFrameSize() {
@@ -535,16 +536,16 @@ class Popup extends EventDispatcher {
         const verticalOffset = optionsGeneral.popupVerticalOffset * offsetScale;
 
         const [x, w] = this._getConstrainedPosition(
-            elementRect.right - horizontalOffset,
-            elementRect.left + horizontalOffset,
+            elementRect.x + elementRect.width - horizontalOffset,
+            elementRect.x + horizontalOffset,
             width,
             viewport.left,
             viewport.right,
             true
         );
         const [y, h, below] = this._getConstrainedPositionBinary(
-            elementRect.top - verticalOffset,
-            elementRect.bottom + verticalOffset,
+            elementRect.y - verticalOffset,
+            elementRect.y + elementRect.height + verticalOffset,
             height,
             viewport.top,
             viewport.bottom,
