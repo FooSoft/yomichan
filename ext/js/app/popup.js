@@ -207,8 +207,8 @@ class Popup extends EventDispatcher {
     }
 
     async getFrameSize() {
-        const rect = this._frame.getBoundingClientRect();
-        return {width: rect.width, height: rect.height, valid: true};
+        const {width, height} = this._frame.getBoundingClientRect();
+        return {width, height, valid: true};
     }
 
     async setFrameSize(width, height) {
