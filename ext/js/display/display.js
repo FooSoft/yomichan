@@ -906,12 +906,7 @@ class Display extends EventDispatcher {
             changeHistory = true;
         }
 
-        let {
-            focusEntry=null,
-            scrollX=null,
-            scrollY=null,
-            optionsContext=null
-        } = state;
+        let {focusEntry, scrollX, scrollY, optionsContext} = state;
         if (typeof focusEntry !== 'number') { focusEntry = 0; }
         if (!(typeof optionsContext === 'object' && optionsContext !== null)) {
             optionsContext = this.getOptionsContext();
