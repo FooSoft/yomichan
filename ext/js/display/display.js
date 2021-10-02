@@ -857,8 +857,11 @@ class Display extends EventDispatcher {
         document.documentElement.dataset.theme = themeName;
     }
 
-    async _findDictionaryEntries(isTerms, source, wildcardsEnabled, optionsContext) {
-        if (isTerms) {
+    async _findDictionaryEntries(isKanji, source, wildcardsEnabled, optionsContext) {
+        if (isKanji) {
+            const dictionaryEntries = await yomichan.api.kanjiFind(source, optionsContext);
+            return dictionaryEntries;
+        } else {
             const findDetails = {};
             if (wildcardsEnabled) {
                 const match = /^([*\uff0a]*)([\w\W]*?)([*\uff0a]*)$/.exec(source);
@@ -874,14 +877,10 @@ class Display extends EventDispatcher {
 
             const {dictionaryEntries} = await yomichan.api.termsFind(source, findDetails, optionsContext);
             return dictionaryEntries;
-        } else {
-            const dictionaryEntries = await yomichan.api.kanjiFind(source, optionsContext);
-            return dictionaryEntries;
         }
     }
 
     async _setContentTermsOrKanji(type, urlSearchParams, token, eventArgs) {
-        const isTerms = (type === 'terms');
         const lookup = (urlSearchParams.get('lookup') !== 'false');
         const wildcardsEnabled = (urlSearchParams.get('wildcards') !== 'off');
 
@@ -922,7 +921,7 @@ class Display extends EventDispatcher {
 
         let {dictionaryEntries} = content;
         if (!Array.isArray(dictionaryEntries)) {
-            dictionaryEntries = lookup && query.length > 0 ? await this._findDictionaryEntries(isTerms, query, wildcardsEnabled, optionsContext) : [];
+            dictionaryEntries = lookup && query.length > 0 ? await this._findDictionaryEntries(type === 'kanji', query, wildcardsEnabled, optionsContext) : [];
             if (this._setContentToken !== token) { return; }
             content.dictionaryEntries = dictionaryEntries;
             changeHistory = true;
@@ -977,7 +976,7 @@ class Display extends EventDispatcher {
 
             const dictionaryEntry = dictionaryEntries[i];
             const entry = (
-                isTerms ?
+                dictionaryEntry.type === 'term' ?
                 this._displayGenerator.createTermEntry(dictionaryEntry) :
                 this._displayGenerator.createKanjiEntry(dictionaryEntry)
             );
