@@ -884,14 +884,17 @@ class Display extends EventDispatcher {
         const isTerms = (type === 'terms');
         const lookup = (urlSearchParams.get('lookup') !== 'false');
         const wildcardsEnabled = (urlSearchParams.get('wildcards') !== 'off');
+
+        // Set query
         const query = urlSearchParams.get('query');
         let queryFull = urlSearchParams.get('full');
         queryFull = (queryFull !== null ? queryFull : query);
         let queryOffset = urlSearchParams.get('offset');
         if (queryOffset !== null) {
             queryOffset = Number.parseInt(queryOffset, 10);
-            if (!Number.isFinite(queryOffset)) { queryOffset = null; }
+            queryOffset = Number.isFinite(queryOffset) ? Math.max(0, Math.min(queryFull.length - query.length, queryOffset)) : null;
         }
+        this._setQuery(query, queryFull, queryOffset);
 
         let {state, content} = this._history;
         let changeHistory = false;
@@ -916,12 +919,6 @@ class Display extends EventDispatcher {
             state.optionsContext = optionsContext;
             changeHistory = true;
         }
-
-        if (queryOffset !== null) {
-            queryOffset = Math.max(0, Math.min(queryFull.length - query.length, queryOffset));
-        }
-
-        this._setQuery(query, queryFull, queryOffset);
 
         let {dictionaryEntries} = content;
         if (!Array.isArray(dictionaryEntries)) {
