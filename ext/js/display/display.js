@@ -582,7 +582,6 @@ class Display extends EventDispatcher {
 
             const fullVisible = urlSearchParams.get('full-visible');
             this._queryParserVisibleOverride = (fullVisible === null ? null : (fullVisible !== 'false'));
-            this._updateQueryParser();
 
             let clear = true;
             this._historyHasChanged = true;
