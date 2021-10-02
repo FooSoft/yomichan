@@ -601,8 +601,7 @@ class Display extends EventDispatcher {
                 case 'unloaded':
                     {
                         clear = false;
-                        const {content} = this._history;
-                        eventArgs.content = content;
+                        eventArgs.content = this._history.content;
                         this.trigger('contentUpdating', eventArgs);
                         this._setContentExtensionUnloaded();
                     }
