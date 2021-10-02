@@ -595,22 +595,8 @@ class Display extends EventDispatcher {
                 case 'terms':
                 case 'kanji':
                     {
-                        const query = urlSearchParams.get('query');
-                        if (query === null) { break; }
-
-                        this._query = query;
                         clear = false;
-                        const isTerms = (type === 'terms');
-                        let queryFull = urlSearchParams.get('full');
-                        queryFull = (queryFull !== null ? queryFull : query);
-                        let queryOffset = urlSearchParams.get('offset');
-                        if (queryOffset !== null) {
-                            queryOffset = Number.parseInt(queryOffset, 10);
-                            if (!Number.isFinite(queryOffset)) { queryOffset = null; }
-                        }
-                        const wildcardsEnabled = (urlSearchParams.get('wildcards') !== 'off');
-                        const lookup = (urlSearchParams.get('lookup') !== 'false');
-                        await this._setContentTermsOrKanji(token, isTerms, query, queryFull, queryOffset, lookup, wildcardsEnabled, eventArgs);
+                        await this._setContentTermsOrKanji(type, urlSearchParams, token, eventArgs);
                     }
                     break;
                 case 'unloaded':
@@ -897,7 +883,21 @@ class Display extends EventDispatcher {
         }
     }
 
-    async _setContentTermsOrKanji(token, isTerms, query, queryFull, queryOffset, lookup, wildcardsEnabled, eventArgs) {
+    async _setContentTermsOrKanji(type, urlSearchParams, token, eventArgs) {
+        const isTerms = (type === 'terms');
+        const lookup = (urlSearchParams.get('lookup') !== 'false');
+        const wildcardsEnabled = (urlSearchParams.get('wildcards') !== 'off');
+        const query = urlSearchParams.get('query');
+        let queryFull = urlSearchParams.get('full');
+        queryFull = (queryFull !== null ? queryFull : query);
+        let queryOffset = urlSearchParams.get('offset');
+        if (queryOffset !== null) {
+            queryOffset = Number.parseInt(queryOffset, 10);
+            if (!Number.isFinite(queryOffset)) { queryOffset = null; }
+        }
+
+        this._query = query;
+
         let {state, content} = this._history;
         let changeHistory = false;
         if (!isObject(content)) {
