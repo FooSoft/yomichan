@@ -587,7 +587,6 @@ class Display extends EventDispatcher {
             let clear = true;
             this._historyHasChanged = true;
             this._contentType = type;
-            this._query = '';
             const eventArgs = {type, urlSearchParams, token};
 
             // Set content
@@ -896,8 +895,6 @@ class Display extends EventDispatcher {
             if (!Number.isFinite(queryOffset)) { queryOffset = null; }
         }
 
-        this._query = query;
-
         let {state, content} = this._history;
         let changeHistory = false;
         if (!isObject(content)) {
@@ -926,8 +923,7 @@ class Display extends EventDispatcher {
             queryOffset = Math.max(0, Math.min(queryFull.length - query.length, queryOffset));
         }
 
-        this._setFullQuery(queryFull, queryOffset);
-        this._setTitleText(query);
+        this._setQuery(query, queryFull, queryOffset);
 
         let {dictionaryEntries} = content;
         if (!Array.isArray(dictionaryEntries)) {
@@ -1028,14 +1024,12 @@ class Display extends EventDispatcher {
 
         this._updateNavigation(false, false);
         this._setNoContentVisible(false);
-        this._setTitleText('');
-        this._setFullQuery('', 0);
+        this._setQuery('', '', 0);
     }
 
     _clearContent() {
         this._container.textContent = '';
-        this._setTitleText('');
-        this._setFullQuery('', 0);
+        this._setQuery('', '', 0);
     }
 
     _setNoContentVisible(visible) {
@@ -1046,10 +1040,12 @@ class Display extends EventDispatcher {
         }
     }
 
-    _setFullQuery(text, offset) {
-        this._fullQuery = text;
-        this._queryOffset = offset;
+    _setQuery(query, fullQuery, queryOffset) {
+        this._query = query;
+        this._fullQuery = fullQuery;
+        this._queryOffset = queryOffset;
         this._updateQueryParser();
+        this._setTitleText(query);
     }
 
     _updateQueryParser() {
