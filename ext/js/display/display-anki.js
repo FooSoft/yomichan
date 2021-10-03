@@ -70,6 +70,10 @@ class DisplayAnki {
             ['viewNote',          this._viewNoteForSelectedEntry.bind(this)]
         ]);
         this._display.on('optionsUpdated', this._onOptionsUpdated.bind(this));
+        this._display.on('contentClear', this._onContentClear.bind(this));
+        this._display.on('contentUpdateStart', this._onContentUpdateStart.bind(this));
+        this._display.on('contentUpdateEntry', this._onContentUpdateEntry.bind(this));
+        this._display.on('contentUpdateComplete', this._onContentUpdateComplete.bind(this));
     }
 
     cleanupEntries() {
@@ -171,6 +175,22 @@ class DisplayAnki {
         this._modeOptions.set('term-kana', terms);
 
         this._updateAnkiFieldTemplates(options);
+    }
+
+    _onContentClear() {
+        this.cleanupEntries();
+    }
+
+    _onContentUpdateStart() {
+        this.setupEntriesBegin();
+    }
+
+    _onContentUpdateEntry({element, index}) {
+        this.setupEntry(element, index);
+    }
+
+    _onContentUpdateComplete() {
+        this.setupEntriesComplete();
     }
 
     _onNoteAdd(e) {
