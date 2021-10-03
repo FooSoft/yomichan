@@ -16,8 +16,6 @@
  */
 
 /* global
- * DisplayAnki
- * DisplayAudio
  * DisplayGenerator
  * DisplayHistory
  * DisplayNotification
@@ -106,10 +104,8 @@ class Display extends EventDispatcher {
         this._contentTextScanner = null;
         this._tagNotification = null;
         this._footerNotificationContainer = document.querySelector('#content-footer');
-        this._displayAudio = new DisplayAudio(this);
         this._optionToggleHotkeyHandler = new OptionToggleHotkeyHandler(this);
         this._elementOverflowController = new ElementOverflowController();
-        this._displayAnki = new DisplayAnki(this, japaneseUtil);
         this._frameVisible = (pageType === 'search');
 
         this._hotkeyHandler.registerActions([
@@ -139,14 +135,6 @@ class Display extends EventDispatcher {
 
     get displayGenerator() {
         return this._displayGenerator;
-    }
-
-    get autoPlayAudioDelay() {
-        return this._displayAudio.autoPlayAudioDelay;
-    }
-
-    set autoPlayAudioDelay(value) {
-        this._displayAudio.autoPlayAudioDelay = value;
     }
 
     get queryParserVisible() {
@@ -227,8 +215,6 @@ class Display extends EventDispatcher {
         // Prepare
         await this._hotkeyHelpController.prepare();
         await this._displayGenerator.prepare();
-        this._displayAudio.prepare();
-        this._displayAnki.prepare();
         this._queryParser.prepare();
         this._history.prepare();
         this._optionToggleHotkeyHandler.prepare();
@@ -459,10 +445,6 @@ class Display extends EventDispatcher {
         if (node === null) { return -1; }
         const index = parseInt(node.dataset.index, 10);
         return Number.isFinite(index) ? index : -1;
-    }
-
-    getAnkiNoteMediaAudioDetails(term, reading) {
-        return this._displayAudio.getAnkiNoteMediaAudioDetails(term, reading);
     }
 
     // Message handlers

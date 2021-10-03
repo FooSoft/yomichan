@@ -23,8 +23,9 @@
  */
 
 class DisplayAnki {
-    constructor(display, japaneseUtil) {
+    constructor(display, displayAudio, japaneseUtil) {
         this._display = display;
+        this._displayAudio = displayAudio;
         this._ankiFieldTemplates = null;
         this._ankiFieldTemplatesDefault = null;
         this._ankiNoteBuilder = new AnkiNoteBuilder({japaneseUtil});
@@ -535,7 +536,7 @@ class DisplayAnki {
         const fields = Object.entries(modeOptions.fields);
         const contentOrigin = this._display.getContentOrigin();
         const details = this._ankiNoteBuilder.getDictionaryEntryDetailsForNote(dictionaryEntry);
-        const audioDetails = (details.type === 'term' ? this._display.getAnkiNoteMediaAudioDetails(details.term, details.reading) : null);
+        const audioDetails = (details.type === 'term' ? this._displayAudio.getAnkiNoteMediaAudioDetails(details.term, details.reading) : null);
         const optionsContext = this._display.getOptionsContext();
 
         const {note, errors, requirements: outputRequirements} = await this._ankiNoteBuilder.createNote({

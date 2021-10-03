@@ -21,10 +21,11 @@
  */
 
 class SearchDisplayController {
-    constructor(tabId, frameId, display, japaneseUtil, searchPersistentStateController) {
+    constructor(tabId, frameId, display, displayAudio, japaneseUtil, searchPersistentStateController) {
         this._tabId = tabId;
         this._frameId = frameId;
         this._display = display;
+        this._displayAudio = displayAudio;
         this._searchPersistentStateController = searchPersistentStateController;
         this._searchButton = document.querySelector('#search-button');
         this._queryInput = document.querySelector('#search-textbox');
@@ -69,7 +70,7 @@ class SearchDisplayController {
 
         this._updateClipboardMonitorEnabled();
 
-        this._display.autoPlayAudioDelay = 0;
+        this._displayAudio.autoPlayAudioDelay = 0;
         this._display.queryParserVisible = true;
         this._display.setHistorySettings({useBrowserHistory: true});
 
