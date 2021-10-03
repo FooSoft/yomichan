@@ -57,6 +57,9 @@ class DisplayAudio {
     prepare() {
         this._audioSystem.prepare();
         this._display.on('optionsUpdated', this._onOptionsUpdated.bind(this));
+        this._display.on('contentClear', this._onContentClear.bind(this));
+        this._display.on('contentUpdateEntry', this._onContentUpdateEntry.bind(this));
+        this._display.on('contentUpdateComplete', this._onContentUpdateComplete.bind(this));
         this._onOptionsUpdated({options: this._display.getOptions()});
     }
 
@@ -169,6 +172,18 @@ class DisplayAudio {
         data.audioEnabled = `${enabled && sources.length > 0}`;
 
         this._cache.clear();
+    }
+
+    _onContentClear() {
+        this.cleanupEntries();
+    }
+
+    _onContentUpdateEntry({element, index}) {
+        this.setupEntry(element, index);
+    }
+
+    _onContentUpdateComplete() {
+        this.setupEntriesComplete();
     }
 
     _addAudioSourceInfo(type, url, voice, isInOptions, nameMap) {

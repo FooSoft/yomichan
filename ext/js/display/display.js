@@ -568,7 +568,6 @@ class Display extends EventDispatcher {
             this._closeAllPopupMenus();
             this._eventListeners.removeAllEventListeners();
             this._mediaLoader.unloadAll();
-            this._displayAudio.cleanupEntries();
             this._hideTagNotification(false);
             this._triggerContentClear();
             this._dictionaryEntries = [];
@@ -963,7 +962,6 @@ class Display extends EventDispatcher {
             entry.dataset.index = `${i}`;
             this._dictionaryEntryNodes.push(entry);
             this._addEntryEventListeners(entry);
-            this._displayAudio.setupEntry(entry, i);
             this._triggerContentUpdateEntry(dictionaryEntry, entry, i);
             container.appendChild(entry);
             if (focusEntry === i) {
@@ -981,7 +979,6 @@ class Display extends EventDispatcher {
             this._windowScroll.to(x, y);
         }
 
-        this._displayAudio.setupEntriesComplete();
         this._triggerContentUpdateComplete();
     }
 
