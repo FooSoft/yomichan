@@ -1558,8 +1558,13 @@ class Display extends EventDispatcher {
         const dictionaryEntry = this._dictionaryEntries[index];
         const result = {dictionaryEntry};
 
-        const result2 = await this._displayAnki.getLogData(dictionaryEntry);
-        Object.assign(result, result2);
+        const promises = [];
+        this.trigger('logDictionaryEntryData', {dictionaryEntry, promises});
+        if (promises.length > 0) {
+            for (const result2 of await Promise.all(promises)) {
+                Object.assign(result, result2);
+            }
+        }
 
         console.log(result);
     }

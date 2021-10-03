@@ -74,6 +74,7 @@ class DisplayAnki {
         this._display.on('contentUpdateStart', this._onContentUpdateStart.bind(this));
         this._display.on('contentUpdateEntry', this._onContentUpdateEntry.bind(this));
         this._display.on('contentUpdateComplete', this._onContentUpdateComplete.bind(this));
+        this._display.on('logDictionaryEntryData', this._onLogDictionaryEntryData.bind(this));
     }
 
     async getLogData(dictionaryEntry) {
@@ -175,6 +176,10 @@ class DisplayAnki {
 
     _onContentUpdateComplete() {
         this._updateDictionaryEntryDetails();
+    }
+
+    _onLogDictionaryEntryData({dictionaryEntry, promises}) {
+        promises.push(this.getLogData(dictionaryEntry));
     }
 
     _onNoteAdd(e) {
