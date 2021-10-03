@@ -120,8 +120,6 @@ class Display extends EventDispatcher {
             ['firstEntry',        () => { this._focusEntry(0, 0, true); }],
             ['historyBackward',   () => { this._sourceTermView(); }],
             ['historyForward',    () => { this._nextTermView(); }],
-            ['playAudio',         () => { this._playAudioCurrent(); }],
-            ['playAudioFromSource', this._onHotkeyActionPlayAudioFromSource.bind(this)],
             ['copyHostSelection', () => this._copyHostSelection()],
             ['nextEntryDifferentDictionary',     () => { this._focusEntryWithDifferentDictionary(1, true); }],
             ['previousEntryDifferentDictionary', () => { this._focusEntryWithDifferentDictionary(-1, true); }]
@@ -1192,10 +1190,6 @@ class Display extends EventDispatcher {
         }
     }
 
-    async _playAudioCurrent() {
-        await this._displayAudio.playAudio(this._index, 0);
-    }
-
     _getEntry(index) {
         const entries = this._dictionaryEntryNodes;
         return index >= 0 && index < entries.length ? entries[index] : null;
@@ -1546,10 +1540,6 @@ class Display extends EventDispatcher {
         if (!Number.isFinite(count)) { count = 1; }
         count = Math.max(0, Math.floor(count));
         this._focusEntry(this._index + count * sign, 0, true);
-    }
-
-    _onHotkeyActionPlayAudioFromSource(source) {
-        this._displayAudio.playAudio(this._index, 0, source);
     }
 
     _closeAllPopupMenus() {
