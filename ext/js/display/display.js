@@ -550,7 +550,6 @@ class Display extends EventDispatcher {
             const fullVisible = urlSearchParams.get('full-visible');
             this._queryParserVisibleOverride = (fullVisible === null ? null : (fullVisible !== 'false'));
 
-            let clear = true;
             this._historyHasChanged = true;
             this._contentType = type;
 
@@ -558,24 +557,16 @@ class Display extends EventDispatcher {
             switch (type) {
                 case 'terms':
                 case 'kanji':
-                    {
-                        clear = false;
-                        await this._setContentTermsOrKanji(type, urlSearchParams, token);
-                    }
+                    await this._setContentTermsOrKanji(type, urlSearchParams, token);
                     break;
                 case 'unloaded':
-                    {
-                        clear = false;
-                        this._setContentExtensionUnloaded();
-                    }
+                    this._setContentExtensionUnloaded();
                     break;
-            }
-
-            // Clear
-            if (clear) {
-                type = 'clear';
-                this._contentType = type;
-                this._clearContent();
+                default:
+                    type = 'clear';
+                    this._contentType = type;
+                    this._clearContent();
+                    break;
             }
         } catch (e) {
             this.onError(e);
