@@ -60,6 +60,9 @@ class DisplayAudio {
             ['playAudio',           this._onHotkeyActionPlayAudio.bind(this)],
             ['playAudioFromSource', this._onHotkeyActionPlayAudioFromSource.bind(this)]
         ]);
+        this.registerDirectMessageHandlers([
+            ['clearAutoPlayTimer', {async: false, handler: this._onMessageClearAutoPlayTimer.bind(this)}]
+        ]);
         this._display.on('optionsUpdated', this._onOptionsUpdated.bind(this));
         this._display.on('contentClear', this._onContentClear.bind(this));
         this._display.on('contentUpdateEntry', this._onContentUpdateEntry.bind(this));
@@ -192,6 +195,10 @@ class DisplayAudio {
 
     _onHotkeyActionPlayAudioFromSource(source) {
         this.playAudio(this._display.selectedIndex, 0, source);
+    }
+
+    _onMessageClearAutoPlayTimer() {
+        this.clearAutoPlayTimer();
     }
 
     _addAudioSourceInfo(type, url, voice, isInOptions, nameMap) {

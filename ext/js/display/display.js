@@ -127,7 +127,6 @@ class Display extends EventDispatcher {
         this.registerDirectMessageHandlers([
             ['setOptionsContext',  {async: false, handler: this._onMessageSetOptionsContext.bind(this)}],
             ['setContent',         {async: false, handler: this._onMessageSetContent.bind(this)}],
-            ['clearAutoPlayTimer', {async: false, handler: this._onMessageClearAutoPlayTimer.bind(this)}],
             ['setCustomCss',       {async: false, handler: this._onMessageSetCustomCss.bind(this)}],
             ['setContentScale',    {async: false, handler: this._onMessageSetContentScale.bind(this)}],
             ['configure',          {async: true,  handler: this._onMessageConfigure.bind(this)}],
@@ -343,10 +342,6 @@ class Display extends EventDispatcher {
         this.trigger('optionsUpdated', {options});
     }
 
-    clearAutoPlayTimer() {
-        this._displayAudio.clearAutoPlayTimer();
-    }
-
     setContent(details) {
         const {focus, params, state, content} = details;
         const historyMode = this._historyHasChanged ? details.historyMode : 'clear';
@@ -507,10 +502,6 @@ class Display extends EventDispatcher {
 
     _onMessageSetContent({details}) {
         this.setContent(details);
-    }
-
-    _onMessageClearAutoPlayTimer() {
-        this.clearAutoPlayTimer();
     }
 
     _onMessageSetCustomCss({css}) {
