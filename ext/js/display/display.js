@@ -571,6 +571,7 @@ class Display extends EventDispatcher {
             this._displayAudio.cleanupEntries();
             this._displayAnki.cleanupEntries();
             this._hideTagNotification(false);
+            this._triggerContentClear();
             this._dictionaryEntries = [];
             this._dictionaryEntryNodes = [];
             this._elementOverflowController.clearElements();
@@ -586,7 +587,6 @@ class Display extends EventDispatcher {
             let clear = true;
             this._historyHasChanged = true;
             this._contentType = type;
-            const eventArgs = {type, urlSearchParams, token};
 
             // Set content
             switch (type) {
@@ -594,14 +594,12 @@ class Display extends EventDispatcher {
                 case 'kanji':
                     {
                         clear = false;
-                        await this._setContentTermsOrKanji(type, urlSearchParams, token, eventArgs);
+                        await this._setContentTermsOrKanji(type, urlSearchParams, token);
                     }
                     break;
                 case 'unloaded':
                     {
                         clear = false;
-                        eventArgs.content = this._history.content;
-                        this.trigger('contentUpdating', eventArgs);
                         this._setContentExtensionUnloaded();
                     }
                     break;
@@ -611,16 +609,8 @@ class Display extends EventDispatcher {
             if (clear) {
                 type = 'clear';
                 this._contentType = type;
-                const {content} = this._history;
-                eventArgs.type = type;
-                eventArgs.content = content;
-                this.trigger('contentUpdating', eventArgs);
                 this._clearContent();
             }
-
-            const stale = (this._setContentToken !== token);
-            eventArgs.stale = stale;
-            this.trigger('contentUpdated', eventArgs);
         } catch (e) {
             this.onError(e);
         }
@@ -880,7 +870,7 @@ class Display extends EventDispatcher {
         }
     }
 
-    async _setContentTermsOrKanji(type, urlSearchParams, token, eventArgs) {
+    async _setContentTermsOrKanji(type, urlSearchParams, token) {
         const lookup = (urlSearchParams.get('lookup') !== 'false');
         const wildcardsEnabled = (urlSearchParams.get('wildcards') !== 'off');
 
@@ -949,10 +939,6 @@ class Display extends EventDispatcher {
             this._replaceHistoryStateNoNavigate(state, content);
         }
 
-        eventArgs.source = query;
-        eventArgs.content = content;
-        this.trigger('contentUpdating', eventArgs);
-
         this._dictionaryEntries = dictionaryEntries;
 
         this._updateNavigation(this._history.hasPrevious(), this._history.hasNext());
@@ -960,6 +946,8 @@ class Display extends EventDispatcher {
 
         const container = this._container;
         container.textContent = '';
+
+        this._triggerContentUpdateStart();
 
         this._displayAnki.setupEntriesBegin();
 
@@ -980,6 +968,7 @@ class Display extends EventDispatcher {
             this._addEntryEventListeners(entry);
             this._displayAudio.setupEntry(entry, i);
             this._displayAnki.setupEntry(entry, i);
+            this._triggerContentUpdateEntry(dictionaryEntry, entry, i);
             container.appendChild(entry);
             if (focusEntry === i) {
                 this._focusEntry(i, 0, false);
@@ -998,6 +987,7 @@ class Display extends EventDispatcher {
 
         this._displayAudio.setupEntriesComplete();
         this._displayAnki.setupEntriesComplete();
+        this._triggerContentUpdateComplete();
     }
 
     _setContentExtensionUnloaded() {
@@ -1014,11 +1004,17 @@ class Display extends EventDispatcher {
         this._updateNavigation(false, false);
         this._setNoContentVisible(false);
         this._setQuery('', '', 0);
+
+        this._triggerContentUpdateStart();
+        this._triggerContentUpdateComplete();
     }
 
     _clearContent() {
         this._container.textContent = '';
         this._setQuery('', '', 0);
+
+        this._triggerContentUpdateStart();
+        this._triggerContentUpdateComplete();
     }
 
     _setNoContentVisible(visible) {
@@ -1587,5 +1583,23 @@ class Display extends EventDispatcher {
         Object.assign(result, result2);
 
         console.log(result);
+    }
+
+    _triggerContentClear() {
+        this.trigger('contentClear', {});
+    }
+
+    _triggerContentUpdateStart() {
+        let {content} = this._history;
+        if (typeof content !== 'object' || content === null) { content = {}; }
+        this.trigger('contentUpdateStart', {type: this._contentType, query: this._query, content});
+    }
+
+    _triggerContentUpdateEntry(dictionaryEntry, element, index) {
+        this.trigger('contentUpdateEntry', {dictionaryEntry, element, index});
+    }
+
+    _triggerContentUpdateComplete() {
+        this.trigger('contentUpdateComplete', {type: this._contentType});
     }
 }
