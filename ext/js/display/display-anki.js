@@ -76,28 +76,6 @@ class DisplayAnki {
         this._display.on('contentUpdateComplete', this._onContentUpdateComplete.bind(this));
     }
 
-    cleanupEntries() {
-        this._updateDictionaryEntryDetailsToken = null;
-        this._dictionaryEntryDetails = null;
-        this._hideAnkiNoteErrors(false);
-    }
-
-    setupEntriesBegin() {
-        this._noteContext = this._getNoteContext();
-    }
-
-    setupEntry(entry) {
-        this._addMultipleEventListeners(entry, '.action-view-tags', 'click', this._onShowTagsBind);
-        this._addMultipleEventListeners(entry, '.action-add-note', 'click', this._onNoteAddBind);
-        this._addMultipleEventListeners(entry, '.action-view-note', 'click', this._onViewNoteButtonClickBind);
-        this._addMultipleEventListeners(entry, '.action-view-note', 'contextmenu', this._onViewNoteButtonContextMenuBind);
-        this._addMultipleEventListeners(entry, '.action-view-note', 'menuClose', this._onViewNoteButtonMenuCloseBind);
-    }
-
-    setupEntriesComplete() {
-        this._updateDictionaryEntryDetails();
-    }
-
     async getLogData(dictionaryEntry) {
         const result = {};
 
@@ -178,19 +156,25 @@ class DisplayAnki {
     }
 
     _onContentClear() {
-        this.cleanupEntries();
+        this._updateDictionaryEntryDetailsToken = null;
+        this._dictionaryEntryDetails = null;
+        this._hideAnkiNoteErrors(false);
     }
 
     _onContentUpdateStart() {
-        this.setupEntriesBegin();
+        this._noteContext = this._getNoteContext();
     }
 
-    _onContentUpdateEntry({element, index}) {
-        this.setupEntry(element, index);
+    _onContentUpdateEntry({element}) {
+        this._addMultipleEventListeners(element, '.action-view-tags', 'click', this._onShowTagsBind);
+        this._addMultipleEventListeners(element, '.action-add-note', 'click', this._onNoteAddBind);
+        this._addMultipleEventListeners(element, '.action-view-note', 'click', this._onViewNoteButtonClickBind);
+        this._addMultipleEventListeners(element, '.action-view-note', 'contextmenu', this._onViewNoteButtonContextMenuBind);
+        this._addMultipleEventListeners(element, '.action-view-note', 'menuClose', this._onViewNoteButtonMenuCloseBind);
     }
 
     _onContentUpdateComplete() {
-        this.setupEntriesComplete();
+        this._updateDictionaryEntryDetails();
     }
 
     _onNoteAdd(e) {
