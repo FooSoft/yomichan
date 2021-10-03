@@ -532,10 +532,7 @@ class Display extends EventDispatcher {
 
     _onMessageVisibilityChanged({value}) {
         this._frameVisible = value;
-        if (!value) {
-            this._displayAudio.clearAutoPlayTimer();
-            this._displayAudio.stopAudio();
-        }
+        this.trigger('frameVisibilityChange', {value});
     }
 
     _onMessageExtensionUnloaded() {

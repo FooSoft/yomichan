@@ -64,6 +64,7 @@ class DisplayAudio {
         this._display.on('contentClear', this._onContentClear.bind(this));
         this._display.on('contentUpdateEntry', this._onContentUpdateEntry.bind(this));
         this._display.on('contentUpdateComplete', this._onContentUpdateComplete.bind(this));
+        this._display.on('frameVisibilityChange', this._onFrameVisibilityChange.bind(this));
         this._onOptionsUpdated({options: this._display.getOptions()});
     }
 
@@ -175,6 +176,13 @@ class DisplayAudio {
             this._autoPlayAudioTimer = setTimeout(callback, this._autoPlayAudioDelay);
         } else {
             callback();
+        }
+    }
+
+    _onFrameVisibilityChange({value}) {
+        if (!value) {
+            this.clearAutoPlayTimer();
+            this.stopAudio();
         }
     }
 
