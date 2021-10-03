@@ -56,7 +56,7 @@ class DisplayAudio {
 
     prepare() {
         this._audioSystem.prepare();
-        this._hotkeyHandler.registerActions([
+        this._display.hotkeyHandler.registerActions([
             ['playAudio',           this._onHotkeyActionPlayAudio.bind(this)],
             ['playAudioFromSource', this._onHotkeyActionPlayAudioFromSource.bind(this)]
         ]);
