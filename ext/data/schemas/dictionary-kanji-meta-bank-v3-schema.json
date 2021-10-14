@@ -17,7 +17,7 @@
                 "description": "Type of data. \"freq\" corresponds to frequency information."
             },
             {
-                "type": ["number"],
+                "type": ["string", "number"],
                 "description": "Data for the character."
             }
         ]

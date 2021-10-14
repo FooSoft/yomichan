@@ -28,7 +28,7 @@
                     {
                         "oneOf": [
                             {
-                                "type": ["number"],
+                                "type": ["string", "number"],
                                 "description": "Frequency information for the term."
                             },
                             {
@@ -44,7 +44,7 @@
                                         "description": "Reading for the term."
                                     },
                                     "frequency": {
-                                        "type": ["number"],
+                                        "type": ["string", "number"],
                                         "description": "Frequency information for the term."
                                     }
                                 }
