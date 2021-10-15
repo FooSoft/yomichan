@@ -860,6 +860,9 @@ class Translator {
                                 frequency = data.frequency;
                             }
                             for (const {frequencies, headwordIndex} of targets) {
+                                let displayValue;
+                                let displayValueParsed;
+                                ({frequency, displayValue, displayValueParsed} = this._getFrequencyInfo(data));
                                 frequencies.push(this._createTermFrequency(
                                     frequencies.length,
                                     headwordIndex,
@@ -867,7 +870,9 @@ class Translator {
                                     dictionaryIndex,
                                     dictionaryPriority,
                                     hasReading,
-                                    this._convertFrequency(frequency)
+                                    frequency,
+                                    displayValue,
+                                    displayValueParsed
                                 ));
                             }
                         }
@@ -915,13 +920,16 @@ class Translator {
                 case 'freq':
                     {
                         const {frequencies} = dictionaryEntries[index];
+                        const {frequency, displayValue, displayValueParsed} = this._getFrequencyInfo(data);
                         frequencies.push(this._createKanjiFrequency(
                             frequencies.length,
                             dictionary,
                             dictionaryIndex,
                             dictionaryPriority,
                             character,
-                            this._convertFrequency(data)
+                            frequency,
+                            displayValue,
+                            displayValueParsed
                         ));
                     }
                     break;
@@ -972,20 +980,37 @@ class Translator {
         });
     }
 
-    _convertFrequency(value) {
-        switch (typeof value) {
-            case 'number':
-                return value;
-            case 'string':
-            {
-                const match = this._numberRegex.exec(value);
-                if (match === null) { return 0; }
-                value = Number.parseFloat(match[0]);
-                return Number.isFinite(value) ? value : 0;
+    _convertStringToNumber(value) {
+        const match = this._numberRegex.exec(value);
+        if (match === null) { return 0; }
+        value = Number.parseFloat(match[0]);
+        return Number.isFinite(value) ? value : 0;
+    }
+
+    _getFrequencyInfo(frequency) {
+        let displayValue = null;
+        let displayValueParsed = false;
+        if (typeof frequency === 'object' && frequency !== null) {
+            ({value: frequency, displayValue} = frequency);
+            if (typeof frequency !== 'number') { frequency = 0; }
+            if (typeof displayValue !== 'string') { displayValue = null; }
+        } else {
+            frequency = this._convertFrequency(frequency);
+            switch (typeof frequency) {
+                case 'number':
+                    // No change
+                    break;
+                case 'string':
+                    displayValue = frequency;
+                    displayValueParsed = true;
+                    frequency = this._convertStringToNumber(frequency);
+                    break;
+                default:
+                    frequency = 0;
+                    break;
             }
-            default:
-                return 0;
         }
+        return {frequency, displayValue, displayValueParsed};
     }
 
     // Helpers
@@ -1053,8 +1078,8 @@ class Translator {
         };
     }
 
-    _createKanjiFrequency(index, dictionary, dictionaryIndex, dictionaryPriority, character, frequency) {
-        return {index, dictionary, dictionaryIndex, dictionaryPriority, character, frequency};
+    _createKanjiFrequency(index, dictionary, dictionaryIndex, dictionaryPriority, character, frequency, displayValue, displayValueParsed) {
+        return {index, dictionary, dictionaryIndex, dictionaryPriority, character, frequency, displayValue, displayValueParsed};
     }
 
     _createKanjiDictionaryEntry(character, dictionary, onyomi, kunyomi, tags, stats, definitions) {
@@ -1119,8 +1144,8 @@ class Translator {
         return {index, headwordIndex, dictionary, dictionaryIndex, dictionaryPriority, pitches};
     }
 
-    _createTermFrequency(index, headwordIndex, dictionary, dictionaryIndex, dictionaryPriority, hasReading, frequency) {
-        return {index, headwordIndex, dictionary, dictionaryIndex, dictionaryPriority, hasReading, frequency};
+    _createTermFrequency(index, headwordIndex, dictionary, dictionaryIndex, dictionaryPriority, hasReading, frequency, displayValue, displayValueParsed) {
+        return {index, headwordIndex, dictionary, dictionaryIndex, dictionaryPriority, hasReading, frequency, displayValue, displayValueParsed};
     }
 
     _createTermDictionaryEntry(isPrimary, inflections, score, dictionaryIndex, dictionaryPriority, sourceTermExactMatchCount, maxTransformedTextLength, headwords, definitions) {
