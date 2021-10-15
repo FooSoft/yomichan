@@ -36,6 +36,7 @@ class Translator {
         this._deinflector = null;
         this._tagCache = new Map();
         this._stringComparer = new Intl.Collator('en-US'); // Invariant locale
+        this._numberRegex = /[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?/;
     }
 
     /**
@@ -976,8 +977,12 @@ class Translator {
             case 'number':
                 return value;
             case 'string':
-                value = Number.parseFloat(value);
+            {
+                const match = this._numberRegex.exec(value);
+                if (match === null) { return 0; }
+                value = Number.parseFloat(match[0]);
                 return Number.isFinite(value) ? value : 0;
+            }
             default:
                 return 0;
         }
