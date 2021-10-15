@@ -854,7 +854,7 @@ class Translator {
                     case 'freq':
                         {
                             let frequency = data;
-                            const hasReading = (data !== null && typeof data === 'object');
+                            const hasReading = (data !== null && typeof data === 'object' && typeof data.reading === 'string');
                             if (hasReading) {
                                 if (data.reading !== reading) { continue; }
                                 frequency = data.frequency;
