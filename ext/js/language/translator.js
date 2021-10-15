@@ -862,7 +862,7 @@ class Translator {
                             for (const {frequencies, headwordIndex} of targets) {
                                 let displayValue;
                                 let displayValueParsed;
-                                ({frequency, displayValue, displayValueParsed} = this._getFrequencyInfo(data));
+                                ({frequency, displayValue, displayValueParsed} = this._getFrequencyInfo(frequency));
                                 frequencies.push(this._createTermFrequency(
                                     frequencies.length,
                                     headwordIndex,
@@ -995,7 +995,6 @@ class Translator {
             if (typeof frequency !== 'number') { frequency = 0; }
             if (typeof displayValue !== 'string') { displayValue = null; }
         } else {
-            frequency = this._convertFrequency(frequency);
             switch (typeof frequency) {
                 case 'number':
                     // No change
