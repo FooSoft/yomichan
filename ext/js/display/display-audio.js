@@ -151,7 +151,7 @@ class DisplayAudio {
     }
 
     _onContentUpdateEntry({element, index}) {
-        for (const button of element.querySelectorAll('.action-play-audio')) {
+        for (const button of element.querySelectorAll('.action-button[data-action=play-audio]')) {
             const headwordIndex = this._getAudioPlayButtonHeadwordIndex(button);
             this._eventListeners.addEventListener(button, 'click', this._onAudioPlayButtonClick.bind(this, index, headwordIndex), false);
             this._eventListeners.addEventListener(button, 'contextmenu', this._onAudioPlayButtonContextMenu.bind(this, index, headwordIndex), false);
@@ -414,8 +414,8 @@ class DisplayAudio {
         const {dictionaryEntryNodes} = this._display;
         if (dictionaryEntryIndex >= 0 && dictionaryEntryIndex < dictionaryEntryNodes.length) {
             const node = dictionaryEntryNodes[dictionaryEntryIndex];
-            const button1 = (headwordIndex === 0 ? node.querySelector('.action-play-audio') : null);
-            const button2 = node.querySelector(`.headword:nth-of-type(${headwordIndex + 1}) .action-play-audio`);
+            const button1 = (headwordIndex === 0 ? node.querySelector('.action-button[data-action=play-audio]') : null);
+            const button2 = node.querySelector(`.headword:nth-of-type(${headwordIndex + 1}) .action-button[data-action=play-audio]`);
             if (button1 !== null) { results.push(button1); }
             if (button2 !== null) { results.push(button2); }
         }

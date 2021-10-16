@@ -168,11 +168,11 @@ class DisplayAnki {
     }
 
     _onContentUpdateEntry({element}) {
-        this._addMultipleEventListeners(element, '.action-view-tags', 'click', this._onShowTagsBind);
-        this._addMultipleEventListeners(element, '.action-add-note', 'click', this._onNoteAddBind);
-        this._addMultipleEventListeners(element, '.action-view-note', 'click', this._onViewNoteButtonClickBind);
-        this._addMultipleEventListeners(element, '.action-view-note', 'contextmenu', this._onViewNoteButtonContextMenuBind);
-        this._addMultipleEventListeners(element, '.action-view-note', 'menuClose', this._onViewNoteButtonMenuCloseBind);
+        this._addMultipleEventListeners(element, '.action-button[data-action=view-tags]', 'click', this._onShowTagsBind);
+        this._addMultipleEventListeners(element, '.action-button[data-action=add-note]', 'click', this._onNoteAddBind);
+        this._addMultipleEventListeners(element, '.action-button[data-action=view-note]', 'click', this._onViewNoteButtonClickBind);
+        this._addMultipleEventListeners(element, '.action-button[data-action=view-note]', 'contextmenu', this._onViewNoteButtonContextMenuBind);
+        this._addMultipleEventListeners(element, '.action-button[data-action=view-note]', 'menuClose', this._onViewNoteButtonMenuCloseBind);
     }
 
     _onContentUpdateComplete() {
@@ -204,12 +204,12 @@ class DisplayAnki {
 
     _adderButtonFind(index, mode) {
         const entry = this._getEntry(index);
-        return entry !== null ? entry.querySelector(`.action-add-note[data-mode="${mode}"]`) : null;
+        return entry !== null ? entry.querySelector(`.action-button[data-action=add-note][data-mode="${mode}"]`) : null;
     }
 
     _tagsIndicatorFind(index) {
         const entry = this._getEntry(index);
-        return entry !== null ? entry.querySelector('.action-view-tags') : null;
+        return entry !== null ? entry.querySelector('.action-button[data-action=view-tags]') : null;
     }
 
     _getEntry(index) {
@@ -672,7 +672,7 @@ class DisplayAnki {
 
     _getViewNoteButton(index) {
         const entry = this._getEntry(index);
-        return entry !== null ? entry.querySelector('.action-view-note') : null;
+        return entry !== null ? entry.querySelector('.action-button[data-action=view-note]') : null;
     }
 
     _viewNoteForSelectedEntry() {
