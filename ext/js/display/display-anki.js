@@ -168,11 +168,18 @@ class DisplayAnki {
     }
 
     _onContentUpdateEntry({element}) {
-        this._addMultipleEventListeners(element, '.action-button[data-action=view-tags]', 'click', this._onShowTagsBind);
-        this._addMultipleEventListeners(element, '.action-button[data-action=add-note]', 'click', this._onNoteAddBind);
-        this._addMultipleEventListeners(element, '.action-button[data-action=view-note]', 'click', this._onViewNoteButtonClickBind);
-        this._addMultipleEventListeners(element, '.action-button[data-action=view-note]', 'contextmenu', this._onViewNoteButtonContextMenuBind);
-        this._addMultipleEventListeners(element, '.action-button[data-action=view-note]', 'menuClose', this._onViewNoteButtonMenuCloseBind);
+        const eventListeners = this._eventListeners;
+        for (const node of element.querySelectorAll('.action-button[data-action=view-tags]')) {
+            eventListeners.addEventListener(node, 'click', this._onShowTagsBind);
+        }
+        for (const node of element.querySelectorAll('.action-button[data-action=add-note]')) {
+            eventListeners.addEventListener(node, 'click', this._onNoteAddBind);
+        }
+        for (const node of element.querySelectorAll('.action-button[data-action=view-note]')) {
+            eventListeners.addEventListener(node, 'click', this._onViewNoteButtonClickBind);
+            eventListeners.addEventListener(node, 'contextmenu', this._onViewNoteButtonContextMenuBind);
+            eventListeners.addEventListener(node, 'menuClose', this._onViewNoteButtonMenuCloseBind);
+        }
     }
 
     _onContentUpdateComplete() {
@@ -194,12 +201,6 @@ class DisplayAnki {
         e.preventDefault();
         const tags = e.currentTarget.title;
         this._showAnkiTagsNotification(tags);
-    }
-
-    _addMultipleEventListeners(container, selector, ...args) {
-        for (const node of container.querySelectorAll(selector)) {
-            this._eventListeners.addEventListener(node, ...args);
-        }
     }
 
     _adderButtonFind(index, mode) {
