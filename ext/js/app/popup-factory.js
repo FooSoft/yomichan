@@ -37,8 +37,6 @@ class PopupFactory {
         this._allPopupVisibilityTokenMap = new Map();
     }
 
-    // Public functions
-
     /**
      * Prepares the instance for use.
      */

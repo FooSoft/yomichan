@@ -46,8 +46,6 @@ class PopupProxy extends EventDispatcher {
         this._frameOffsetExpireTimeout = 1000;
     }
 
-    // Public properties
-
     /**
      * The ID of the popup.
      * @type {string}
@@ -124,8 +122,6 @@ class PopupProxy extends EventDispatcher {
     get frameId() {
         return this._frameId;
     }
-
-    // Public functions
 
     /**
      * Sets the options context for the popup.
