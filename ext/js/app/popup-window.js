@@ -116,8 +116,8 @@ class PopupWindow extends EventDispatcher {
      * @param {object} optionsContext The options context object.
      * @returns {Promise<void>}
      */
-    setOptionsContext(optionsContext, source) {
-        return this._invoke(false, 'setOptionsContext', {id: this._id, optionsContext, source});
+    setOptionsContext(optionsContext) {
+        return this._invoke(false, 'setOptionsContext', {id: this._id, optionsContext});
     }
 
     /**

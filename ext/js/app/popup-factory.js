@@ -223,9 +223,9 @@ class PopupFactory {
         };
     }
 
-    async _onApiSetOptionsContext({id, optionsContext, source}) {
+    async _onApiSetOptionsContext({id, optionsContext}) {
         const popup = this._getPopup(id);
-        return await popup.setOptionsContext(optionsContext, source);
+        return await popup.setOptionsContext(optionsContext);
     }
 
     _onApiHide({id, changeFocus}) {

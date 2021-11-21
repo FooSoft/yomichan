@@ -128,8 +128,8 @@ class PopupProxy extends EventDispatcher {
      * @param {object} optionsContext The options context object.
      * @returns {Promise<void>}
      */
-    setOptionsContext(optionsContext, source) {
-        return this._invokeSafe('setOptionsContext', {id: this._id, optionsContext, source});
+    setOptionsContext(optionsContext) {
+        return this._invokeSafe('setOptionsContext', {id: this._id, optionsContext});
     }
 
     /**
