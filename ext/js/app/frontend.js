@@ -159,11 +159,11 @@ class Frontend {
         this._textScanner.on('searched', this._onSearched.bind(this));
 
         yomichan.crossFrame.registerHandlers([
-            ['closePopup',              {async: false, handler: this._onApiClosePopup.bind(this)}],
-            ['copySelection',           {async: false, handler: this._onApiCopySelection.bind(this)}],
-            ['getSelectionText',        {async: false, handler: this._onApiGetSelectionText.bind(this)}],
-            ['getPopupInfo',            {async: false, handler: this._onApiGetPopupInfo.bind(this)}],
-            ['getPageInfo',             {async: false, handler: this._onApiGetPageInfo.bind(this)}]
+            ['Frontend.closePopup',       {async: false, handler: this._onApiClosePopup.bind(this)}],
+            ['Frontend.copySelection',    {async: false, handler: this._onApiCopySelection.bind(this)}],
+            ['Frontend.getSelectionText', {async: false, handler: this._onApiGetSelectionText.bind(this)}],
+            ['Frontend.getPopupInfo',     {async: false, handler: this._onApiGetPopupInfo.bind(this)}],
+            ['Frontend.getPageInfo',      {async: false, handler: this._onApiGetPageInfo.bind(this)}]
         ]);
 
         this._updateContentScale();
@@ -509,7 +509,7 @@ class Frontend {
             return await this._getDefaultPopup();
         }
 
-        const {popupId} = await yomichan.crossFrame.invoke(targetFrameId, 'getPopupInfo');
+        const {popupId} = await yomichan.crossFrame.invoke(targetFrameId, 'Frontend.getPopupInfo');
         if (popupId === null) {
             return null;
         }
@@ -728,7 +728,7 @@ class Frontend {
         let documentTitle = document.title;
         if (this._useProxyPopup) {
             try {
-                ({url, documentTitle} = await yomichan.crossFrame.invoke(this._parentFrameId, 'getPageInfo', {}));
+                ({url, documentTitle} = await yomichan.crossFrame.invoke(this._parentFrameId, 'Frontend.getPageInfo', {}));
             } catch (e) {
                 // NOP
             }

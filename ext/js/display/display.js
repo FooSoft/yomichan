@@ -393,7 +393,7 @@ class Display extends EventDispatcher {
     close() {
         switch (this._pageType) {
             case 'popup':
-                this.invokeContentOrigin('closePopup');
+                this.invokeContentOrigin('Frontend.closePopup');
                 break;
             case 'search':
                 this._closeTab();
@@ -1359,7 +1359,7 @@ class Display extends EventDispatcher {
                 {
                     let text;
                     try {
-                        text = await this.invokeContentOrigin('getSelectionText');
+                        text = await this.invokeContentOrigin('Frontend.getSelectionText');
                     } catch (e) {
                         break;
                     }
@@ -1367,7 +1367,7 @@ class Display extends EventDispatcher {
                 }
                 break;
             default:
-                await this.invokeContentOrigin('copySelection');
+                await this.invokeContentOrigin('Frontend.copySelection');
                 break;
         }
     }
