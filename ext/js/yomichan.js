@@ -57,6 +57,12 @@ class Yomichan extends EventDispatcher {
             // NOP
         }
 
+        try {
+            this._extensionUrlBase = chrome.runtime.getURL('/');
+        } catch (e) {
+            this._extensionUrlBase = null;
+        }
+
         this._isBackground = null;
         this._api = null;
         this._crossFrame = null;
@@ -148,11 +154,7 @@ class Yomichan extends EventDispatcher {
      * @returns true if the URL is an extension URL, false otherwise.
      */
     isExtensionUrl(url) {
-        try {
-            return url.startsWith(chrome.runtime.getURL('/'));
-        } catch (e) {
-            return false;
-        }
+        return this._extensionUrlBase !== null && url.startsWith(this._extensionUrlBase);
     }
 
     /**
