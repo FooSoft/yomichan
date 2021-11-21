@@ -57,7 +57,7 @@ class PopupWindow extends EventDispatcher {
      * @type {Popup}
      */
     set parent(value) {
-        throw new Error('Not supported on PopupProxy');
+        throw new Error('Not supported on PopupWindow');
     }
 
     /**
@@ -75,7 +75,7 @@ class PopupWindow extends EventDispatcher {
      * @throws Throws an error, since this class doesn't support children.
      */
     set child(value) {
-        throw new Error('Not supported on PopupProxy');
+        throw new Error('Not supported on PopupWindow');
     }
 
     /**
