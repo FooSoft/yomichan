@@ -895,7 +895,7 @@ class Backend {
 
         await this._sendMessageTabPromise(
             tab.id,
-            {action: 'setMode', params: {mode: 'popup'}},
+            {action: 'SearchDisplayController.setMode', params: {mode: 'popup'}},
             {frameId: 0}
         );
 
@@ -909,7 +909,7 @@ class Backend {
             try {
                 const mode = await this._sendMessageTabPromise(
                     tab.id,
-                    {action: 'getMode', params: {}},
+                    {action: 'SearchDisplayController.getMode', params: {}},
                     {frameId: 0}
                 );
                 return mode === 'popup';
@@ -969,7 +969,7 @@ class Backend {
     _updateSearchQuery(tabId, text, animate) {
         return this._sendMessageTabPromise(
             tabId,
-            {action: 'updateSearchQuery', params: {text, animate}},
+            {action: 'SearchDisplayController.updateSearchQuery', params: {text, animate}},
             {frameId: 0}
         );
     }
