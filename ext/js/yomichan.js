@@ -49,12 +49,11 @@ class Yomichan extends EventDispatcher {
     constructor() {
         super();
 
-        this._extensionName = 'Yomichan';
         try {
             const manifest = chrome.runtime.getManifest();
             this._extensionName = `${manifest.name} v${manifest.version}`;
         } catch (e) {
-            // NOP
+            this._extensionName = 'Yomichan';
         }
 
         try {
