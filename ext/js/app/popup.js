@@ -627,7 +627,7 @@ class Popup extends EventDispatcher {
     }
 
     _onExtensionUnloaded() {
-        this._invokeWindow('extensionUnloaded');
+        this._invokeWindow('Display.extensionUnloaded');
     }
 
     _getFrameParentElement() {

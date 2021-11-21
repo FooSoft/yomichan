@@ -136,7 +136,7 @@ class Display extends EventDispatcher {
             ['Display.visibilityChanged', {async: false, handler: this._onMessageVisibilityChanged.bind(this)}]
         ]);
         this.registerWindowMessageHandlers([
-            ['extensionUnloaded', {async: false, handler: this._onMessageExtensionUnloaded.bind(this)}]
+            ['Display.extensionUnloaded', {async: false, handler: this._onMessageExtensionUnloaded.bind(this)}]
         ]);
     }
 
