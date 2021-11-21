@@ -92,9 +92,9 @@ class Frontend {
         this._optionsContextOverride = null;
 
         this._runtimeMessageHandlers = new Map([
-            ['requestFrontendReadyBroadcast', {async: false, handler: this._onMessageRequestFrontendReadyBroadcast.bind(this)}],
-            ['setAllVisibleOverride',         {async: true,  handler: this._onApiSetAllVisibleOverride.bind(this)}],
-            ['clearAllVisibleOverride',       {async: true,  handler: this._onApiClearAllVisibleOverride.bind(this)}]
+            ['Frontend.requestReadyBroadcast',   {async: false, handler: this._onMessageRequestFrontendReadyBroadcast.bind(this)}],
+            ['Frontend.setAllVisibleOverride',   {async: true,  handler: this._onApiSetAllVisibleOverride.bind(this)}],
+            ['Frontend.clearAllVisibleOverride', {async: true,  handler: this._onApiClearAllVisibleOverride.bind(this)}]
         ]);
 
         this._hotkeyHandler.registerActions([
@@ -702,7 +702,7 @@ class Frontend {
             }
 
             chrome.runtime.onMessage.addListener(onMessage);
-            yomichan.api.broadcastTab('requestFrontendReadyBroadcast', {frameId: this._frameId});
+            yomichan.api.broadcastTab('Frontend.requestReadyBroadcast', {frameId: this._frameId});
         });
     }
 

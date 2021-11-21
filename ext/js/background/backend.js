@@ -1685,7 +1685,7 @@ class Backend {
         let token = null;
         try {
             if (typeof tabId === 'number' && typeof frameId === 'number') {
-                const action = 'setAllVisibleOverride';
+                const action = 'Frontend.setAllVisibleOverride';
                 const params = {value: false, priority: 0, awaitFrame: true};
                 token = await this._sendMessageTabPromise(tabId, {action, params}, {frameId});
             }
@@ -1702,7 +1702,7 @@ class Backend {
             });
         } finally {
             if (token !== null) {
-                const action = 'clearAllVisibleOverride';
+                const action = 'Frontend.clearAllVisibleOverride';
                 const params = {token};
                 try {
                     await this._sendMessageTabPromise(tabId, {action, params}, {frameId});
