@@ -48,13 +48,14 @@ class FrameOffsetForwarder {
 
         const results = await Promise.all(promises);
 
-        let xOffset = 0;
-        let yOffset = 0;
-        for (const {x, y} of results) {
-            xOffset += x;
-            yOffset += y;
+        let x = 0;
+        let y = 0;
+        for (const result of results) {
+            if (result === null) { return null; }
+            x += result.x;
+            y += result.y;
         }
-        return [xOffset, yOffset];
+        return [x, y];
     }
 
     // Private
