@@ -38,6 +38,7 @@ class ScriptManager {
             return Promise.reject(new Error('Stylesheet injection not supported'));
         }
     }
+
     /**
      * Injects a script into a specific tab and frame.
      * @param {string} file The path to a file to inject.
