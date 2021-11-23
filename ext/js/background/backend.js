@@ -564,7 +564,7 @@ class Backend {
     async _onApiInjectStylesheet({type, value}, sender) {
         const {frameId, tab} = sender;
         if (!isObject(tab)) { throw new Error('Invalid tab'); }
-        return await this._scriptManager.injectStylesheet(type, value, tab.id, frameId);
+        return await this._scriptManager.injectStylesheet(type, value, tab.id, frameId, false, true, 'document_start');
     }
 
     async _onApiGetStylesheetContent({url}) {

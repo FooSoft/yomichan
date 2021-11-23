@@ -20,20 +20,23 @@
  */
 class ScriptManager {
     /**
-     * Injects a stylesheet into a specific tab and frame.
+     * Injects a stylesheet into a tab.
      * @param {string} type The type of content to inject; either 'file' or 'code'.
      * @param {string} content The content to inject.
      *   If type is 'file', this argument should be a path to a file.
      *   If type is 'code', this argument should be the CSS content.
      * @param {number} tabId The id of the tab to inject into.
-     * @param {number} frameId The id of the frame to inject into.
+     * @param {number} [frameId] The id of the frame to inject into.
+     * @param {boolean} [allFrames] Whether or not the stylesheet should be injected into all frames.
+     * @param {boolean} [matchAboutBlank] Whether or not the stylesheet should be injected into about:blank frames.
+     * @param {string} [runAt] The time to inject the stylesheet at.
      * @returns {Promise<void>}
      */
-    injectStylesheet(type, content, tabId, frameId) {
+    injectStylesheet(type, content, tabId, frameId, allFrames, matchAboutBlank, runAt) {
         if (isObject(chrome.tabs) && typeof chrome.tabs.insertCSS === 'function') {
-            return this._injectStylesheetMV2(type, content, tabId, frameId);
+            return this._injectStylesheetMV2(type, content, tabId, frameId, allFrames, matchAboutBlank, runAt);
         } else if (isObject(chrome.scripting) && typeof chrome.scripting.insertCSS === 'function') {
-            return this._injectStylesheetMV3(type, content, tabId, frameId);
+            return this._injectStylesheetMV3(type, content, tabId, frameId, allFrames);
         } else {
             return Promise.reject(new Error('Stylesheet injection not supported'));
         }
@@ -58,23 +61,23 @@ class ScriptManager {
 
     // Private
 
-    _injectStylesheetMV2(type, content, tabId, frameId) {
+    _injectStylesheetMV2(type, content, tabId, frameId, allFrames, matchAboutBlank, runAt) {
         return new Promise((resolve, reject) => {
             const details = (
                 type === 'file' ?
                 {
                     file: content,
-                    runAt: 'document_start',
+                    runAt,
                     cssOrigin: 'author',
-                    allFrames: false,
-                    matchAboutBlank: true
+                    allFrames,
+                    matchAboutBlank
                 } :
                 {
                     code: content,
-                    runAt: 'document_start',
+                    runAt,
                     cssOrigin: 'user',
-                    allFrames: false,
-                    matchAboutBlank: true
+                    allFrames,
+                    matchAboutBlank
                 }
             );
             if (typeof frameId === 'number') {
@@ -91,7 +94,7 @@ class ScriptManager {
         });
     }
 
-    _injectStylesheetMV3(type, content, tabId, frameId) {
+    _injectStylesheetMV3(type, content, tabId, frameId, allFrames) {
         return new Promise((resolve, reject) => {
             const details = (
                 type === 'file' ?
@@ -100,9 +103,9 @@ class ScriptManager {
             );
             details.target = {
                 tabId,
-                allFrames: false
+                allFrames
             };
-            if (typeof frameId === 'number') {
+            if (!allFrames && typeof frameId === 'number') {
                 details.target.frameIds = [frameId];
             }
             chrome.scripting.insertCSS(details, () => {
