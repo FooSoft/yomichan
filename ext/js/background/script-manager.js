@@ -43,17 +43,20 @@ class ScriptManager {
     }
 
     /**
-     * Injects a script into a specific tab and frame.
+     * Injects a script into a tab.
      * @param {string} file The path to a file to inject.
      * @param {number} tabId The id of the tab to inject into.
-     * @param {number} frameId The id of the frame to inject into.
+     * @param {number} [frameId] The id of the frame to inject into.
+     * @param {boolean} [allFrames] Whether or not the script should be injected into all frames.
+     * @param {boolean} [matchAboutBlank] Whether or not the script should be injected into about:blank frames.
+     * @param {string} [runAt] The time to inject the script at.
      * @returns {Promise<{frameId: number, result: object}>} The id of the frame and the result of the script injection.
      */
-    injectScript(file, tabId, frameId) {
+    injectScript(file, tabId, frameId, allFrames, matchAboutBlank, runAt) {
         if (isObject(chrome.tabs) && typeof chrome.tabs.executeScript === 'function') {
-            return this._injectScriptMV2(file, tabId, frameId);
+            return this._injectScriptMV2(file, tabId, frameId, allFrames, matchAboutBlank, runAt);
         } else if (isObject(chrome.scripting) && typeof chrome.scripting.executeScript === 'function') {
-            return this._injectScriptMV3(file, tabId, frameId);
+            return this._injectScriptMV3(file, tabId, frameId, allFrames);
         } else {
             return Promise.reject(new Error('Script injection not supported'));
         }
@@ -119,14 +122,14 @@ class ScriptManager {
         });
     }
 
-    _injectScriptMV2(file, tabId, frameId) {
+    _injectScriptMV2(file, tabId, frameId, allFrames, matchAboutBlank, runAt) {
         return new Promise((resolve, reject) => {
             const details = {
-                allFrames: false,
+                allFrames,
                 frameId,
                 file,
-                matchAboutBlank: true,
-                runAt: 'document_start'
+                matchAboutBlank,
+                runAt
             };
             chrome.tabs.executeScript(tabId, details, (results) => {
                 const e = chrome.runtime.lastError;
@@ -140,16 +143,15 @@ class ScriptManager {
         });
     }
 
-    _injectScriptMV3(file, tabId, frameId) {
+    _injectScriptMV3(file, tabId, frameId, allFrames) {
         return new Promise((resolve, reject) => {
             const details = {
                 files: [file],
-                target: {
-                    allFrames: false,
-                    frameIds: [frameId],
-                    tabId
-                }
+                target: {tabId, allFrames}
             };
+            if (!allFrames && typeof frameId === 'number') {
+                details.target.frameIds = [frameId];
+            }
             chrome.scripting.executeScript(details, (results) => {
                 const e = chrome.runtime.lastError;
                 if (e) {

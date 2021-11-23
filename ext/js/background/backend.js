@@ -2156,7 +2156,7 @@ class Backend {
 
         if (file === null) { return; }
 
-        await this._scriptManager.injectScript(file, tabId, frameId);
+        await this._scriptManager.injectScript(file, tabId, frameId, false, true, 'document_start');
     }
 
     async _getNormalizedDictionaryDatabaseMedia(targets) {
