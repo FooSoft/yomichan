@@ -15,10 +15,35 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-(() => {
+(async () => {
     // Reentrant check
     if (self.googleDocsAccessibilitySetup) { return; }
     self.googleDocsAccessibilitySetup = true;
+
+    const invokeApi = (action, params) => {
+        return new Promise((resolve, reject) => {
+            chrome.runtime.sendMessage({action, params}, (response) => {
+                void chrome.runtime.lastError;
+                if (typeof response !== 'object' || response === null) {
+                    reject(new Error('Unexpected response'));
+                } else if (typeof response.error !== 'undefined') {
+                    reject(new Error('Invalid response'));
+                } else {
+                    resolve(response.result);
+                }
+            });
+        });
+    };
+
+    const optionsContext = {depth: 0, url: location.href};
+    let options;
+    try {
+        options = await invokeApi('optionsGet', {optionsContext});
+    } catch (e) {
+        return;
+    }
+
+    if (!options.accessibility.forceGoogleDocsHtmlRendering) { return; }
 
     let parent = document.head;
     if (parent === null) {
