@@ -28,4 +28,5 @@
     const script = document.createElement('script');
     script.textContent = 'window._docs_force_html_by_ext = true;';
     parent.appendChild(script);
+    parent.removeChild(script);
 })();
