@@ -333,8 +333,7 @@ class ScriptManager {
 
     _registerContentScriptFallback(id, details) {
         const {allFrames, css, js, matchAboutBlank, runAt, urlMatches} = details;
-        const urlRegex = new RegExp(urlMatches);
-        const details2 = {allFrames, css, js, matchAboutBlank, runAt, urlRegex};
+        const details2 = {allFrames, css, js, matchAboutBlank, runAt, urlRegex: null};
         let unregister;
         const webNavigationEvent = this._getWebNavigationEvent(runAt);
         if (isObject(webNavigationEvent)) {
@@ -356,6 +355,7 @@ class ScriptManager {
                 chrome.tabs.onUpdated.addListener(onTabUpdated, extraParameters);
             } catch (e) {
                 // Chrome
+                details2.urlRegex = new RegExp(urlMatches);
                 chrome.tabs.onUpdated.addListener(onTabUpdated);
             }
             unregister = () => chrome.tabs.onUpdated.removeListener(onTabUpdated);
@@ -378,7 +378,7 @@ class ScriptManager {
 
     async _injectContentScript(isWebNavigation, details, status, url, tabId, frameId) {
         const {urlRegex} = details;
-        if (typeof urlRegex !== 'undefined' && !urlRegex.test(url)) { return; }
+        if (urlRegex !== null && !urlRegex.test(url)) { return; }
 
         let {allFrames, css, js, matchAboutBlank, runAt} = details;
 
