@@ -181,6 +181,31 @@ class ScriptManager {
         return true;
     }
 
+    /**
+     * Gets the optional permissions required to register a content script.
+     * @returns {string[]} An array of the required permissions, which may be empty.
+     */
+    getRequiredContentScriptRegistrationPermissions() {
+        if (
+            // Firefox
+            (
+                typeof browser === 'object' && browser !== null &&
+                isObject(browser.contentScripts) &&
+                typeof browser.contentScripts.register === 'function'
+            ) ||
+            // Chrome
+            (
+                isObject(chrome.scripting) &&
+                typeof chrome.scripting.registerContentScripts === 'function'
+            )
+        ) {
+            return [];
+        }
+
+        // Fallback
+        return ['webNavigation'];
+    }
+
     // Private
 
     _injectStylesheetMV2(type, content, tabId, frameId, allFrames, matchAboutBlank, runAt) {
