@@ -16,6 +16,10 @@
  */
 
 (() => {
+    // Reentrant check
+    if (self.googleDocsAccessibilitySetup) { return; }
+    self.googleDocsAccessibilitySetup = true;
+
     let parent = document.head;
     if (parent === null) {
         parent = document.documentElement;
