@@ -106,9 +106,9 @@ class ScriptManager {
      * @param {string} id A unique identifier for the registration.
      * @param {object} details The script registration details.
      * @param {boolean} [details.allFrames] Same as `all_frames` in the `content_scripts` manifest key.
-     * @param {string[]} [details.css]
+     * @param {string[]} [details.css] List of CSS paths.
      * @param {string[]} [details.excludeMatches] Same as `exclude_matches` in the `content_scripts` manifest key.
-     * @param {string[]} [details.js]
+     * @param {string[]} [details.js] List of script paths.
      * @param {boolean} [details.matchAboutBlank] Same as `match_about_blank` in the `content_scripts` manifest key.
      * @param {string[]} details.matches Same as `matches` in the `content_scripts` manifest key.
      * @param {string} [details.urlMatches] Regex match pattern to use as a fallback
