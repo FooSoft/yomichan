@@ -404,8 +404,8 @@ class DictionaryDatabase {
             index,
             term: row.expression,
             reading: row.reading,
-            definitionTags: this._splitField(row.definitionTags || row.tags || ''),
-            termTags: this._splitField(row.termTags || ''),
+            definitionTags: this._splitField(row.definitionTags || row.tags),
+            termTags: this._splitField(row.termTags),
             rules: this._splitField(row.rules),
             definitions: row.glossary,
             score: row.score,
@@ -441,6 +441,6 @@ class DictionaryDatabase {
     }
 
     _splitField(field) {
-        return field.length === 0 ? [] : field.split(' ');
+        return typeof field === 'string' && field.length > 0 ? field.split(' ') : [];
     }
 }
