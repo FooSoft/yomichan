@@ -400,6 +400,7 @@ class DictionaryDatabase {
     }
 
     _createTerm(row, {itemIndex: index}) {
+        const {sequence} = row;
         return {
             index,
             term: row.expression,
@@ -411,7 +412,7 @@ class DictionaryDatabase {
             score: row.score,
             dictionary: row.dictionary,
             id: row.id,
-            sequence: typeof row.sequence === 'undefined' ? -1 : row.sequence
+            sequence: typeof sequence === 'number' ? sequence : -1
         };
     }
 
