@@ -352,10 +352,10 @@ class DictionaryDatabase {
             }
             let completeCount = 0;
             const requiredCompleteCount = itemCount * indexCount;
-            const onGetAll = (rows, {item, itemIndex}) => {
+            const onGetAll = (rows, data) => {
                 for (const row of rows) {
-                    if (predicate(row, item)) {
-                        results.push(createResult(row, itemIndex));
+                    if (predicate(row, data.item)) {
+                        results.push(createResult(row, data));
                     }
                 }
                 if (++completeCount >= requiredCompleteCount) {
@@ -366,7 +366,7 @@ class DictionaryDatabase {
                 const item = items[i];
                 const query = createQuery(item);
                 for (let j = 0; j < indexCount; ++j) {
-                    this._db.getAll(indexList[j], query, onGetAll, reject, {item, itemIndex: i});
+                    this._db.getAll(indexList[j], query, onGetAll, reject, {item, itemIndex: i, indexIndex: j});
                 }
             }
         });
@@ -399,7 +399,7 @@ class DictionaryDatabase {
         });
     }
 
-    _createTerm(row, index) {
+    _createTerm(row, {itemIndex: index}) {
         return {
             index,
             term: row.expression,
@@ -415,7 +415,7 @@ class DictionaryDatabase {
         };
     }
 
-    _createKanji(row, index) {
+    _createKanji(row, {itemIndex: index}) {
         return {
             index,
             character: row.character,
@@ -428,15 +428,15 @@ class DictionaryDatabase {
         };
     }
 
-    _createTermMeta({expression: term, mode, data, dictionary}, index) {
+    _createTermMeta({expression: term, mode, data, dictionary}, {itemIndex: index}) {
         return {term, mode, data, dictionary, index};
     }
 
-    _createKanjiMeta({character, mode, data, dictionary}, index) {
+    _createKanjiMeta({character, mode, data, dictionary}, {itemIndex: index}) {
         return {character, mode, data, dictionary, index};
     }
 
-    _createMedia(row, index) {
+    _createMedia(row, {itemIndex: index}) {
         return Object.assign({}, row, {index});
     }
 
