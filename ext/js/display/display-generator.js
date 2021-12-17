@@ -64,9 +64,14 @@ class DisplayGenerator {
 
         const uniqueTerms = new Set();
         const uniqueReadings = new Set();
-        for (const {term, reading} of headwords) {
+        const primaryMatchTypes = new Set();
+        for (const {term, reading, sources} of headwords) {
             uniqueTerms.add(term);
             uniqueReadings.add(reading);
+            for (const {matchType, isPrimary} of sources) {
+                if (!isPrimary) { continue; }
+                primaryMatchTypes.add(matchType);
+            }
         }
 
         node.dataset.format = type;
@@ -78,6 +83,7 @@ class DisplayGenerator {
         node.dataset.uniqueReadingCount = `${uniqueReadings.size}`;
         node.dataset.frequencyCount = `${frequencies.length}`;
         node.dataset.groupedFrequencyCount = `${groupedFrequencies.length}`;
+        node.dataset.primaryMatchTypes = [...primaryMatchTypes].join(' ');
 
         for (let i = 0, ii = headwords.length; i < ii; ++i) {
             const node2 = this._createTermHeadword(headwords[i], i, pronunciations);
