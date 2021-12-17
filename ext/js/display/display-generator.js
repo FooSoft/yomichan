@@ -235,11 +235,14 @@ class DisplayGenerator {
         const {term, reading, tags, sources} = headword;
 
         let isPrimaryAny = false;
-        for (const {isPrimary} of sources) {
+        const matchTypes = new Set();
+        const matchSources = new Set();
+        for (const {matchType, matchSource, isPrimary} of sources) {
             if (isPrimary) {
                 isPrimaryAny = true;
-                break;
             }
+            matchTypes.add(matchType);
+            matchSources.add(matchSource);
         }
 
         const node = this._templates.instantiate('headword');
@@ -249,6 +252,8 @@ class DisplayGenerator {
         node.dataset.isPrimary = `${isPrimaryAny}`;
         node.dataset.readingIsSame = `${reading === term}`;
         node.dataset.frequency = DictionaryDataUtil.getTermFrequency(tags);
+        node.dataset.matchTypes = [...matchTypes].join(' ');
+        node.dataset.matchSources = [...matchSources].join(' ');
 
         const {wordClasses} = headword;
         const pronunciationCategories = this._getPronunciationCategories(reading, pronunciations, wordClasses, headwordIndex);
