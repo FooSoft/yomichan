@@ -1239,9 +1239,9 @@ class Translator {
         const headwordsArray = [...headwords.values()];
 
         let sourceTermExactMatchCount = 0;
-        for (const {term, sources} of headwordsArray) {
-            for (const {deinflectedText, isPrimary: isPrimary2} of sources) {
-                if (isPrimary2 && deinflectedText === term) {
+        for (const {sources} of headwordsArray) {
+            for (const source of sources) {
+                if (source.isPrimary && source.matchSource === 'term') {
                     ++sourceTermExactMatchCount;
                     break;
                 }
