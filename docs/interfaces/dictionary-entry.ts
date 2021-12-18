@@ -19,15 +19,23 @@ namespace Translation {
     // Common
 
     /**
+     * Enum representing the type of a `DictionaryEntry`.
+     * `'kanji'` corresponds to a KanjiDictionaryEntry.
+     * `'term'` corresponds to a TermDictionaryEntry.
+     */
+    export enum DictionaryEntryType {
+        Kanji = 'kanji',
+        Term = 'term',
+    }
+
+    /**
      * A generic dictionary entry which is used as the base interface.
      */
     export interface DictionaryEntry {
         /**
-         * A string corresponding to the type of the entry.
-         * `'kanji'` corresponds to a KanjiDictionaryEntry.
-         * `'term'` corresponds to a TermDictionaryEntry.
+         * The type of the entry.
          */
-        type: string;
+        type: DictionaryEntryType;
     }
 
     /**
@@ -71,7 +79,7 @@ namespace Translation {
 
     /**
      * A dictionary entry for a kanji character.
-     * `DictionaryEntry.type` is always `'kanji'`.
+     * `DictionaryEntry.type` is always `DictionaryEntryType.Kanji`.
      */
     export interface KanjiDictionaryEntry extends DictionaryEntry {
         /**
@@ -196,7 +204,7 @@ namespace Translation {
 
     /**
      * A dictionary entry for a term or group of terms.
-     * `DictionaryEntry.type` is always `'term'`.
+     * `DictionaryEntry.type` is always `DictionaryEntryType.Term`.
      */
     export interface TermDictionaryEntry extends DictionaryEntry {
         /**
