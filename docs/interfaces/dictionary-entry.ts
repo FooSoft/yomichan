@@ -428,6 +428,24 @@ namespace Translation {
     }
 
     /**
+     * Enum representing how the search term relates to the final term.
+     */
+     export enum TermSourceMatchType {
+        Exact = 'exact',
+        Prefix = 'prefix',
+        Suffix = 'suffix',
+    }
+
+    /**
+     * Enum representing what database field was used to match the source term.
+     */
+    export enum TermSourceMatchSource {
+        Term = 'term',
+        Reading = 'reading',
+        Sequence = 'sequence',
+    }
+
+    /**
      * Source information represents how the original text was transformed to get to the final term.
      */
     export interface TermSource {
@@ -445,14 +463,12 @@ namespace Translation {
         deinflectedText: string;
         /**
          * How the deinflected text matches the value from the database.
-         * Value can be one of: 'exact', 'prefix', 'suffix'
          */
-        matchType: string;
+        matchType: TermSourceMatchType;
         /**
          * Which field was used to match the database entry.
-         * Value can be one of: 'term', 'reading', 'sequence'
          */
-        matchSource: string;
+        matchSource: TermSourceMatchSource;
         /**
          * Whether or not this source is a primary source. Primary sources are derived from the
          * original search text, while non-primary sources originate from related terms.
