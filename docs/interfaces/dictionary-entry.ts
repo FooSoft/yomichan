@@ -363,11 +363,11 @@ namespace Translation {
          */
         position: number;
         /**
-         * Positions of moras that have a .
+         * Positions of morae with a nasal sound.
          */
         nasalPositions: number[];
         /**
-         * Position of the downstep, as a number of mora.
+         * Positions of morae with a devoiced sound.
          */
         devoicePositions: [];
         /**
