@@ -46,7 +46,7 @@
         "jsdom": "^19.0.0",
         "parse5": "^6.0.1",
         "stylelint": "^14.3.0",
-        "stylelint-config-recommended": "^4.0.0",
+        "stylelint-config-recommended": "^6.0.0",
         "web-ext": "^6.6.0"
     }
 }
