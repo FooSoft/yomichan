@@ -38,7 +38,7 @@
     "devDependencies": {
         "browserify": "^17.0.0",
         "css": "^3.0.0",
-        "eslint": "^7.32.0",
+        "eslint": "^8.8.0",
         "eslint-plugin-header": "^3.1.1",
         "eslint-plugin-no-unsanitized": "^3.2.0",
         "fake-indexeddb": "^3.1.7",
