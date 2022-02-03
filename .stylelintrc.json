@@ -8,7 +8,6 @@
         "string-quotes": "single",
         "color-named": "never",
         "declaration-no-important": true,
-        "function-calc-no-invalid": true,
         "function-calc-no-unspaced-operator": true,
         "string-no-newline": true,
         "unit-no-unknown": true,
