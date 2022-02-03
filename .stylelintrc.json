@@ -24,7 +24,12 @@
         "number-leading-zero": "always",
         "number-no-trailing-zeros": true,
         "unit-case": "lower",
-        "value-keyword-case": "lower",
+        "value-keyword-case": [
+            "lower",
+            {
+                "camelCaseSvgKeywords": true
+            }
+        ],
         "property-case": "lower",
         "indentation": 4,
         "max-empty-lines": 2,
