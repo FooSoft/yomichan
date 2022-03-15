@@ -52,17 +52,8 @@ class DisplayContentManager {
      *   No assumptions should be made about the synchronicity of this callback.
      * @param {DisplayContentManager.OnUnloadCallback} onUnload The callback that is executed when the media should be unloaded.
      */
-    async loadMedia(path, dictionary, onLoad, onUnload) {
-        const token = this._token;
-        const data = {onUnload, loaded: false};
-
-        this._loadMediaData.push(data);
-
-        const media = await this._getMedia(path, dictionary);
-        if (token !== this._token) { return; }
-
-        onLoad(media.url);
-        data.loaded = true;
+    loadMedia(path, dictionary, onLoad, onUnload) {
+        this._loadMedia(path, dictionary, onLoad, onUnload);
     }
 
     /**
@@ -86,6 +77,19 @@ class DisplayContentManager {
         this._mediaCache.clear();
 
         this._token = {};
+    }
+
+    async _loadMedia(path, dictionary, onLoad, onUnload) {
+        const token = this._token;
+        const data = {onUnload, loaded: false};
+
+        this._loadMediaData.push(data);
+
+        const media = await this._getMedia(path, dictionary);
+        if (token !== this._token) { return; }
+
+        onLoad(media.url);
+        data.loaded = true;
     }
 
     async _getMedia(path, dictionary) {
