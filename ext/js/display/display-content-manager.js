@@ -32,7 +32,7 @@ class DisplayContentManager {
 
         this._loadMediaData.push(data);
 
-        const media = await this.getMedia(path, dictionary);
+        const media = await this._getMedia(path, dictionary);
         if (token !== this._token) { return; }
 
         onLoad(media.url);
@@ -59,7 +59,7 @@ class DisplayContentManager {
         this._token = {};
     }
 
-    async getMedia(path, dictionary) {
+    async _getMedia(path, dictionary) {
         let cachedData;
         let dictionaryCache = this._mediaCache.get(dictionary);
         if (typeof dictionaryCache !== 'undefined') {
