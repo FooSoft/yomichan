@@ -19,13 +19,39 @@
  * StringUtil
  */
 
+/**
+ * A callback used when a media file has been loaded.
+ * @callback DisplayContentManager.OnLoadCallback
+ * @param {string} url The URL of the media that was loaded.
+ */
+
+/**
+ * A callback used when a media file should be unloaded.
+ * @callback DisplayContentManager.OnUnloadCallback
+ * @param {boolean} fullyLoaded Whether or not the media was fully loaded.
+ */
+
+/**
+ * The content manager which is used when generating HTML display content.
+ */
 class DisplayContentManager {
+    /**
+     * Creates a new instance of the class.
+     */
     constructor() {
         this._token = {};
         this._mediaCache = new Map();
         this._loadMediaData = [];
     }
 
+    /**
+     * Attempts to load the media file from a given dictionary.
+     * @param {string} path The path to the media file in the dictionary.
+     * @param {string} dictionary The name of the dictionary.
+     * @param {DisplayContentManager.OnLoadCallback} onLoad The callback that is executed if the media was loaded successfully.
+     *   No assumptions should be made about the synchronicity of this callback.
+     * @param {DisplayContentManager.OnUnloadCallback} onUnload The callback that is executed when the media should be unloaded.
+     */
     async loadMedia(path, dictionary, onLoad, onUnload) {
         const token = this._token;
         const data = {onUnload, loaded: false};
@@ -39,6 +65,9 @@ class DisplayContentManager {
         data.loaded = true;
     }
 
+    /**
+     * Unloads all media that has been loaded.
+     */
     unloadAll() {
         for (const {onUnload, loaded} of this._loadMediaData) {
             if (typeof onUnload === 'function') {
