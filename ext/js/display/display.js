@@ -938,7 +938,7 @@ class Display extends EventDispatcher {
 
         this._dictionaryEntries = dictionaryEntries;
 
-        this._updateNavigation(this._history.hasPrevious(), this._history.hasNext());
+        this._updateNavigationAuto();
         this._setNoContentVisible(dictionaryEntries.length === 0 && lookup);
 
         const container = this._container;
@@ -1002,6 +1002,7 @@ class Display extends EventDispatcher {
 
     _clearContent() {
         this._container.textContent = '';
+        this._updateNavigationAuto();
         this._setQuery('', '', 0);
 
         this._triggerContentUpdateStart();
@@ -1056,6 +1057,10 @@ class Display extends EventDispatcher {
             title = `${text}${separator}${title}`;
         }
         document.title = title;
+    }
+
+    _updateNavigationAuto() {
+        this._updateNavigation(this._history.hasPrevious(), this._history.hasNext());
     }
 
     _updateNavigation(previous, next) {
