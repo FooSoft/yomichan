@@ -37,8 +37,10 @@
 class DisplayContentManager {
     /**
      * Creates a new instance of the class.
+     * @param {Display} display The display instance that owns this object.
      */
-    constructor() {
+    constructor(display) {
+        this._display = display;
         this._token = {};
         this._mediaCache = new Map();
         this._loadMediaData = [];

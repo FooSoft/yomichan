@@ -52,7 +52,7 @@ class Display extends EventDispatcher {
         this._styleNode = null;
         this._eventListeners = new EventListenerCollection();
         this._setContentToken = null;
-        this._contentManager = new DisplayContentManager();
+        this._contentManager = new DisplayContentManager(this);
         this._hotkeyHelpController = new HotkeyHelpController();
         this._displayGenerator = new DisplayGenerator({
             japaneseUtil,
