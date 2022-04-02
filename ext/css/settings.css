@@ -499,6 +499,9 @@ a.heading-link-light {
 .settings-group.settings-group-top-margin {
     margin-top: 1.0125em;
 }
+.settings-item {
+    position: relative;
+}
 .settings-item:not([hidden]) {
     display: block;
 }
@@ -679,6 +682,16 @@ select.short-height {
 
 
 /* Advanced settings */
+.settings-group.advanced-only>.settings-item::after,
+.settings-item.advanced-only::after {
+    content: '';
+    background-color: var(--advanced-color-lighter);
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 0.25em;
+}
 .advanced-toggle {
     --accent-color: var(--advanced-color);
     --accent-color-lighter: var(--advanced-color-lighter);
