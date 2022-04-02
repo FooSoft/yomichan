@@ -506,7 +506,7 @@ a.heading-link-light {
 .settings-item-inner {
     display: flex;
     flex-flow: row nowrap;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-content: stretch;
     width: 100%;
 }
