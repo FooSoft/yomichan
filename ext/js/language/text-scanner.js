@@ -748,7 +748,7 @@ class TextScanner extends EventDispatcher {
     }
 
     _hookEvents() {
-        const capture = false;
+        const capture = true;
         let eventListenerInfos;
         if (this._searchOnClickOnly) {
             eventListenerInfos = this._getMouseClickOnlyEventListeners(capture);
