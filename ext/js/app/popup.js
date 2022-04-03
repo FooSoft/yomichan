@@ -290,9 +290,10 @@ class Popup extends EventDispatcher {
      * @returns {Promise<void>}
      */
     updateTheme() {
-        this._frame.dataset.theme = this._popupTheme;
-        this._frame.dataset.outerTheme = this._popupOuterTheme;
-        this._frame.dataset.siteTheme = this._getSiteTheme();
+        const data = this._frame.dataset;
+        data.theme = this._popupTheme;
+        data.outerTheme = this._popupOuterTheme;
+        data.siteTheme = this._getSiteTheme();
     }
 
     /**
