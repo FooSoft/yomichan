@@ -57,6 +57,7 @@ class Popup extends EventDispatcher {
 
         this._popupTheme = 'default';
         this._popupOuterTheme = 'default';
+        this._browserTheme = 'light';
 
         this._frameSizeContentScale = null;
         this._frameClient = null;
@@ -156,6 +157,9 @@ class Popup extends EventDispatcher {
         this._visible.on('change', this._onVisibleChange.bind(this));
         yomichan.on('extensionUnloaded', this._onExtensionUnloaded.bind(this));
         this._onVisibleChange({value: this.isVisibleSync()});
+        const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
+        mediaQueryList.addEventListener('change', this._onPrefersColorSchemeDarkChange.bind(this));
+        this._onPrefersColorSchemeDarkChange(mediaQueryList);
     }
 
     /**
@@ -294,6 +298,7 @@ class Popup extends EventDispatcher {
         data.theme = this._popupTheme;
         data.outerTheme = this._popupOuterTheme;
         data.siteTheme = this._getSiteTheme();
+        data.browserTheme = this._browserTheme;
     }
 
     /**
@@ -351,6 +356,11 @@ class Popup extends EventDispatcher {
 
     _onFrameMouseOut() {
         this.trigger('framePointerOut', {});
+    }
+
+    _onPrefersColorSchemeDarkChange({matches}) {
+        this._browserTheme = (matches ? 'dark' : 'light');
+        this.updateTheme();
     }
 
     _inject() {

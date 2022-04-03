@@ -117,6 +117,7 @@ class Display extends EventDispatcher {
 
         this._popupTheme = 'default';
         this._popupOuterTheme = 'default';
+        this._browserTheme = 'light';
 
         this._hotkeyHandler.registerActions([
             ['close',             () => { this._onHotkeyClose(); }],
@@ -213,6 +214,11 @@ class Display extends EventDispatcher {
     }
 
     async prepare() {
+        // Theme
+        const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
+        mediaQueryList.addEventListener('change', this._onPrefersColorSchemeDarkChange.bind(this));
+        this._onPrefersColorSchemeDarkChange(mediaQueryList);
+
         // State setup
         const {documentElement} = document;
         const {browser} = await yomichan.api.getEnvironmentInfo();
@@ -797,6 +803,11 @@ class Display extends EventDispatcher {
         }
     }
 
+    _onPrefersColorSchemeDarkChange({matches}) {
+        this._browserTheme = (matches ? 'dark' : 'light');
+        this._updateTheme();
+    }
+
     _showTagNotification(tagNode) {
         tagNode = tagNode.parentNode;
         if (tagNode === null) { return; }
@@ -854,6 +865,7 @@ class Display extends EventDispatcher {
         const data = document.documentElement.dataset;
         data.theme = this._popupTheme;
         data.outerTheme = this._popupOuterTheme;
+        data.browserTheme = this._browserTheme;
     }
 
     async _findDictionaryEntries(isKanji, source, wildcardsEnabled, optionsContext) {
