@@ -213,6 +213,7 @@ class Display extends EventDispatcher {
 
     async prepare() {
         // Theme
+        this._themeController.siteTheme = 'light';
         this._themeController.prepare();
 
         // State setup
@@ -846,7 +847,6 @@ class Display extends EventDispatcher {
         const {popupTheme} = general;
         this._themeController.theme = popupTheme;
         this._themeController.outerTheme = general.popupOuterTheme;
-        this._themeController.siteTheme = popupTheme;
         this._themeController.updateTheme();
         this.setCustomCss(general.customPopupCss);
     }
