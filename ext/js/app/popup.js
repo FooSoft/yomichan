@@ -290,7 +290,7 @@ class Popup extends EventDispatcher {
         const {popupTheme, popupOuterTheme} = this._options.general;
         this._frame.dataset.theme = popupTheme;
         this._frame.dataset.outerTheme = popupOuterTheme;
-        this._frame.dataset.siteColor = this._getSiteColor();
+        this._frame.dataset.siteTheme = this._getSiteTheme();
     }
 
     /**
@@ -588,7 +588,7 @@ class Popup extends EventDispatcher {
         }
     }
 
-    _getSiteColor() {
+    _getSiteTheme() {
         const color = [255, 255, 255];
         const {documentElement, body} = document;
         if (documentElement !== null) {

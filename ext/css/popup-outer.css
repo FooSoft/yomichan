@@ -32,7 +32,7 @@ iframe.yomichan-popup[data-theme=dark] {
     border-color: #666666;
 }
 iframe.yomichan-popup[data-outer-theme=dark],
-iframe.yomichan-popup[data-outer-theme=auto][data-site-color=dark] {
+iframe.yomichan-popup[data-outer-theme=auto][data-site-theme=dark] {
     box-shadow: 0 0 10em rgba(255, 255, 255, 0.5);
 }
 iframe.yomichan-popup[data-popup-display-mode=full-width] {
