@@ -288,8 +288,9 @@ class Popup extends EventDispatcher {
 
     /**
      * Updates the outer theme of the popup.
+     * @returns {Promise<void>}
      */
-    updateTheme() {
+    async updateTheme() {
         this._themeController.updateTheme();
     }
 
