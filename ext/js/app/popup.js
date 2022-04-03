@@ -55,6 +55,9 @@ class Popup extends EventDispatcher {
         this._contentScale = 1.0;
         this._targetOrigin = chrome.runtime.getURL('/').replace(/\/$/, '');
 
+        this._popupTheme = 'default';
+        this._popupOuterTheme = 'default';
+
         this._frameSizeContentScale = null;
         this._frameClient = null;
         this._frame = document.createElement('iframe');
@@ -287,9 +290,8 @@ class Popup extends EventDispatcher {
      * @returns {Promise<void>}
      */
     updateTheme() {
-        const {popupTheme, popupOuterTheme} = this._options.general;
-        this._frame.dataset.theme = popupTheme;
-        this._frame.dataset.outerTheme = popupOuterTheme;
+        this._frame.dataset.theme = this._popupTheme;
+        this._frame.dataset.outerTheme = this._popupOuterTheme;
         this._frame.dataset.siteTheme = this._getSiteTheme();
     }
 
@@ -825,6 +827,10 @@ class Popup extends EventDispatcher {
     async _setOptionsContext(optionsContext) {
         this._optionsContext = optionsContext;
         this._options = await yomichan.api.optionsGet(optionsContext);
+        ({
+            popupTheme: this._popupTheme,
+            popupOuterTheme: this._popupOuterTheme
+        } = this._options.general);
         this.updateTheme();
     }
 
