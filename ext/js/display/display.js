@@ -115,6 +115,9 @@ class Display extends EventDispatcher {
         this._onMenuButtonClickBind = this._onMenuButtonClick.bind(this);
         this._onMenuButtonMenuCloseBind = this._onMenuButtonMenuClose.bind(this);
 
+        this._popupTheme = 'default';
+        this._popupOuterTheme = 'default';
+
         this._hotkeyHandler.registerActions([
             ['close',             () => { this._onHotkeyClose(); }],
             ['nextEntry',         this._onHotkeyActionMoveRelative.bind(this, 1)],
@@ -302,8 +305,7 @@ class Display extends EventDispatcher {
 
         this._updateHotkeys(options);
         this._updateDocumentOptions(options);
-        this._updateTheme(options.general.popupTheme);
-        this.setCustomCss(options.general.customPopupCss);
+        this._setTheme(options);
         this._hotkeyHelpController.setOptions(options);
         this._displayGenerator.updateHotkeys();
         this._hotkeyHelpController.setupNode(document.documentElement);
@@ -837,8 +839,21 @@ class Display extends EventDispatcher {
         data.popupActionBarLocation = `${options.general.popupActionBarLocation}`;
     }
 
-    _updateTheme(themeName) {
-        document.documentElement.dataset.theme = themeName;
+    _setTheme(options) {
+        let customPopupCss;
+        ({
+            popupTheme: this._popupTheme,
+            popupOuterTheme: this._popupOuterTheme,
+            customPopupCss
+        } = options.general);
+        this._updateTheme();
+        this.setCustomCss(customPopupCss);
+    }
+
+    _updateTheme() {
+        const data = document.documentElement.dataset;
+        data.theme = this._popupTheme;
+        data.outerTheme = this._popupOuterTheme;
     }
 
     async _findDictionaryEntries(isKanji, source, wildcardsEnabled, optionsContext) {
