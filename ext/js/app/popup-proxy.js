@@ -235,7 +235,6 @@ class PopupProxy extends EventDispatcher {
 
     /**
      * Updates the outer theme of the popup.
-     * @returns {Promise<void>}
      */
     updateTheme() {
         return this._invokeSafe('PopupFactory.updateTheme', {id: this._id});
