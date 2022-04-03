@@ -31,6 +31,7 @@
  * QueryParser
  * ScrollElement
  * TextScanner
+ * ThemeController
  * dynamicLoader
  */
 
@@ -114,10 +115,7 @@ class Display extends EventDispatcher {
         this._onTagClickBind = this._onTagClick.bind(this);
         this._onMenuButtonClickBind = this._onMenuButtonClick.bind(this);
         this._onMenuButtonMenuCloseBind = this._onMenuButtonMenuClose.bind(this);
-
-        this._popupTheme = 'default';
-        this._popupOuterTheme = 'default';
-        this._browserTheme = 'light';
+        this._themeController = new ThemeController(document.documentElement);
 
         this._hotkeyHandler.registerActions([
             ['close',             () => { this._onHotkeyClose(); }],
@@ -215,9 +213,7 @@ class Display extends EventDispatcher {
 
     async prepare() {
         // Theme
-        const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
-        mediaQueryList.addEventListener('change', this._onPrefersColorSchemeDarkChange.bind(this));
-        this._onPrefersColorSchemeDarkChange(mediaQueryList);
+        this._themeController.prepare();
 
         // State setup
         const {documentElement} = document;
@@ -803,11 +799,6 @@ class Display extends EventDispatcher {
         }
     }
 
-    _onPrefersColorSchemeDarkChange({matches}) {
-        this._browserTheme = (matches ? 'dark' : 'light');
-        this._updateTheme();
-    }
-
     _showTagNotification(tagNode) {
         tagNode = tagNode.parentNode;
         if (tagNode === null) { return; }
@@ -851,21 +842,13 @@ class Display extends EventDispatcher {
     }
 
     _setTheme(options) {
-        let customPopupCss;
-        ({
-            popupTheme: this._popupTheme,
-            popupOuterTheme: this._popupOuterTheme,
-            customPopupCss
-        } = options.general);
-        this._updateTheme();
-        this.setCustomCss(customPopupCss);
-    }
-
-    _updateTheme() {
-        const data = document.documentElement.dataset;
-        data.theme = this._popupTheme;
-        data.outerTheme = this._popupOuterTheme;
-        data.browserTheme = this._browserTheme;
+        const {general} = options;
+        const {popupTheme} = general;
+        this._themeController.theme = popupTheme;
+        this._themeController.outerTheme = general.popupOuterTheme;
+        this._themeController.siteTheme = popupTheme;
+        this._themeController.updateTheme();
+        this.setCustomCss(general.customPopupCss);
     }
 
     async _findDictionaryEntries(isKanji, source, wildcardsEnabled, optionsContext) {
