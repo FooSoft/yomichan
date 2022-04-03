@@ -166,16 +166,10 @@ class ThemeController {
      */
     _resolveThemeValue(theme, computedSiteTheme) {
         switch (theme) {
-            case 'auto':
-                theme = computedSiteTheme;
-                break;
-            case 'browser':
-                theme = this._browserTheme;
-                break;
-            default:
-                return theme;
+            case 'auto': return computedSiteTheme;
+            case 'browser': return this._browserTheme;
+            default: return theme;
         }
-        return (theme === 'light' ? 'default' : theme);
     }
 
     /**
