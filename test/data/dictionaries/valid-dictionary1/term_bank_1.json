@@ -204,6 +204,43 @@
                         "external link"
                     ]
                 }
+            ]},
+            {"type": "structured-content", "content": [
+                {"tag": "ul", "content": [
+                    {"tag": "li", "content": "Unordered list item 1"},
+                    {"tag": "li", "content": "Unordered list item 2"},
+                    {"tag": "li", "content": "Unordered list item 3"}
+                ]}
+            ]},
+            {"type": "structured-content", "content": [
+                {"tag": "ol", "content": [
+                    {"tag": "li", "content": "Ordered list item 1"},
+                    {"tag": "li", "content": "Ordered list item 2"},
+                    {"tag": "li", "content": "Ordered list item 3"}
+                ]}
+            ]},
+            {"type": "structured-content", "content": [
+                {"tag": "ol", "style": {"listStyleType": "hiragana-iroha"}, "content": [
+                    {"tag": "li", "content": "List item i"},
+                    {"tag": "li", "content": "List item ro"},
+                    {"tag": "li", "content": "List item ha"}
+                ]}
+            ]},
+            {"type": "structured-content", "content": [
+                {"tag": "ul", "content": [
+                    {"tag": "li", "style": {"listStyleType": "'⇄'"}, "content": ["【", {"tag": "a", "href": "?query=よみ&wildcards=off", "content": ["Antonym"]}, "】"]},
+                    {"tag": "li", "style": {"listStyleType": "'🔄'"}, "content": ["【", {"tag": "a", "href": "?query=よみ&wildcards=off", "content": ["References and is referenced by"]}, "】"]},
+                    {"tag": "li", "style": {"listStyleType": "'➡'"}, "content": ["【", {"tag": "a", "href": "?query=よみ&wildcards=off", "content": ["References"]}, "】"]},
+                    {"tag": "li", "style": {"listStyleType": "'⬅'"}, "content": ["【", {"tag": "a", "href": "?query=よみ&wildcards=off", "content": ["Referenced by"]}, "】"]}
+                ]}
+            ]},
+            {"type": "structured-content", "content": [
+                {"tag": "ol", "content": [
+                    {"tag": "li", "style": {"listStyleType": "'①'"}, "content": "まるいち"},
+                    {"tag": "li", "style": {"listStyleType": "'②'"}, "content": "まるに"},
+                    {"tag": "li", "style": {"listStyleType": "'③'"}, "content": "まるさん"},
+                    {"tag": "li", "style": {"listStyleType": "'④'"}, "content": "まるよん"}
+                ]}
             ]}
         ],
         100, "P E1"

@@ -95,7 +95,7 @@
                             "properties": {
                                 "tag": {
                                     "type": "string",
-                                    "enum": ["span", "div"]
+                                    "enum": ["span", "div", "ol", "ul", "li"]
                                 },
                                 "content": {
                                     "$ref": "#/definitions/structuredContent"
@@ -276,6 +276,10 @@
                 "marginBottom": {
                     "type": "number",
                     "default": 0
+                },
+                "listStyleType": {
+                    "type": "string",
+                    "default": "disc"
                 }
             }
         }
