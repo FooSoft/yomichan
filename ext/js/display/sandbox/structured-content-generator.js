@@ -207,8 +207,9 @@ class StructuredContentGenerator {
 
     _createStructuredContentElement(tag, content, dictionary, type, hasChildren, hasStyle) {
         const node = this._createElement(tag, `gloss-sc-${tag}`);
-        const {data} = content;
+        const {data, lang} = content;
         if (typeof data === 'object' && data !== null) { this._setElementDataset(node, data); }
+        if (typeof lang === 'string') { node.lang = lang; }
         switch (type) {
             case 'table-cell':
                 {
@@ -273,6 +274,9 @@ class StructuredContentGenerator {
 
         const text = this._createElement('span', 'gloss-link-text');
         node.appendChild(text);
+
+        const {lang} = content;
+        if (typeof lang === 'string') { node.lang = lang; }
 
         const child = this.createStructuredContent(content.content, dictionary);
         if (child !== null) { text.appendChild(child); }
