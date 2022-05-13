@@ -54,7 +54,7 @@
                                 },
                                 "lang": {
                                     "type": "string",
-                                    "description": "Defines the language of an element in the format defined by RFC 5646"
+                                    "description": "Defines the language of an element in the format defined by RFC 5646."
                                 }
                             }
                         },
@@ -89,7 +89,7 @@
                                 },
                                 "lang": {
                                     "type": "string",
-                                    "description": "Defines the language of an element in the format defined by RFC 5646"
+                                    "description": "Defines the language of an element in the format defined by RFC 5646."
                                 }
                             }
                         },
@@ -116,7 +116,7 @@
                                 },
                                 "lang": {
                                     "type": "string",
-                                    "description": "Defines the language of an element in the format defined by RFC 5646"
+                                    "description": "Defines the language of an element in the format defined by RFC 5646."
                                 }
                             }
                         },
@@ -221,7 +221,7 @@
                                 },
                                 "lang": {
                                     "type": "string",
-                                    "description": "Defines the language of an element in the format defined by RFC 5646"
+                                    "description": "Defines the language of an element in the format defined by RFC 5646."
                                 }
                             }
                         }

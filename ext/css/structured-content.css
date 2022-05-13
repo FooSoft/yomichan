@@ -235,9 +235,7 @@
     padding: 0.25em;
     vertical-align: top;
 }
-.gloss-sc-ol {
-    padding-left: var(--list-padding2);
-}
+.gloss-sc-ol,
 .gloss-sc-ul {
     padding-left: var(--list-padding2);
 }
