@@ -23,50 +23,7 @@ class StructuredContentGenerator {
     }
 
     createStructuredContent(content, dictionary) {
-        if (typeof content === 'string') {
-            return this._createTextNode(content);
-        }
-        if (!(typeof content === 'object' && content !== null)) {
-            return null;
-        }
-        if (Array.isArray(content)) {
-            const fragment = this._createDocumentFragment();
-            for (const item of content) {
-                const child = this.createStructuredContent(item, dictionary);
-                if (child !== null) { fragment.appendChild(child); }
-            }
-            return fragment;
-        }
-        const {tag} = content;
-        switch (tag) {
-            case 'br':
-                return this._createStructuredContentElement(tag, content, dictionary, 'simple', false, false);
-            case 'ruby':
-            case 'rt':
-            case 'rp':
-                return this._createStructuredContentElement(tag, content, dictionary, 'simple', true, false);
-            case 'table':
-                return this._createStructuredContentTableElement(tag, content, dictionary);
-            case 'thead':
-            case 'tbody':
-            case 'tfoot':
-            case 'tr':
-                return this._createStructuredContentElement(tag, content, dictionary, 'table', true, false);
-            case 'th':
-            case 'td':
-                return this._createStructuredContentElement(tag, content, dictionary, 'table-cell', true, true);
-            case 'div':
-            case 'span':
-            case 'ol':
-            case 'ul':
-            case 'li':
-                return this._createStructuredContentElement(tag, content, dictionary, 'simple', true, true);
-            case 'img':
-                return this.createDefinitionImage(content, dictionary);
-            case 'a':
-                return this._createLinkElement(content, dictionary);
-        }
-        return null;
+        return this._createStructuredContent(content, dictionary);
     }
 
     createDefinitionImage(data, dictionary) {
@@ -161,6 +118,53 @@ class StructuredContentGenerator {
 
     // Private
 
+    _createStructuredContent(content, dictionary) {
+        if (typeof content === 'string') {
+            return this._createTextNode(content);
+        }
+        if (!(typeof content === 'object' && content !== null)) {
+            return null;
+        }
+        if (Array.isArray(content)) {
+            const fragment = this._createDocumentFragment();
+            for (const item of content) {
+                const child = this._createStructuredContent(item, dictionary);
+                if (child !== null) { fragment.appendChild(child); }
+            }
+            return fragment;
+        }
+        const {tag} = content;
+        switch (tag) {
+            case 'br':
+                return this._createStructuredContentElement(tag, content, dictionary, 'simple', false, false);
+            case 'ruby':
+            case 'rt':
+            case 'rp':
+                return this._createStructuredContentElement(tag, content, dictionary, 'simple', true, false);
+            case 'table':
+                return this._createStructuredContentTableElement(tag, content, dictionary);
+            case 'thead':
+            case 'tbody':
+            case 'tfoot':
+            case 'tr':
+                return this._createStructuredContentElement(tag, content, dictionary, 'table', true, false);
+            case 'th':
+            case 'td':
+                return this._createStructuredContentElement(tag, content, dictionary, 'table-cell', true, true);
+            case 'div':
+            case 'span':
+            case 'ol':
+            case 'ul':
+            case 'li':
+                return this._createStructuredContentElement(tag, content, dictionary, 'simple', true, true);
+            case 'img':
+                return this.createDefinitionImage(content, dictionary);
+            case 'a':
+                return this._createLinkElement(content, dictionary);
+        }
+        return null;
+    }
+
     _createElement(tagName, className) {
         const node = this._document.createElement(tagName);
         node.className = className;
@@ -227,7 +231,7 @@ class StructuredContentGenerator {
             }
         }
         if (hasChildren) {
-            const child = this.createStructuredContent(content.content, dictionary);
+            const child = this._createStructuredContent(content.content, dictionary);
             if (child !== null) { node.appendChild(child); }
         }
         return node;
@@ -279,7 +283,7 @@ class StructuredContentGenerator {
         const {lang} = content;
         if (typeof lang === 'string') { node.lang = lang; }
 
-        const child = this.createStructuredContent(content.content, dictionary);
+        const child = this._createStructuredContent(content.content, dictionary);
         if (child !== null) { text.appendChild(child); }
 
         if (!internal) {
