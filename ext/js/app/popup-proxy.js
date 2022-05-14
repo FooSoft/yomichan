@@ -185,15 +185,15 @@ class PopupProxy extends EventDispatcher {
 
     /**
      * Shows and updates the positioning and content of the popup.
-     * @param {{optionsContext: object, elementRect: {x: number, y: number, width: number, height: number}, writingMode: string}} details Settings for the outer popup.
+     * @param {{optionsContext: object, sourceRect: {x: number, y: number, width: number, height: number}, writingMode: string}} details Settings for the outer popup.
      * @param {object} displayDetails The details parameter passed to `Display.setContent`; see that function for details.
      * @returns {Promise<void>}
      */
     async showContent(details, displayDetails) {
-        const {elementRect} = details;
-        if (typeof elementRect !== 'undefined' && this._frameOffsetForwarder !== null) {
+        const {sourceRect} = details;
+        if (typeof sourceRect !== 'undefined' && this._frameOffsetForwarder !== null) {
             await this._updateFrameOffset();
-            [elementRect.x, elementRect.y] = this._applyFrameOffset(elementRect.x, elementRect.y);
+            [sourceRect.x, sourceRect.y] = this._applyFrameOffset(sourceRect.x, sourceRect.y);
         }
         return await this._invokeSafe('PopupFactory.showContent', {id: this._id, details, displayDetails});
     }

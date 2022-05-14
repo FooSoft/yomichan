@@ -246,20 +246,20 @@ class Popup extends EventDispatcher {
 
     /**
      * Shows and updates the positioning and content of the popup.
-     * @param {{optionsContext: object, elementRect: {x: number, y: number, width: number, height: number}, writingMode: string}} details Settings for the outer popup.
+     * @param {{optionsContext: object, sourceRect: {x: number, y: number, width: number, height: number}, writingMode: string}} details Settings for the outer popup.
      * @param {object} displayDetails The details parameter passed to `Display.setContent`; see that function for details.
      * @returns {Promise<void>}
      */
     async showContent(details, displayDetails) {
         if (!this._optionsAssigned) { throw new Error('Options not assigned'); }
 
-        const {optionsContext, elementRect, writingMode} = details;
+        const {optionsContext, sourceRect, writingMode} = details;
         if (optionsContext !== null) {
             await this._setOptionsContextIfDifferent(optionsContext);
         }
 
-        if (typeof elementRect !== 'undefined' && typeof writingMode !== 'undefined') {
-            await this._show(elementRect, writingMode);
+        if (typeof sourceRect !== 'undefined' && typeof writingMode !== 'undefined') {
+            await this._show(sourceRect, writingMode);
         }
 
         if (displayDetails !== null) {
@@ -523,7 +523,7 @@ class Popup extends EventDispatcher {
         }
     }
 
-    async _show(elementRect, writingMode) {
+    async _show(sourceRect, writingMode) {
         const injected = await this._inject();
         if (!injected) { return; }
 
@@ -535,7 +535,7 @@ class Popup extends EventDispatcher {
         const scaleRatio = this._frameSizeContentScale === null ? 1.0 : scale / this._frameSizeContentScale;
         this._frameSizeContentScale = scale;
         const getPositionArgs = [
-            elementRect,
+            sourceRect,
             Math.max(frameRect.width * scaleRatio, this._initialWidth * scale),
             Math.max(frameRect.height * scaleRatio, this._initialHeight * scale),
             viewport,
@@ -652,22 +652,22 @@ class Popup extends EventDispatcher {
         return fullscreenElement;
     }
 
-    _getPositionForHorizontalText(elementRect, width, height, viewport, offsetScale) {
+    _getPositionForHorizontalText(sourceRect, width, height, viewport, offsetScale) {
         const preferBelow = (this._horizontalTextPosition === 'below');
         const horizontalOffset = this._horizontalOffset * offsetScale;
         const verticalOffset = this._verticalOffset * offsetScale;
 
         const [x, w] = this._getConstrainedPosition(
-            elementRect.x + elementRect.width - horizontalOffset,
-            elementRect.x + horizontalOffset,
+            sourceRect.x + sourceRect.width - horizontalOffset,
+            sourceRect.x + horizontalOffset,
             width,
             viewport.left,
             viewport.right,
             true
         );
         const [y, h, below] = this._getConstrainedPositionBinary(
-            elementRect.y - verticalOffset,
-            elementRect.y + elementRect.height + verticalOffset,
+            sourceRect.y - verticalOffset,
+            sourceRect.y + sourceRect.height + verticalOffset,
             height,
             viewport.top,
             viewport.bottom,
@@ -676,22 +676,22 @@ class Popup extends EventDispatcher {
         return [x, y, w, h, below];
     }
 
-    _getPositionForVerticalText(elementRect, width, height, viewport, offsetScale, writingMode) {
+    _getPositionForVerticalText(sourceRect, width, height, viewport, offsetScale, writingMode) {
         const preferRight = this._isVerticalTextPopupOnRight(this._verticalTextPosition, writingMode);
         const horizontalOffset = this._horizontalOffset2 * offsetScale;
         const verticalOffset = this._verticalOffset2 * offsetScale;
 
         const [x, w] = this._getConstrainedPositionBinary(
-            elementRect.x - horizontalOffset,
-            elementRect.x + elementRect.width + horizontalOffset,
+            sourceRect.x - horizontalOffset,
+            sourceRect.x + sourceRect.width + horizontalOffset,
             width,
             viewport.left,
             viewport.right,
             preferRight
         );
         const [y, h, below] = this._getConstrainedPosition(
-            elementRect.y + elementRect.height - verticalOffset,
-            elementRect.y + verticalOffset,
+            sourceRect.y + sourceRect.height - verticalOffset,
+            sourceRect.y + verticalOffset,
             height,
             viewport.top,
             viewport.bottom,

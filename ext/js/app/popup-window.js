@@ -168,7 +168,7 @@ class PopupWindow extends EventDispatcher {
 
     /**
      * Shows and updates the positioning and content of the popup.
-     * @param {{optionsContext: object, elementRect: {x: number, y: number, width: number, height: number}, writingMode: string}} details Settings for the outer popup.
+     * @param {{optionsContext: object, sourceRect: {x: number, y: number, width: number, height: number}, writingMode: string}} details Settings for the outer popup.
      * @param {object} displayDetails The details parameter passed to `Display.setContent`; see that function for details.
      * @returns {Promise<void>}
      */
