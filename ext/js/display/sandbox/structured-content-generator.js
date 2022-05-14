@@ -133,36 +133,7 @@ class StructuredContentGenerator {
             }
             return fragment;
         }
-        const {tag} = content;
-        switch (tag) {
-            case 'br':
-                return this._createStructuredContentElement(tag, content, dictionary, 'simple', false, false);
-            case 'ruby':
-            case 'rt':
-            case 'rp':
-                return this._createStructuredContentElement(tag, content, dictionary, 'simple', true, false);
-            case 'table':
-                return this._createStructuredContentTableElement(tag, content, dictionary);
-            case 'thead':
-            case 'tbody':
-            case 'tfoot':
-            case 'tr':
-                return this._createStructuredContentElement(tag, content, dictionary, 'table', true, false);
-            case 'th':
-            case 'td':
-                return this._createStructuredContentElement(tag, content, dictionary, 'table-cell', true, true);
-            case 'div':
-            case 'span':
-            case 'ol':
-            case 'ul':
-            case 'li':
-                return this._createStructuredContentElement(tag, content, dictionary, 'simple', true, true);
-            case 'img':
-                return this.createDefinitionImage(content, dictionary);
-            case 'a':
-                return this._createLinkElement(content, dictionary);
-        }
-        return null;
+        return this._createStructuredContentGenericElement(content, dictionary);
     }
 
     _createElement(tagName, className) {
@@ -201,6 +172,39 @@ class StructuredContentGenerator {
             node.dataset.imageLoadState = unloaded ? 'unloaded' : 'load-error';
             imageBackground.style.removeProperty('--image');
         }
+    }
+
+    _createStructuredContentGenericElement(content, dictionary) {
+        const {tag} = content;
+        switch (tag) {
+            case 'br':
+                return this._createStructuredContentElement(tag, content, dictionary, 'simple', false, false);
+            case 'ruby':
+            case 'rt':
+            case 'rp':
+                return this._createStructuredContentElement(tag, content, dictionary, 'simple', true, false);
+            case 'table':
+                return this._createStructuredContentTableElement(tag, content, dictionary);
+            case 'thead':
+            case 'tbody':
+            case 'tfoot':
+            case 'tr':
+                return this._createStructuredContentElement(tag, content, dictionary, 'table', true, false);
+            case 'th':
+            case 'td':
+                return this._createStructuredContentElement(tag, content, dictionary, 'table-cell', true, true);
+            case 'div':
+            case 'span':
+            case 'ol':
+            case 'ul':
+            case 'li':
+                return this._createStructuredContentElement(tag, content, dictionary, 'simple', true, true);
+            case 'img':
+                return this.createDefinitionImage(content, dictionary);
+            case 'a':
+                return this._createLinkElement(content, dictionary);
+        }
+        return null;
     }
 
     _createStructuredContentTableElement(tag, content, dictionary) {
