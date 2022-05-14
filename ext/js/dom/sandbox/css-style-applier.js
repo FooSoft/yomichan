@@ -37,6 +37,9 @@ class CssStyleApplier {
         this._styleDataUrl = styleDataUrl;
         this._styleData = [];
         this._cachedRules = new Map();
+        // eslint-disable-next-line no-control-regex
+        this._patternHtmlWhitespace = /[\t\r\n\x0C ]+/g;
+        this._patternClassNameCharacter = /[0-9a-zA-Z-_]/;
     }
 
     /**
@@ -106,10 +109,10 @@ class CssStyleApplier {
         rules = [];
         this._cachedRules.set(className, rules);
 
-        const classNamePattern = new RegExp(`.${className}(?![0-9a-zA-Z-])`, '');
+        const classList = this._getTokens(className);
         for (const {selectors, styles} of this._styleData) {
             const selectorText = selectors.join(',');
-            if (!classNamePattern.test(selectorText)) { continue; }
+            if (!this._selectorMatches(selectorText, classList)) { continue; }
             rules.push({selectorText, styles});
         }
 
@@ -122,5 +125,34 @@ class CssStyleApplier {
             cssText += `${property}:${value};`;
         }
         return cssText;
+    }
+
+    _selectorMatches(selectorText, classList) {
+        const pattern = this._patternClassNameCharacter;
+        for (const item of classList) {
+            const prefixedItem = `.${item}`;
+            let start = 0;
+            while (true) {
+                const index = selectorText.indexOf(prefixedItem, start);
+                if (index < 0) { break; }
+                start = index + prefixedItem.length;
+                if (start >= selectorText.length || !pattern.test(selectorText[start])) { return true; }
+            }
+        }
+        return false;
+    }
+
+    _getTokens(tokenListString) {
+        let start = 0;
+        const pattern = this._patternHtmlWhitespace;
+        pattern.lastIndex = 0;
+        const result = [];
+        while (true) {
+            const match = pattern.exec(tokenListString);
+            const end = match === null ? tokenListString.length : match.index;
+            if (end > start) { result.push(tokenListString.substring(start, end)); }
+            if (match === null) { return result; }
+            start = end + match[0].length;
+        }
     }
 }
