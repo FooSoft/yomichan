@@ -139,6 +139,7 @@ class StructuredContentGenerator {
             for (const item of content) {
                 this._appendStructuredContent(container, item, dictionary);
             }
+            return;
         }
         const node = this._createStructuredContentGenericElement(content, dictionary);
         if (node !== null) {
