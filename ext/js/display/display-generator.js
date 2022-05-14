@@ -28,7 +28,7 @@ class DisplayGenerator {
         this._contentManager = contentManager;
         this._hotkeyHelpController = hotkeyHelpController;
         this._templates = null;
-        this._structuredContentGenerator = new StructuredContentGenerator(this._contentManager, document);
+        this._structuredContentGenerator = new StructuredContentGenerator(this._contentManager, japaneseUtil, document);
         this._pronunciationGenerator = new PronunciationGenerator(japaneseUtil);
     }
 

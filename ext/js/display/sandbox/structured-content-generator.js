@@ -16,8 +16,9 @@
  */
 
 class StructuredContentGenerator {
-    constructor(contentManager, document) {
+    constructor(contentManager, japaneseUtil, document) {
         this._contentManager = contentManager;
+        this._japaneseUtil = japaneseUtil;
         this._document = document;
     }
 
