@@ -23,7 +23,10 @@ class StructuredContentGenerator {
     }
 
     createStructuredContent(content, dictionary) {
-        return this._createStructuredContent(content, dictionary);
+        const node = this._createElement('span', 'structured-content');
+        const content2 = this._createStructuredContent(content, dictionary);
+        if (content2 !== null) { node.appendChild(content2); }
+        return node;
     }
 
     createDefinitionImage(data, dictionary) {
