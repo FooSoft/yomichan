@@ -21,6 +21,14 @@
  */
 class CssStyleApplier {
     /**
+     * @typedef {object} CssRule
+     * @property {string} selectors A CSS selector string representing one or more selectors.
+     * @property {[string, string][]} styles A list of CSS property and value pairs.
+     * @property {string} styles[][0] The CSS property.
+     * @property {string} styles[][1] The CSS value.
+     */
+
+    /**
      * Creates a new instance of the class.
      * @param styleDataUrl The local URL to the JSON file continaing the style rules.
      *   The style rules should be of the format:
@@ -68,7 +76,7 @@ class CssStyleApplier {
             const className = element.getAttribute('class');
             if (className.length === 0) { continue; }
             let cssTextNew = '';
-            for (const {selectorText, styles} of this._getRulesForClass(className)) {
+            for (const {selectorText, styles} of this._getCandidateCssRulesForClass(className)) {
                 if (!element.matches(selectorText)) { continue; }
                 cssTextNew += this._getCssText(styles);
             }
@@ -102,7 +110,12 @@ class CssStyleApplier {
         return await response.json();
     }
 
-    _getRulesForClass(className) {
+    /**
+     * Gets an array of candidate CSS rules which might match a specific class.
+     * @param {string} className A whitespace-separated list of classes.
+     * @returns {CssRule[]} An array of candidate CSS rules.
+     */
+    _getCandidateCssRulesForClass(className) {
         let rules = this._cachedRules.get(className);
         if (typeof rules !== 'undefined') { return rules; }
 
