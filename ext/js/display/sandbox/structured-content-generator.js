@@ -22,6 +22,11 @@ class StructuredContentGenerator {
         this._document = document;
     }
 
+    appendStructuredContent(node, content, dictionary) {
+        node.classList.add('structured-content');
+        this._appendStructuredContent(node, content, dictionary);
+    }
+
     createStructuredContent(content, dictionary) {
         const node = this._createElement('span', 'structured-content');
         this._appendStructuredContent(node, content, dictionary);

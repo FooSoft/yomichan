@@ -347,11 +347,8 @@ class DisplayGenerator {
 
     _createTermDefinitionEntryStructuredContent(content, dictionary) {
         const node = this._templates.instantiate('gloss-item');
-        const child = this._structuredContentGenerator.createStructuredContent(content, dictionary);
-        if (child !== null) {
-            const contentContainer = node.querySelector('.gloss-content');
-            contentContainer.appendChild(child);
-        }
+        const contentContainer = node.querySelector('.gloss-content');
+        this._structuredContentGenerator.appendStructuredContent(contentContainer, content, dictionary);
         return node;
     }
 
