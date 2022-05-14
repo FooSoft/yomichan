@@ -24,8 +24,7 @@ class StructuredContentGenerator {
 
     createStructuredContent(content, dictionary) {
         const node = this._createElement('span', 'structured-content');
-        const content2 = this._createStructuredContent(content, dictionary);
-        if (content2 !== null) { node.appendChild(content2); }
+        this._appendStructuredContent(node, content, dictionary);
         return node;
     }
 
@@ -121,22 +120,25 @@ class StructuredContentGenerator {
 
     // Private
 
-    _createStructuredContent(content, dictionary) {
+    _appendStructuredContent(container, content, dictionary) {
         if (typeof content === 'string') {
-            return this._createTextNode(content);
+            if (content.length > 0) {
+                container.appendChild(this._createTextNode(content));
+            }
+            return;
         }
         if (!(typeof content === 'object' && content !== null)) {
-            return null;
+            return;
         }
         if (Array.isArray(content)) {
-            const fragment = this._createDocumentFragment();
             for (const item of content) {
-                const child = this._createStructuredContent(item, dictionary);
-                if (child !== null) { fragment.appendChild(child); }
+                this._appendStructuredContent(container, item, dictionary);
             }
-            return fragment;
         }
-        return this._createStructuredContentGenericElement(content, dictionary);
+        const node = this._createStructuredContentGenericElement(content, dictionary);
+        if (node !== null) {
+            container.appendChild(node);
+        }
     }
 
     _createElement(tagName, className) {
@@ -238,8 +240,7 @@ class StructuredContentGenerator {
             }
         }
         if (hasChildren) {
-            const child = this._createStructuredContent(content.content, dictionary);
-            if (child !== null) { node.appendChild(child); }
+            this._appendStructuredContent(node, content.content, dictionary);
         }
         return node;
     }
@@ -290,8 +291,7 @@ class StructuredContentGenerator {
         const {lang} = content;
         if (typeof lang === 'string') { node.lang = lang; }
 
-        const child = this._createStructuredContent(content.content, dictionary);
-        if (child !== null) { text.appendChild(child); }
+        this._appendStructuredContent(text, content.content, dictionary);
 
         if (!internal) {
             const icon = this._createElement('span', 'gloss-link-external-icon icon');
