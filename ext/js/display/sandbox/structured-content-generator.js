@@ -157,10 +157,6 @@ class StructuredContentGenerator {
         return this._document.createTextNode(data);
     }
 
-    _createDocumentFragment() {
-        return this._document.createDocumentFragment();
-    }
-
     _setElementDataset(element, data) {
         for (let [key, value] of Object.entries(data)) {
             if (key.length > 0) {
