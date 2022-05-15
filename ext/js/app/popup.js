@@ -30,7 +30,7 @@ class Popup extends EventDispatcher {
      * Information about how popup content should be shown, specifically related to the outer popup frame.
      * @typedef {object} ContentDetails
      * @property {?object} optionsContext The options context for the content to show.
-     * @property {Rect} sourceRect The rectangle of the source content.
+     * @property {Rect[]} sourceRects The rectangles of the source content.
      * @property {'horizontal-tb' | 'vertical-rl' | 'vertical-lr' | 'sideways-rl' | 'sideways-lr'} writingMode The normalized CSS writing-mode value of the source content.
      */
 
@@ -280,12 +280,12 @@ class Popup extends EventDispatcher {
     async showContent(details, displayDetails) {
         if (!this._optionsAssigned) { throw new Error('Options not assigned'); }
 
-        const {optionsContext, sourceRect, writingMode} = details;
+        const {optionsContext, sourceRects, writingMode} = details;
         if (optionsContext !== null) {
             await this._setOptionsContextIfDifferent(optionsContext);
         }
 
-        await this._show(sourceRect, writingMode);
+        await this._show(sourceRects, writingMode);
 
         if (displayDetails !== null) {
             this._invokeSafe('Display.setContent', {details: displayDetails});
@@ -548,7 +548,7 @@ class Popup extends EventDispatcher {
         }
     }
 
-    async _show(sourceRect, writingMode) {
+    async _show(sourceRects, writingMode) {
         const injected = await this._inject();
         if (!injected) { return; }
 
@@ -560,7 +560,7 @@ class Popup extends EventDispatcher {
         const scaleRatio = this._frameSizeContentScale === null ? 1.0 : scale / this._frameSizeContentScale;
         this._frameSizeContentScale = scale;
         const getPositionArgs = [
-            sourceRect,
+            sourceRects,
             Math.max(frameRect.width * scaleRatio, this._initialWidth * scale),
             Math.max(frameRect.height * scaleRatio, this._initialHeight * scale),
             viewport,
@@ -569,8 +569,8 @@ class Popup extends EventDispatcher {
         ];
         let [x, y, width, height, below] = (
             writingMode === 'horizontal-tb' || this._verticalTextPosition === 'default' ?
-            this._getPositionForHorizontalText(...getPositionArgs) :
-            this._getPositionForVerticalText(...getPositionArgs)
+            this._getPositionForHorizontalTextMulti(...getPositionArgs) :
+            this._getPositionForVerticalTextMulti(...getPositionArgs)
         );
 
         frame.dataset.popupDisplayMode = this._displayMode;
@@ -675,6 +675,16 @@ class Popup extends EventDispatcher {
         }
 
         return fullscreenElement;
+    }
+
+    _getPositionForHorizontalTextMulti(sourceRects, width, height, viewport, offsetScale) {
+        const sourceRect = this._getBoundingSourceRect(sourceRects);
+        return this._getPositionForHorizontalText(sourceRect, width, height, viewport, offsetScale);
+    }
+
+    _getPositionForVerticalTextMulti(sourceRects, width, height, viewport, offsetScale, writingMode) {
+        const sourceRect = this._getBoundingSourceRect(sourceRects);
+        return this._getPositionForVerticalText(sourceRect, width, height, viewport, offsetScale, writingMode);
     }
 
     _getPositionForHorizontalText(sourceRect, width, height, viewport, offsetScale) {
@@ -844,5 +854,19 @@ class Popup extends EventDispatcher {
     async _setOptionsContextIfDifferent(optionsContext) {
         if (deepEqual(this._optionsContext, optionsContext)) { return; }
         await this._setOptionsContext(optionsContext);
+    }
+
+    _getBoundingSourceRect(sourceRects) {
+        let {left, top, width, height} = sourceRects[0];
+        let right = left + width;
+        let bottom = top + height;
+        for (let i = 1, ii = sourceRects.length; i < ii; ++i) {
+            const {left: left2, top: top2, width: width2, height: height2} = sourceRects[i];
+            left = Math.min(left, left2);
+            top = Math.min(top, top2);
+            right = Math.max(right, left2 + width2);
+            bottom = Math.max(bottom, top2 + height2);
+        }
+        return {left, top, width: right - left, height: bottom - top};
     }
 }
