@@ -565,7 +565,7 @@ class Popup extends EventDispatcher {
         if (!injected) { return; }
 
         const viewport = this._getViewport(this._scaleRelativeToVisualViewport);
-        let {left, top, width, height, below} = this._getPosition(sourceRects, writingMode, viewport);
+        let {left, top, width, height, after, below} = this._getPosition(sourceRects, writingMode, viewport);
 
         if (this._displayModeIsFullWidth) {
             left = viewport.left;
@@ -575,6 +575,7 @@ class Popup extends EventDispatcher {
 
         const frame = this._frame;
         frame.dataset.popupDisplayMode = this._displayMode;
+        frame.dataset.after = `${after}`;
         frame.dataset.below = `${below}`;
         frame.style.left = `${left}px`;
         frame.style.top = `${top}px`;
