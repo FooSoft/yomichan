@@ -250,7 +250,9 @@ class PopupFactory {
 
     async _onApiContainsPoint({id, x, y}) {
         const popup = this._getPopup(id);
-        [x, y] = this._convertPopupPointToRootPagePoint(popup, x, y);
+        const offset = this._getPopupOffset(popup);
+        x += offset.x;
+        y += offset.y;
         return await popup.containsPoint(x, y);
     }
 
@@ -258,9 +260,11 @@ class PopupFactory {
         const popup = this._getPopup(id);
         if (!this._popupCanShow(popup)) { return; }
 
+        const offset = this._getPopupOffset(popup);
         const {sourceRects} = details;
         for (const sourceRect of sourceRects) {
-            [sourceRect.left, sourceRect.top] = this._convertPopupPointToRootPagePoint(popup, sourceRect.left, sourceRect.top);
+            sourceRect.left += offset.x;
+            sourceRect.top += offset.y;
         }
 
         return await popup.showContent(details, displayDetails);
@@ -311,16 +315,15 @@ class PopupFactory {
         return popup;
     }
 
-    _convertPopupPointToRootPagePoint(popup, x, y) {
+    _getPopupOffset(popup) {
         const {parent} = popup;
         if (parent !== null) {
             const popupRect = parent.getFrameRect();
             if (popupRect.valid) {
-                x += popupRect.left;
-                y += popupRect.top;
+                return {x: popupRect.left, y: popupRect.top};
             }
         }
-        return [x, y];
+        return {x: 0, y: 0};
     }
 
     _popupCanShow(popup) {
