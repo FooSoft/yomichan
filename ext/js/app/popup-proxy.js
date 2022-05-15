@@ -40,7 +40,8 @@ class PopupProxy extends EventDispatcher {
         this._frameId = frameId;
         this._frameOffsetForwarder = frameOffsetForwarder;
 
-        this._frameOffset = [0, 0];
+        this._frameOffsetX = 0;
+        this._frameOffsetY = 0;
         this._frameOffsetPromise = null;
         this._frameOffsetUpdatedAt = null;
         this._frameOffsetExpireTimeout = 1000;
@@ -319,8 +320,12 @@ class PopupProxy extends EventDispatcher {
         this._frameOffsetPromise = this._frameOffsetForwarder.getOffset();
         try {
             const offset = await this._frameOffsetPromise;
-            this._frameOffset = offset !== null ? offset : [0, 0];
-            if (offset === null) {
+            if (offset !== null) {
+                this._frameOffsetX = offset[0];
+                this._frameOffsetY = offset[1];
+            } else {
+                this._frameOffsetX = 0;
+                this._frameOffsetY = 0;
                 this.trigger('offsetNotFound');
                 return;
             }
@@ -333,7 +338,6 @@ class PopupProxy extends EventDispatcher {
     }
 
     _applyFrameOffset(x, y) {
-        const [offsetX, offsetY] = this._frameOffset;
-        return [x + offsetX, y + offsetY];
+        return [x + this._frameOffsetX, y + this._frameOffsetY];
     }
 }
