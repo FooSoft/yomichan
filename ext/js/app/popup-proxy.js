@@ -190,8 +190,8 @@ class PopupProxy extends EventDispatcher {
      * @returns {Promise<void>}
      */
     async showContent(details, displayDetails) {
-        const {sourceRect} = details;
         if (this._frameOffsetForwarder !== null) {
+            const {sourceRect} = details;
             await this._updateFrameOffset();
             [sourceRect.left, sourceRect.top] = this._applyFrameOffset(sourceRect.left, sourceRect.top);
         }
