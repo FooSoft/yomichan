@@ -679,19 +679,21 @@ class Popup extends EventDispatcher {
 
     _getPositionForHorizontalTextMulti(sourceRects, width, height, viewport, offsetScale) {
         const sourceRect = this._getBoundingSourceRect(sourceRects);
-        return this._getPositionForHorizontalText(sourceRect, width, height, viewport, offsetScale);
+        const horizontalOffset = this._horizontalOffset * offsetScale;
+        const verticalOffset = this._verticalOffset * offsetScale;
+        const preferBelow = (this._horizontalTextPosition === 'below');
+        return this._getPositionForHorizontalText(sourceRect, width, height, viewport, horizontalOffset, verticalOffset, preferBelow);
     }
 
     _getPositionForVerticalTextMulti(sourceRects, width, height, viewport, offsetScale, writingMode) {
         const sourceRect = this._getBoundingSourceRect(sourceRects);
-        return this._getPositionForVerticalText(sourceRect, width, height, viewport, offsetScale, writingMode);
+        const horizontalOffset = this._horizontalOffset2 * offsetScale;
+        const verticalOffset = this._verticalOffset2 * offsetScale;
+        const preferRight = this._isVerticalTextPopupOnRight(this._verticalTextPosition, writingMode);
+        return this._getPositionForVerticalText(sourceRect, width, height, viewport, horizontalOffset, verticalOffset, preferRight);
     }
 
-    _getPositionForHorizontalText(sourceRect, width, height, viewport, offsetScale) {
-        const preferBelow = (this._horizontalTextPosition === 'below');
-        const horizontalOffset = this._horizontalOffset * offsetScale;
-        const verticalOffset = this._verticalOffset * offsetScale;
-
+    _getPositionForHorizontalText(sourceRect, width, height, viewport, horizontalOffset, verticalOffset, preferBelow) {
         const [x, w] = this._getConstrainedPosition(
             sourceRect.left + sourceRect.width - horizontalOffset,
             sourceRect.left + horizontalOffset,
@@ -711,11 +713,7 @@ class Popup extends EventDispatcher {
         return [x, y, w, h, below];
     }
 
-    _getPositionForVerticalText(sourceRect, width, height, viewport, offsetScale, writingMode) {
-        const preferRight = this._isVerticalTextPopupOnRight(this._verticalTextPosition, writingMode);
-        const horizontalOffset = this._horizontalOffset2 * offsetScale;
-        const verticalOffset = this._verticalOffset2 * offsetScale;
-
+    _getPositionForVerticalText(sourceRect, width, height, viewport, horizontalOffset, verticalOffset, preferRight) {
         const [x, w] = this._getConstrainedPositionBinary(
             sourceRect.left - horizontalOffset,
             sourceRect.left + sourceRect.width + horizontalOffset,
