@@ -30,17 +30,22 @@ class Popup extends EventDispatcher {
      * Information about how popup content should be shown, specifically related to the outer popup frame.
      * @typedef {object} ContentDetails
      * @property {?object} optionsContext The options context for the content to show.
-     * @property {object} sourceRect The rectangle of the source content.
-     * @property {number} sourceRect.left The left position of the rectangle.
-     * @property {number} sourceRect.left The top position of the rectangle.
-     * @property {number} sourceRect.width The width of the rectangle.
-     * @property {number} sourceRect.height The height of the rectangle.
+     * @property {Rect} sourceRect The rectangle of the source content.
      * @property {'horizontal-tb' | 'vertical-rl' | 'vertical-lr' | 'sideways-rl' | 'sideways-lr'} writingMode The normalized CSS writing-mode value of the source content.
      */
 
     /**
-     * A rectangle representing a DOM region, similar to DOMRect but with a `valid` property.
+     * A rectangle representing a DOM region, similar to DOMRect.
      * @typedef {object} Rect
+     * @property {number} left The left position of the rectangle.
+     * @property {number} left The top position of the rectangle.
+     * @property {number} width The width of the rectangle.
+     * @property {number} height The height of the rectangle.
+     */
+
+    /**
+     * A rectangle representing a DOM region, similar to DOMRect but with a `valid` property.
+     * @typedef {object} ValidRect
      * @property {number} left The left position of the rectangle.
      * @property {number} left The top position of the rectangle.
      * @property {number} width The width of the rectangle.
@@ -347,7 +352,7 @@ class Popup extends EventDispatcher {
 
     /**
      * Gets the rectangle of the DOM frame, synchronously.
-     * @returns {Rect} The rect.
+     * @returns {ValidRect} The rect.
      *   `valid` is `false` for `PopupProxy`, since the DOM node is hosted in a different frame.
      */
     getFrameRect() {

@@ -229,7 +229,7 @@ class PopupWindow extends EventDispatcher {
 
     /**
      * Gets the rectangle of the DOM frame, synchronously.
-     * @returns {Popup.Rect} The rect.
+     * @returns {Popup.ValidRect} The rect.
      *   `valid` is `false` for `PopupProxy`, since the DOM node is hosted in a different frame.
      */
     getFrameRect() {
