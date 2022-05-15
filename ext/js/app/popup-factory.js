@@ -314,8 +314,8 @@ class PopupFactory {
         if (parent !== null) {
             const popupRect = parent.getFrameRect();
             if (popupRect.valid) {
-                x += popupRect.x;
-                y += popupRect.y;
+                x += popupRect.left;
+                y += popupRect.top;
             }
         }
         return [x, y];

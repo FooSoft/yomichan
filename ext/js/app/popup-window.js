@@ -229,11 +229,11 @@ class PopupWindow extends EventDispatcher {
 
     /**
      * Gets the rectangle of the DOM frame, synchronously.
-     * @returns {{x: number, y: number, width: number, height: number, valid: boolean}} The rect.
+     * @returns {Popup.Rect} The rect.
      *   `valid` is `false` for `PopupProxy`, since the DOM node is hosted in a different frame.
      */
     getFrameRect() {
-        return {x: 0, y: 0, width: 0, height: 0, valid: false};
+        return {left: 0, top: 0, width: 0, height: 0, valid: false};
     }
 
     /**

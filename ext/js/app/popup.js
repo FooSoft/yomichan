@@ -39,6 +39,16 @@ class Popup extends EventDispatcher {
      */
 
     /**
+     * A rectangle representing a DOM region, similar to DOMRect but with a `valid` property.
+     * @typedef {object} Rect
+     * @property {number} left The left position of the rectangle.
+     * @property {number} left The top position of the rectangle.
+     * @property {number} width The width of the rectangle.
+     * @property {number} height The height of the rectangle.
+     * @property {boolean} valid Whether or not the rectangle is valid.
+     */
+
+    /**
      * Creates a new instance.
      * @param {object} details
      * @param {string} details.id The ID of the popup.
@@ -249,7 +259,7 @@ class Popup extends EventDispatcher {
     async containsPoint(x, y) {
         for (let popup = this; popup !== null && popup.isVisibleSync(); popup = popup.child) {
             const rect = popup.getFrameRect();
-            if (rect.valid && x >= rect.x && y >= rect.y && x < rect.x + rect.width && y < rect.y + rect.height) {
+            if (rect.valid && x >= rect.left && y >= rect.top && x < rect.left + rect.width && y < rect.top + rect.height) {
                 return true;
             }
         }
@@ -337,12 +347,12 @@ class Popup extends EventDispatcher {
 
     /**
      * Gets the rectangle of the DOM frame, synchronously.
-     * @returns {{x: number, y: number, width: number, height: number, valid: boolean}} The rect.
+     * @returns {Rect} The rect.
      *   `valid` is `false` for `PopupProxy`, since the DOM node is hosted in a different frame.
      */
     getFrameRect() {
         const {left, top, width, height} = this._frame.getBoundingClientRect();
-        return {x: left, y: top, width, height, valid: true};
+        return {left, top, width, height, valid: true};
     }
 
     /**
