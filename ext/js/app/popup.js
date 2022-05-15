@@ -38,7 +38,7 @@ class Popup extends EventDispatcher {
      * A rectangle representing a DOM region, similar to DOMRect.
      * @typedef {object} Rect
      * @property {number} left The left position of the rectangle.
-     * @property {number} left The top position of the rectangle.
+     * @property {number} top The top position of the rectangle.
      * @property {number} right The right position of the rectangle.
      * @property {number} bottom The bottom position of the rectangle.
      */
@@ -47,7 +47,7 @@ class Popup extends EventDispatcher {
      * A rectangle representing a DOM region, similar to DOMRect but with a `valid` property.
      * @typedef {object} ValidRect
      * @property {number} left The left position of the rectangle.
-     * @property {number} left The top position of the rectangle.
+     * @property {number} top The top position of the rectangle.
      * @property {number} right The right position of the rectangle.
      * @property {number} bottom The bottom position of the rectangle.
      * @property {boolean} valid Whether or not the rectangle is valid.
