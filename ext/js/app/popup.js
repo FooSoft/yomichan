@@ -692,22 +692,42 @@ class Popup extends EventDispatcher {
      * @returns {SizeRect}
      */
     _getPositionForHorizontalTextMulti(sourceRects, frameWidth, frameHeight, viewport, offsetScale) {
-        const sourceRect = this._getBoundingSourceRect(sourceRects);
         const horizontalOffset = this._horizontalOffset * offsetScale;
         const verticalOffset = this._verticalOffset * offsetScale;
         const preferBelow = this._horizontalTextPositionBelow;
-        return this._getPositionForHorizontalText(sourceRect, frameWidth, frameHeight, viewport, horizontalOffset, verticalOffset, preferBelow);
+        let best = null;
+        const sourceRectsLength = sourceRects.length;
+        for (let i = 0, ii = (sourceRectsLength > 1 ? sourceRectsLength : 0); i <= ii; ++i) {
+            const sourceRect = i < sourceRectsLength ? sourceRects[i] : this._getBoundingSourceRect(sourceRects);
+            const result = this._getPositionForHorizontalText(sourceRect, frameWidth, frameHeight, viewport, horizontalOffset, verticalOffset, preferBelow);
+            if (i < ii && this._isOverlapping(result, sourceRects, i)) { continue; }
+            if (best === null || result.height > best.height) {
+                best = result;
+                if (result.height >= frameHeight) { break; }
+            }
+        }
+        return best;
     }
 
     /**
      * @returns {SizeRect}
      */
     _getPositionForVerticalTextMulti(sourceRects, frameWidth, frameHeight, viewport, offsetScale, writingMode) {
-        const sourceRect = this._getBoundingSourceRect(sourceRects);
         const horizontalOffset = this._horizontalOffset2 * offsetScale;
         const verticalOffset = this._verticalOffset2 * offsetScale;
         const preferRight = this._isVerticalTextPopupOnRight(this._verticalTextPosition, writingMode);
-        return this._getPositionForVerticalText(sourceRect, frameWidth, frameHeight, viewport, horizontalOffset, verticalOffset, preferRight);
+        let best = null;
+        const sourceRectsLength = sourceRects.length;
+        for (let i = 0, ii = (sourceRectsLength > 1 ? sourceRectsLength : 0); i <= ii; ++i) {
+            const sourceRect = i < sourceRectsLength ? sourceRects[i] : this._getBoundingSourceRect(sourceRects);
+            const result = this._getPositionForVerticalText(sourceRect, frameWidth, frameHeight, viewport, horizontalOffset, verticalOffset, preferRight);
+            if (i < ii && this._isOverlapping(result, sourceRects, i)) { continue; }
+            if (best === null || result.height > best.height) {
+                best = result;
+                if (result.height >= frameHeight) { break; }
+            }
+        }
+        return best;
     }
 
     /**
@@ -877,6 +897,10 @@ class Popup extends EventDispatcher {
     }
 
     _getBoundingSourceRect(sourceRects) {
+        switch (sourceRects.length) {
+            case 0: return {left: 0, top: 0, right: 0, bottom: 0};
+            case 1: return sourceRects[0];
+        }
         let {left, top, right, bottom} = sourceRects[0];
         for (let i = 1, ii = sourceRects.length; i < ii; ++i) {
             const sourceRect = sourceRects[i];
@@ -886,5 +910,30 @@ class Popup extends EventDispatcher {
             bottom = Math.max(bottom, sourceRect.bottom);
         }
         return {left, top, right, bottom};
+    }
+
+    /**
+     * @param {SizeRect} sizeRect
+     * @param {Rect[]} sourceRects
+     * @param {number} ignoreIndex
+     * @returns {boolean}
+     */
+    _isOverlapping(sizeRect, sourceRects, ignoreIndex) {
+        const {left, top} = sizeRect;
+        const right = left + sizeRect.width;
+        const bottom = top + sizeRect.height;
+        for (let i = 0, ii = sourceRects.length; i < ii; ++i) {
+            if (i === ignoreIndex) { continue; }
+            const sourceRect = sourceRects[i];
+            if (
+                left < sourceRect.right &&
+                right > sourceRect.left &&
+                top < sourceRect.bottom &&
+                bottom > sourceRect.top
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 }
