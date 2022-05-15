@@ -565,7 +565,7 @@ class Frontend {
             textSource = this._textScanner.getCurrentTextSource();
             if (textSource === null) { return; }
         }
-        this._showPopupContent(textSource, null);
+        this._showPopupContent(textSource, null, null);
     }
 
     _showContent(textSource, focus, dictionaryEntries, type, sentence, documentTitle, optionsContext) {
@@ -601,7 +601,7 @@ class Frontend {
         this._showPopupContent(textSource, optionsContext, details);
     }
 
-    _showPopupContent(textSource, optionsContext, details=null) {
+    _showPopupContent(textSource, optionsContext, details) {
         const {left, top, width, height} = textSource.getRect();
         this._lastShowPromise = (
             this._popup !== null ?
@@ -661,7 +661,7 @@ class Frontend {
             this._popup !== null &&
             await this._popup.isVisible()
         ) {
-            this._showPopupContent(textSource, null);
+            this._showPopupContent(textSource, null, null);
         }
     }
 
