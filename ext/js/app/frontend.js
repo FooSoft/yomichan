@@ -608,7 +608,7 @@ class Frontend {
             this._popup.showContent(
                 {
                     optionsContext,
-                    sourceRect: {x: left, y: top, width, height, valid: true},
+                    sourceRect: {x: left, y: top, width, height},
                     writingMode: textSource.getWritingMode()
                 },
                 details
