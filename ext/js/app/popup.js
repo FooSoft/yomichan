@@ -29,7 +29,7 @@ class Popup extends EventDispatcher {
     /**
      * Information about how popup content should be shown, specifically related to the outer popup frame.
      * @typedef {object} ContentDetails
-     * @property {object} optionsContext The options context for the content to show.
+     * @property {?object} optionsContext The options context for the content to show.
      * @property {object} sourceRect The rectangle of the source content.
      * @property {number} sourceRect.x The left position of the rectangle.
      * @property {number} sourceRect.y The top position of the rectangle.
