@@ -563,27 +563,10 @@ class Popup extends EventDispatcher {
         const injected = await this._inject();
         if (!injected) { return; }
 
-        const frame = this._frame;
-        const frameRect = frame.getBoundingClientRect();
-
         const viewport = this._getViewport(this._scaleRelativeToVisualViewport);
-        const scale = this._contentScale;
-        const scaleRatio = this._frameSizeContentScale === null ? 1.0 : scale / this._frameSizeContentScale;
-        this._frameSizeContentScale = scale;
-        const getPositionArgs = [
-            sourceRects,
-            Math.max(frameRect.width * scaleRatio, this._initialWidth * scale),
-            Math.max(frameRect.height * scaleRatio, this._initialHeight * scale),
-            viewport,
-            scale,
-            writingMode
-        ];
-        let {left, top, width, height, below} = (
-            writingMode === 'horizontal-tb' || this._verticalTextPosition === 'default' ?
-            this._getPositionForHorizontalTextMulti(...getPositionArgs) :
-            this._getPositionForVerticalTextMulti(...getPositionArgs)
-        );
+        let {left, top, width, height, below} = this._getPosition(sourceRects, writingMode, viewport);
 
+        const frame = this._frame;
         frame.dataset.popupDisplayMode = this._displayMode;
         frame.dataset.below = `${below}`;
 
@@ -689,38 +672,43 @@ class Popup extends EventDispatcher {
     }
 
     /**
+     * @param {Rect[]} sourceRects
+     * @param {string} writingMode
      * @returns {SizeRect}
      */
-    _getPositionForHorizontalTextMulti(sourceRects, frameWidth, frameHeight, viewport, offsetScale) {
-        const horizontalOffset = this._horizontalOffset * offsetScale;
-        const verticalOffset = this._verticalOffset * offsetScale;
-        const preferBelow = this._horizontalTextPositionBelow;
-        let best = null;
-        const sourceRectsLength = sourceRects.length;
-        for (let i = 0, ii = (sourceRectsLength > 1 ? sourceRectsLength : 0); i <= ii; ++i) {
-            const sourceRect = i < sourceRectsLength ? sourceRects[i] : this._getBoundingSourceRect(sourceRects);
-            const result = this._getPositionForHorizontalText(sourceRect, frameWidth, frameHeight, viewport, horizontalOffset, verticalOffset, preferBelow);
-            if (i < ii && this._isOverlapping(result, sourceRects, i)) { continue; }
-            if (best === null || result.height > best.height) {
-                best = result;
-                if (result.height >= frameHeight) { break; }
-            }
-        }
-        return best;
-    }
+    _getPosition(sourceRects, writingMode, viewport) {
+        const scale = this._contentScale;
+        const scaleRatio = this._frameSizeContentScale === null ? 1.0 : scale / this._frameSizeContentScale;
+        this._frameSizeContentScale = scale;
+        const frameRect = this._frame.getBoundingClientRect();
+        const frameWidth = Math.max(frameRect.width * scaleRatio, this._initialWidth * scale);
+        const frameHeight = Math.max(frameRect.height * scaleRatio, this._initialHeight * scale);
 
-    /**
-     * @returns {SizeRect}
-     */
-    _getPositionForVerticalTextMulti(sourceRects, frameWidth, frameHeight, viewport, offsetScale, writingMode) {
-        const horizontalOffset = this._horizontalOffset2 * offsetScale;
-        const verticalOffset = this._verticalOffset2 * offsetScale;
-        const preferRight = this._isVerticalTextPopupOnRight(this._verticalTextPosition, writingMode);
+        const horizontal = (writingMode === 'horizontal-tb' || this._verticalTextPosition === 'default');
+        let preferAfter;
+        let horizontalOffset;
+        let verticalOffset;
+        if (horizontal) {
+            preferAfter = this._horizontalTextPositionBelow;
+            horizontalOffset = this._horizontalOffset;
+            verticalOffset = this._verticalOffset;
+        } else {
+            preferAfter = this._isVerticalTextPopupOnRight(this._verticalTextPosition, writingMode);
+            horizontalOffset = this._horizontalOffset2;
+            verticalOffset = this._verticalOffset2;
+        }
+        horizontalOffset *= scale;
+        verticalOffset *= scale;
+
         let best = null;
         const sourceRectsLength = sourceRects.length;
         for (let i = 0, ii = (sourceRectsLength > 1 ? sourceRectsLength : 0); i <= ii; ++i) {
             const sourceRect = i < sourceRectsLength ? sourceRects[i] : this._getBoundingSourceRect(sourceRects);
-            const result = this._getPositionForVerticalText(sourceRect, frameWidth, frameHeight, viewport, horizontalOffset, verticalOffset, preferRight);
+            const result = (
+                horizontal ?
+                this._getPositionForHorizontalText(sourceRect, frameWidth, frameHeight, viewport, horizontalOffset, verticalOffset, preferAfter) :
+                this._getPositionForVerticalText(sourceRect, frameWidth, frameHeight, viewport, horizontalOffset, verticalOffset, preferAfter)
+            );
             if (i < ii && this._isOverlapping(result, sourceRects, i)) { continue; }
             if (best === null || result.height > best.height) {
                 best = result;
