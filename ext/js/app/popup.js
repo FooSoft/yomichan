@@ -48,8 +48,8 @@ class Popup extends EventDispatcher {
      * @typedef {object} ValidRect
      * @property {number} left The left position of the rectangle.
      * @property {number} left The top position of the rectangle.
-     * @property {number} width The width of the rectangle.
-     * @property {number} height The height of the rectangle.
+     * @property {number} right The right position of the rectangle.
+     * @property {number} bottom The bottom position of the rectangle.
      * @property {boolean} valid Whether or not the rectangle is valid.
      */
 
@@ -264,7 +264,7 @@ class Popup extends EventDispatcher {
     async containsPoint(x, y) {
         for (let popup = this; popup !== null && popup.isVisibleSync(); popup = popup.child) {
             const rect = popup.getFrameRect();
-            if (rect.valid && x >= rect.left && y >= rect.top && x < rect.left + rect.width && y < rect.top + rect.height) {
+            if (rect.valid && x >= rect.left && y >= rect.top && x < rect.right && y < rect.bottom) {
                 return true;
             }
         }
@@ -356,8 +356,8 @@ class Popup extends EventDispatcher {
      *   `valid` is `false` for `PopupProxy`, since the DOM node is hosted in a different frame.
      */
     getFrameRect() {
-        const {left, top, width, height} = this._frame.getBoundingClientRect();
-        return {left, top, width, height, valid: true};
+        const {left, top, right, bottom} = this._frame.getBoundingClientRect();
+        return {left, top, right, bottom, valid: true};
     }
 
     /**
