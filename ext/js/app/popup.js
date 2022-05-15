@@ -90,7 +90,7 @@ class Popup extends EventDispatcher {
         this._horizontalOffset2 = 10;
         this._verticalOffset2 = 0;
         this._verticalTextPosition = 'before';
-        this._horizontalTextPosition = 'below';
+        this._horizontalTextPositionBelow = true;
         this._displayMode = 'default';
         this._scaleRelativeToVisualViewport = true;
         this._useSecureFrameUrl = true;
@@ -681,7 +681,7 @@ class Popup extends EventDispatcher {
         const sourceRect = this._getBoundingSourceRect(sourceRects);
         const horizontalOffset = this._horizontalOffset * offsetScale;
         const verticalOffset = this._verticalOffset * offsetScale;
-        const preferBelow = (this._horizontalTextPosition === 'below');
+        const preferBelow = this._horizontalTextPositionBelow;
         return this._getPositionForHorizontalText(sourceRect, width, height, viewport, horizontalOffset, verticalOffset, preferBelow);
     }
 
@@ -739,10 +739,9 @@ class Popup extends EventDispatcher {
                 return !this._isWritingModeLeftToRight(writingMode);
             case 'after':
                 return this._isWritingModeLeftToRight(writingMode);
-            case 'left':
-                return false;
             case 'right':
                 return true;
+            // case 'left':
             default:
                 return false;
         }
@@ -839,7 +838,7 @@ class Popup extends EventDispatcher {
         this._horizontalOffset2 = general.popupHorizontalOffset2;
         this._verticalOffset2 = general.popupVerticalOffset2;
         this._verticalTextPosition = general.popupVerticalTextPosition;
-        this._horizontalTextPosition = general.popupHorizontalTextPosition;
+        this._horizontalTextPositionBelow = (general.popupHorizontalTextPosition === 'below');
         this._displayMode = general.popupDisplayMode;
         this._scaleRelativeToVisualViewport = general.popupScaleRelativeToVisualViewport;
         this._useSecureFrameUrl = general.useSecurePopupFrameUrl;
