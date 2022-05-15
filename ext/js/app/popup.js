@@ -270,9 +270,7 @@ class Popup extends EventDispatcher {
             await this._setOptionsContextIfDifferent(optionsContext);
         }
 
-        if (typeof sourceRect !== 'undefined' && typeof writingMode !== 'undefined') {
-            await this._show(sourceRect, writingMode);
-        }
+        await this._show(sourceRect, writingMode);
 
         if (displayDetails !== null) {
             this._invokeSafe('Display.setContent', {details: displayDetails});
