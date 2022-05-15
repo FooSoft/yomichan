@@ -179,7 +179,8 @@ class PopupProxy extends EventDispatcher {
     async containsPoint(x, y) {
         if (this._frameOffsetForwarder !== null) {
             await this._updateFrameOffset();
-            [x, y] = this._applyFrameOffset(x, y);
+            x += this._frameOffsetX;
+            y += this._frameOffsetY;
         }
         return await this._invokeSafe('PopupFactory.containsPoint', {id: this._id, x, y}, false);
     }
@@ -195,7 +196,8 @@ class PopupProxy extends EventDispatcher {
             const {sourceRects} = details;
             await this._updateFrameOffset();
             for (const sourceRect of sourceRects) {
-                [sourceRect.left, sourceRect.top] = this._applyFrameOffset(sourceRect.left, sourceRect.top);
+                sourceRect.left += this._frameOffsetX;
+                sourceRect.top += this._frameOffsetY;
             }
         }
         return await this._invokeSafe('PopupFactory.showContent', {id: this._id, details, displayDetails});
@@ -335,9 +337,5 @@ class PopupProxy extends EventDispatcher {
         } finally {
             this._frameOffsetPromise = null;
         }
-    }
-
-    _applyFrameOffset(x, y) {
-        return [x + this._frameOffsetX, y + this._frameOffsetY];
     }
 }
