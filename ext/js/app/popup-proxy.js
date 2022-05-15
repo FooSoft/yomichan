@@ -185,8 +185,8 @@ class PopupProxy extends EventDispatcher {
 
     /**
      * Shows and updates the positioning and content of the popup.
-     * @param {{optionsContext: object, sourceRect: {x: number, y: number, width: number, height: number}, writingMode: string}} details Settings for the outer popup.
-     * @param {object} displayDetails The details parameter passed to `Display.setContent`; see that function for details.
+     * @param {Popup.ContentDetails} details Settings for the outer popup.
+     * @param {Display.ContentDetails} displayDetails The details parameter passed to `Display.setContent`.
      * @returns {Promise<void>}
      */
     async showContent(details, displayDetails) {

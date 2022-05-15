@@ -27,6 +27,18 @@
  */
 class Popup extends EventDispatcher {
     /**
+     * Information about how popup content should be shown, specifically related to the outer popup frame.
+     * @typedef {object} ContentDetails
+     * @property {object} optionsContext The options context for the content to show.
+     * @property {object} sourceRect The rectangle of the source content.
+     * @property {number} sourceRect.x The left position of the rectangle.
+     * @property {number} sourceRect.y The top position of the rectangle.
+     * @property {number} sourceRect.width The width of the rectangle.
+     * @property {number} sourceRect.height The height of the rectangle.
+     * @property {'horizontal-tb' | 'vertical-rl' | 'vertical-lr' | 'sideways-rl' | 'sideways-lr'} writingMode The normalized CSS writing-mode value of the source content.
+     */
+
+    /**
      * Creates a new instance.
      * @param {object} details
      * @param {string} details.id The ID of the popup.
@@ -246,8 +258,8 @@ class Popup extends EventDispatcher {
 
     /**
      * Shows and updates the positioning and content of the popup.
-     * @param {{optionsContext: object, sourceRect: {x: number, y: number, width: number, height: number}, writingMode: string}} details Settings for the outer popup.
-     * @param {object} displayDetails The details parameter passed to `Display.setContent`; see that function for details.
+     * @param {ContentDetails} details Settings for the outer popup.
+     * @param {Display.ContentDetails} displayDetails The details parameter passed to `Display.setContent`.
      * @returns {Promise<void>}
      */
     async showContent(details, displayDetails) {
