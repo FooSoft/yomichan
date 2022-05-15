@@ -103,6 +103,7 @@ class Popup extends EventDispatcher {
         this._verticalTextPosition = 'before';
         this._horizontalTextPositionBelow = true;
         this._displayMode = 'default';
+        this._displayModeIsFullWidth = false;
         this._scaleRelativeToVisualViewport = true;
         this._useSecureFrameUrl = true;
         this._useShadowDom = true;
@@ -566,16 +567,15 @@ class Popup extends EventDispatcher {
         const viewport = this._getViewport(this._scaleRelativeToVisualViewport);
         let {left, top, width, height, below} = this._getPosition(sourceRects, writingMode, viewport);
 
-        const frame = this._frame;
-        frame.dataset.popupDisplayMode = this._displayMode;
-        frame.dataset.below = `${below}`;
-
-        if (this._displayMode === 'full-width') {
+        if (this._displayModeIsFullWidth) {
             left = viewport.left;
             top = below ? viewport.bottom - height : viewport.top;
             width = viewport.right - viewport.left;
         }
 
+        const frame = this._frame;
+        frame.dataset.popupDisplayMode = this._displayMode;
+        frame.dataset.below = `${below}`;
         frame.style.left = `${left}px`;
         frame.style.top = `${top}px`;
         this._setFrameSize(width, height);
@@ -871,6 +871,7 @@ class Popup extends EventDispatcher {
         this._verticalTextPosition = general.popupVerticalTextPosition;
         this._horizontalTextPositionBelow = (general.popupHorizontalTextPosition === 'below');
         this._displayMode = general.popupDisplayMode;
+        this._displayModeIsFullWidth = (this._displayMode === 'full-width');
         this._scaleRelativeToVisualViewport = general.popupScaleRelativeToVisualViewport;
         this._useSecureFrameUrl = general.useSecurePopupFrameUrl;
         this._useShadowDom = general.usePopupShadowDom;
