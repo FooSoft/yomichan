@@ -31,8 +31,8 @@ class Popup extends EventDispatcher {
      * @typedef {object} ContentDetails
      * @property {?object} optionsContext The options context for the content to show.
      * @property {object} sourceRect The rectangle of the source content.
-     * @property {number} sourceRect.x The left position of the rectangle.
-     * @property {number} sourceRect.y The top position of the rectangle.
+     * @property {number} sourceRect.left The left position of the rectangle.
+     * @property {number} sourceRect.left The top position of the rectangle.
      * @property {number} sourceRect.width The width of the rectangle.
      * @property {number} sourceRect.height The height of the rectangle.
      * @property {'horizontal-tb' | 'vertical-rl' | 'vertical-lr' | 'sideways-rl' | 'sideways-lr'} writingMode The normalized CSS writing-mode value of the source content.
@@ -668,16 +668,16 @@ class Popup extends EventDispatcher {
         const verticalOffset = this._verticalOffset * offsetScale;
 
         const [x, w] = this._getConstrainedPosition(
-            sourceRect.x + sourceRect.width - horizontalOffset,
-            sourceRect.x + horizontalOffset,
+            sourceRect.left + sourceRect.width - horizontalOffset,
+            sourceRect.left + horizontalOffset,
             width,
             viewport.left,
             viewport.right,
             true
         );
         const [y, h, below] = this._getConstrainedPositionBinary(
-            sourceRect.y - verticalOffset,
-            sourceRect.y + sourceRect.height + verticalOffset,
+            sourceRect.top - verticalOffset,
+            sourceRect.top + sourceRect.height + verticalOffset,
             height,
             viewport.top,
             viewport.bottom,
@@ -692,16 +692,16 @@ class Popup extends EventDispatcher {
         const verticalOffset = this._verticalOffset2 * offsetScale;
 
         const [x, w] = this._getConstrainedPositionBinary(
-            sourceRect.x - horizontalOffset,
-            sourceRect.x + sourceRect.width + horizontalOffset,
+            sourceRect.left - horizontalOffset,
+            sourceRect.left + sourceRect.width + horizontalOffset,
             width,
             viewport.left,
             viewport.right,
             preferRight
         );
         const [y, h, below] = this._getConstrainedPosition(
-            sourceRect.y + sourceRect.height - verticalOffset,
-            sourceRect.y + verticalOffset,
+            sourceRect.top + sourceRect.height - verticalOffset,
+            sourceRect.top + verticalOffset,
             height,
             viewport.top,
             viewport.bottom,

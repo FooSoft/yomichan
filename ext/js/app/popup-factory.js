@@ -259,7 +259,7 @@ class PopupFactory {
         if (!this._popupCanShow(popup)) { return; }
 
         const {sourceRect} = details;
-        [sourceRect.x, sourceRect.y] = this._convertPopupPointToRootPagePoint(popup, sourceRect.x, sourceRect.y);
+        [sourceRect.left, sourceRect.top] = this._convertPopupPointToRootPagePoint(popup, sourceRect.left, sourceRect.top);
 
         return await popup.showContent(details, displayDetails);
     }
