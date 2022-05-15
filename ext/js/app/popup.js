@@ -39,8 +39,8 @@ class Popup extends EventDispatcher {
      * @typedef {object} Rect
      * @property {number} left The left position of the rectangle.
      * @property {number} left The top position of the rectangle.
-     * @property {number} width The width of the rectangle.
-     * @property {number} height The height of the rectangle.
+     * @property {number} right The right position of the rectangle.
+     * @property {number} bottom The bottom position of the rectangle.
      */
 
     /**
@@ -695,7 +695,7 @@ class Popup extends EventDispatcher {
 
     _getPositionForHorizontalText(sourceRect, width, height, viewport, horizontalOffset, verticalOffset, preferBelow) {
         const [x, w] = this._getConstrainedPosition(
-            sourceRect.left + sourceRect.width - horizontalOffset,
+            sourceRect.right - horizontalOffset,
             sourceRect.left + horizontalOffset,
             width,
             viewport.left,
@@ -704,7 +704,7 @@ class Popup extends EventDispatcher {
         );
         const [y, h, below] = this._getConstrainedPositionBinary(
             sourceRect.top - verticalOffset,
-            sourceRect.top + sourceRect.height + verticalOffset,
+            sourceRect.bottom + verticalOffset,
             height,
             viewport.top,
             viewport.bottom,
@@ -716,14 +716,14 @@ class Popup extends EventDispatcher {
     _getPositionForVerticalText(sourceRect, width, height, viewport, horizontalOffset, verticalOffset, preferRight) {
         const [x, w] = this._getConstrainedPositionBinary(
             sourceRect.left - horizontalOffset,
-            sourceRect.left + sourceRect.width + horizontalOffset,
+            sourceRect.right + horizontalOffset,
             width,
             viewport.left,
             viewport.right,
             preferRight
         );
         const [y, h, below] = this._getConstrainedPosition(
-            sourceRect.top + sourceRect.height - verticalOffset,
+            sourceRect.bottom - verticalOffset,
             sourceRect.top + verticalOffset,
             height,
             viewport.top,
@@ -855,16 +855,14 @@ class Popup extends EventDispatcher {
     }
 
     _getBoundingSourceRect(sourceRects) {
-        let {left, top, width, height} = sourceRects[0];
-        let right = left + width;
-        let bottom = top + height;
+        let {left, top, right, bottom} = sourceRects[0];
         for (let i = 1, ii = sourceRects.length; i < ii; ++i) {
-            const {left: left2, top: top2, width: width2, height: height2} = sourceRects[i];
-            left = Math.min(left, left2);
-            top = Math.min(top, top2);
-            right = Math.max(right, left2 + width2);
-            bottom = Math.max(bottom, top2 + height2);
+            const sourceRect = sourceRects[i];
+            left = Math.min(left, sourceRect.left);
+            top = Math.min(top, sourceRect.top);
+            right = Math.max(right, sourceRect.right);
+            bottom = Math.max(bottom, sourceRect.bottom);
         }
-        return {left, top, width: right - left, height: bottom - top};
+        return {left, top, right, bottom};
     }
 }

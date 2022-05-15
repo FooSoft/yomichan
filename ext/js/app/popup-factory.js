@@ -265,6 +265,8 @@ class PopupFactory {
         for (const sourceRect of sourceRects) {
             sourceRect.left += offset.x;
             sourceRect.top += offset.y;
+            sourceRect.right += offset.x;
+            sourceRect.bottom += offset.y;
         }
 
         return await popup.showContent(details, displayDetails);

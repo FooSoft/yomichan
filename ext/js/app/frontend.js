@@ -603,8 +603,8 @@ class Frontend {
 
     _showPopupContent(textSource, optionsContext, details) {
         const sourceRects = [];
-        for (const {left, top, width, height} of textSource.getRects()) {
-            sourceRects.push({left, top, width, height});
+        for (const {left, top, right, bottom} of textSource.getRects()) {
+            sourceRects.push({left, top, right, bottom});
         }
         this._lastShowPromise = (
             this._popup !== null ?
