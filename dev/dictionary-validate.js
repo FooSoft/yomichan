@@ -38,6 +38,7 @@ function readSchema(relativeFileName) {
 
 
 async function validateDictionaryBanks(zip, fileNameFormat, schema) {
+    const jsonSchema = new JsonSchema(schema);
     let index = 1;
     while (true) {
         const fileName = fileNameFormat.replace(/\?/, index);
@@ -46,7 +47,7 @@ async function validateDictionaryBanks(zip, fileNameFormat, schema) {
         if (!file) { break; }
 
         const data = JSON.parse(await file.async('string'));
-        new JsonSchema(schema).validate(data);
+        jsonSchema.validate(data);
 
         ++index;
     }
