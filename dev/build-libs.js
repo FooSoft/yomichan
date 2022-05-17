@@ -21,15 +21,27 @@ const browserify = require('browserify');
 
 async function buildParse5() {
     const parse5Path = require.resolve('parse5');
-    return await new Promise((resolve, reject) => {
-        browserify([parse5Path], {standalone: 'parse5', debug: true}).bundle((error, result) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(result);
-            }
+    const cwd = process.cwd();
+    try {
+        const baseDir = path.dirname(parse5Path);
+        process.chdir(baseDir); // This is necessary to ensure relative source map file names are consistent
+        return await new Promise((resolve, reject) => {
+            browserify({
+                entries: [parse5Path],
+                standalone: 'parse5',
+                debug: true,
+                baseDir
+            }).bundle((error, result) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+            });
         });
-    });
+    } finally {
+        process.chdir(cwd);
+    }
 }
 
 function getBuildTargets() {
