@@ -886,6 +886,10 @@ class Popup extends EventDispatcher {
         await this._setOptionsContext(optionsContext);
     }
 
+    /**
+     * @param {Rect[]} sourceRects
+     * @returns {Rect}
+     */
     _getBoundingSourceRect(sourceRects) {
         switch (sourceRects.length) {
             case 0: return {left: 0, top: 0, right: 0, bottom: 0};
