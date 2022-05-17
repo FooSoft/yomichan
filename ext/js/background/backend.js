@@ -513,7 +513,12 @@ class Backend {
     }
 
     async _onApiNoteView({noteId}) {
-        return await this._anki.guiBrowseNote(noteId);
+        try {
+            await this._anki.guiEditNote(noteId);
+        } catch (e) {
+            // Not supported
+            await this._anki.guiBrowseNote(noteId);
+        }
     }
 
     async _onApiSuspendAnkiCardsForNote({noteId}) {
