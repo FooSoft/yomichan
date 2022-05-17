@@ -106,6 +106,15 @@ class AnkiConnect {
     }
 
     /**
+     * Opens the note editor GUI.
+     * @param {number} noteId The ID of the note.
+     * @returns {Promise<null>}
+     */
+    async guiEditNote(noteId) {
+        return await this._invoke('guiEditNote', {note: noteId});
+    }
+
+    /**
      * Stores a file with the specified base64-encoded content inside Anki's media folder.
      * @param {string} fileName The name of the file.
      * @param {string} content The base64-encoded content of the file.
