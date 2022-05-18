@@ -539,8 +539,6 @@ class EventListenerCollection {
                 case 'off':
                     object.off(...args);
                     break;
-                default:
-                    throw new Error(`Unknown remove function: ${removeFunctionName}`);
             }
         }
         this._eventListeners = [];
