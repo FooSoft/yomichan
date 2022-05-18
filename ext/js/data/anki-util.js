@@ -33,7 +33,7 @@ class AnkiUtil {
     /**
      * Checks whether or not any marker is contained in a string.
      * @param string A string to check.
-     * @return `true` if the text contains an Anki field marker, `false` otherwise.
+     * @returns `true` if the text contains an Anki field marker, `false` otherwise.
      */
     static stringContainsAnyFieldMarker(string) {
         const result = this._markerPattern.test(string);
@@ -44,7 +44,7 @@ class AnkiUtil {
     /**
      * Gets a list of all markers that are contained in a string.
      * @param string A string to check.
-     * @return An array of marker strings.
+     * @returns An array of marker strings.
      */
     static getFieldMarkers(string) {
         const pattern = this._markerPattern;
@@ -85,7 +85,7 @@ class AnkiUtil {
     /**
      * Checks whether or not a note object is valid.
      * @param note A note object to check.
-     * @return `true` if the note is valid, `false` otherwise.
+     * @returns `true` if the note is valid, `false` otherwise.
      */
     static isNoteDataValid(note) {
         if (!isObject(note)) { return false; }

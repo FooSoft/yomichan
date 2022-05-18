@@ -27,7 +27,7 @@ class RegexUtil {
      * @param pattern A regular expression to use as the replacement.
      * @param replacement A replacement string that follows the format of the standard
      *   JavaScript regular expression replacement string.
-     * @return A new string with the pattern replacements applied and the source map updated.
+     * @returns A new string with the pattern replacements applied and the source map updated.
      */
     static applyTextReplacement(text, sourceMap, pattern, replacement) {
         const isGlobal = pattern.global;
@@ -60,7 +60,7 @@ class RegexUtil {
      * @param replacement The replacement string that follows the format of the standard
      *   JavaScript regular expression replacement string.
      * @param match A match object returned from RegExp.match.
-     * @return A new string with the pattern replacement applied.
+     * @returns A new string with the pattern replacement applied.
      */
     static applyMatchReplacement(replacement, match) {
         const pattern = this._matchReplacementPattern;
