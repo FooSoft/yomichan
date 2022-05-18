@@ -130,7 +130,8 @@ class ObjectPropertyAccessor {
     /**
      * Converts a path string to a path array.
      * @param pathArray The path array to convert.
-     * @returns A string representation of pathArray.
+     * @returns A string representation of `pathArray`.
+     * @throws {Error} An error is thrown if any item of `pathArray` is not a string or an integer.
      */
     static getPathString(pathArray) {
         const regexShort = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
@@ -167,7 +168,8 @@ class ObjectPropertyAccessor {
      * Converts a path array to a path string. For the most part, the format of this string
      * matches Javascript's notation for property access.
      * @param pathString The path string to convert.
-     * @returns An array representation of pathString.
+     * @returns An array representation of `pathString`.
+     * @throws {Error} An error is thrown if `pathString` is malformed.
      */
     static getPathArray(pathString) {
         const pathArray = [];
