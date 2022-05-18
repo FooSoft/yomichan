@@ -21,11 +21,17 @@
  */
 class CssStyleApplier {
     /**
+     * A CSS rule.
      * @typedef {object} CssRule
      * @property {string} selectors A CSS selector string representing one or more selectors.
-     * @property {[string, string][]} styles A list of CSS property and value pairs.
-     * @property {string} styles[][0] The CSS property.
-     * @property {string} styles[][1] The CSS value.
+     * @property {CssDeclaration[]} styles A list of CSS property and value pairs.
+     */
+
+    /**
+     * A single CSS property declaration.
+     * @typedef {object} CssDeclaration
+     * @property {string} property A CSS property's name, using kebab-case.
+     * @property {string} value The property's value.
      */
 
     /**
@@ -54,14 +60,24 @@ class CssStyleApplier {
      * Loads the data file for use.
      */
     async prepare() {
-        let styleData;
+        let rawData;
         try {
-            styleData = await this._fetchJsonAsset(this._styleDataUrl);
+            rawData = await this._fetchJsonAsset(this._styleDataUrl);
         } catch (e) {
             console.error(e);
         }
-        if (Array.isArray(styleData)) {
-            this._styleData = styleData;
+        const styleData = this._styleData;
+        styleData.length = 0;
+        for (const {selectors, styles} of rawData) {
+            const selectors2 = selectors.join(',');
+            const styles2 = [];
+            for (const [property, value] of styles) {
+                styles2.push({property, value});
+            }
+            styleData.push({
+                selectors: selectors2,
+                styles: styles2
+            });
         }
     }
 
@@ -76,8 +92,8 @@ class CssStyleApplier {
             const className = element.getAttribute('class');
             if (className.length === 0) { continue; }
             let cssTextNew = '';
-            for (const {selectorText, styles} of this._getCandidateCssRulesForClass(className)) {
-                if (!element.matches(selectorText)) { continue; }
+            for (const {selectors, styles} of this._getCandidateCssRulesForClass(className)) {
+                if (!element.matches(selectors)) { continue; }
                 cssTextNew += this._getCssText(styles);
             }
             cssTextNew += element.style.cssText;
@@ -124,17 +140,21 @@ class CssStyleApplier {
 
         const classList = this._getTokens(className);
         for (const {selectors, styles} of this._styleData) {
-            const selectorText = selectors.join(',');
-            if (!this._selectorMatches(selectorText, classList)) { continue; }
-            rules.push({selectorText, styles});
+            if (!this._selectorMatches(selectors, classList)) { continue; }
+            rules.push({selectors, styles});
         }
 
         return rules;
     }
 
+    /**
+     * Converts an array of CSS rules to a CSS string.
+     * @param {CssRule[]} styles An array of CSS rules.
+     * @returns {string} The CSS string.
+     */
     _getCssText(styles) {
         let cssText = '';
-        for (const [property, value] of styles) {
+        for (const {property, value} of styles) {
             cssText += `${property}:${value};`;
         }
         return cssText;
