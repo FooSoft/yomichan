@@ -140,7 +140,7 @@ class CssStyleApplier {
 
         const classList = this._getTokens(className);
         for (const {selectors, styles} of this._styleData) {
-            if (!this._selectorMatches(selectors, classList)) { continue; }
+            if (!this._selectorMightMatch(selectors, classList)) { continue; }
             rules.push({selectors, styles});
         }
 
@@ -160,7 +160,13 @@ class CssStyleApplier {
         return cssText;
     }
 
-    _selectorMatches(selectors, classList) {
+    /**
+     * Checks whether or not a CSS string might match at least one class in a list.
+     * @param {string} selectors A CSS selector string.
+     * @param {string[]} classList An array of CSS classes.
+     * @returns {boolean} `true` if the selector string might match one of the classes in `classList`, false otherwise.
+     */
+    _selectorMightMatch(selectors, classList) {
         const pattern = this._patternClassNameCharacter;
         for (const item of classList) {
             const prefixedItem = `.${item}`;
