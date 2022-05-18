@@ -21,15 +21,16 @@
 class SelectorObserver {
     /**
      * Creates a new instance.
-     * @param selector A string CSS selector used to find elements.
-     * @param ignoreSelector A string CSS selector used to filter elements, or null for no filtering.
-     * @param onAdded A function which is invoked for each element that is added that matches the selector.
+     * @param details The configuration for the object.
+     * @param details.selector A string CSS selector used to find elements.
+     * @param details.ignoreSelector A string CSS selector used to filter elements, or null for no filtering.
+     * @param details.onAdded A function which is invoked for each element that is added that matches the selector.
      *   The signature is (element) => data.
-     * @param onRemoved A function which is invoked for each element that is removed, or null.
+     * @param details.onRemoved A function which is invoked for each element that is removed, or null.
      *   The signature is (element, data) => void.
-     * @param onChildrenUpdated A function which is invoked for each element which has its children updated, or null.
+     * @param details.onChildrenUpdated A function which is invoked for each element which has its children updated, or null.
      *   The signature is (element, data) => void.
-     * @param isStale A function which checks if the data is stale for a given element, or null.
+     * @param details.isStale A function which checks if the data is stale for a given element, or null.
      *   If the element is stale, it will be removed and potentially re-added.
      *   The signature is (element, data) => bool.
      */
