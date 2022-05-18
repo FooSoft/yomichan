@@ -111,6 +111,12 @@ class CssStyleApplier {
 
     // Private
 
+    /**
+     * Fetches and parses a JSON file.
+     * @param {string} url The URL to the file.
+     * @returns {Promise<*>} A JSON object.
+     * @throws {Error} An error is thrown if the fetch fails.
+     */
     async _fetchJsonAsset(url) {
         const response = await fetch(url, {
             method: 'GET',
@@ -181,6 +187,11 @@ class CssStyleApplier {
         return false;
     }
 
+    /**
+     * Gets the whitespace-delimited tokens from a string.
+     * @param {string} tokenListString The string to parse.
+     * @returns {string[]} An array of tokens.
+     */
     _getTokens(tokenListString) {
         let start = 0;
         const pattern = this._patternHtmlWhitespace;
