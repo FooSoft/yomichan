@@ -25,9 +25,10 @@
 class ClipboardReader {
     /**
      * Creates a new instances of a clipboard reader.
-     * @param document The Document object to be used, or null for no support.
-     * @param pasteTargetSelector The selector for the paste target element.
-     * @param imagePasteTargetSelector The selector for the image paste target element.
+     * @param {object} details
+     * @param {?Document} details.document The Document object to be used, or null for no support.
+     * @param {?string} details.pasteTargetSelector The selector for the paste target element.
+     * @param {?string} details.imagePasteTargetSelector The selector for the image paste target element.
      */
     constructor({document=null, pasteTargetSelector=null, imagePasteTargetSelector=null}) {
         this._document = document;

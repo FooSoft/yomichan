@@ -168,7 +168,7 @@ class PopupWindow extends EventDispatcher {
 
     /**
      * Shows and updates the positioning and content of the popup.
-     * @param {Popup.ContentDetails} details Settings for the outer popup.
+     * @param {Popup.ContentDetails} _details Settings for the outer popup.
      * @param {Display.ContentDetails} displayDetails The details parameter passed to `Display.setContent`.
      * @returns {Promise<void>}
      */
@@ -194,7 +194,7 @@ class PopupWindow extends EventDispatcher {
 
     /**
      * Sets the scaling factor of the popup content.
-     * @param {number} scale The scaling factor.
+     * @param {number} _scale The scaling factor.
      */
     setContentScale(_scale) {
         // NOP
@@ -202,7 +202,6 @@ class PopupWindow extends EventDispatcher {
 
     /**
      * Returns whether or not the popup is currently visible, synchronously.
-     * @returns {boolean} `true` if the popup is visible, `false` otherwise.
      * @throws An exception is thrown for `PopupWindow` since it cannot synchronously detect visibility.
      */
     isVisibleSync() {

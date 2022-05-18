@@ -233,7 +233,6 @@ class PopupProxy extends EventDispatcher {
 
     /**
      * Returns whether or not the popup is currently visible, synchronously.
-     * @returns {boolean} `true` if the popup is visible, `false` otherwise.
      * @throws An exception is thrown for `PopupProxy` since it cannot synchronously detect visibility.
      */
     isVisibleSync() {
