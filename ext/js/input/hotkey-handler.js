@@ -61,11 +61,11 @@ class HotkeyHandler extends EventDispatcher {
      * Registers a set of hotkeys for a given scope.
      * @param scope The scope that the hotkey definitions must be for in order to be activated.
      * @param hotkeys An array of hotkey definitions of the format `{action, key, modifiers, scopes, enabled}`.
-     * * `action` - a string indicating which action to perform.
-     * * `key` - a keyboard key code indicating which key needs to be pressed.
-     * * `modifiers` - an array of keyboard modifiers which also need to be pressed. Supports: `'alt', 'ctrl', 'shift', 'meta'`.
-     * * `scopes` - an array of scopes for which the hotkey is valid. If this array does not contain `this.scope`, the hotkey will not be registered.
-     * * `enabled` - a boolean indicating whether the hotkey is currently enabled.
+     * - `action` - a string indicating which action to perform.
+     * - `key` - a keyboard key code indicating which key needs to be pressed.
+     * - `modifiers` - an array of keyboard modifiers which also need to be pressed. Supports: `'alt', 'ctrl', 'shift', 'meta'`.
+     * - `scopes` - an array of scopes for which the hotkey is valid. If this array does not contain `this.scope`, the hotkey will not be registered.
+     * - `enabled` - a boolean indicating whether the hotkey is currently enabled.
      */
     registerHotkeys(scope, hotkeys) {
         let registrations = this._hotkeyRegistrations.get(scope);

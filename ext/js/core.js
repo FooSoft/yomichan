@@ -356,8 +356,8 @@ function promiseAnimationFrame(timeout=null) {
  * @param {object} params Information which was passed with the original message.
  * @param {function} callback A callback function which is invoked after the handler has completed. The value passed
  *   to the function is in the format:
- *   * `{result: any}` if the handler invoked successfully.
- *   * `{error: object}` if the handler thew an error. The error is serialized.
+ *   - `{result: any}` if the handler invoked successfully.
+ *   - `{error: object}` if the handler thew an error. The error is serialized.
  * @param {...*} extraArgs Additional arguments which are passed to the `handler` function.
  * @returns {boolean} `true` if the function is invoked asynchronously, `false` otherwise.
  */
