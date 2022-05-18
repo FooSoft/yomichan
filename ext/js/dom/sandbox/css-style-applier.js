@@ -160,16 +160,16 @@ class CssStyleApplier {
         return cssText;
     }
 
-    _selectorMatches(selectorText, classList) {
+    _selectorMatches(selectors, classList) {
         const pattern = this._patternClassNameCharacter;
         for (const item of classList) {
             const prefixedItem = `.${item}`;
             let start = 0;
             while (true) {
-                const index = selectorText.indexOf(prefixedItem, start);
+                const index = selectors.indexOf(prefixedItem, start);
                 if (index < 0) { break; }
                 start = index + prefixedItem.length;
-                if (start >= selectorText.length || !pattern.test(selectorText[start])) { return true; }
+                if (start >= selectors.length || !pattern.test(selectors[start])) { return true; }
             }
         }
         return false;
