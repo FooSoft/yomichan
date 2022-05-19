@@ -114,7 +114,7 @@ class DOMTextScanner {
             } else if (nodeType === ELEMENT_NODE) {
                 lastNode = node;
                 this._offset = 0;
-                [enterable, newlines] = DOMTextScanner.getElementSeekInfo(node);
+                ({enterable, newlines} = DOMTextScanner.getElementSeekInfo(node));
                 if (newlines > this._newlines && generateLayoutContent) {
                     this._newlines = newlines;
                 }
@@ -125,7 +125,7 @@ class DOMTextScanner {
 
             for (const exitedNode of exitedNodes) {
                 if (exitedNode.nodeType !== ELEMENT_NODE) { continue; }
-                newlines = DOMTextScanner.getElementSeekInfo(exitedNode)[1];
+                ({newlines} = DOMTextScanner.getElementSeekInfo(exitedNode));
                 if (newlines > this._newlines && generateLayoutContent) {
                     this._newlines = newlines;
                 }
@@ -392,9 +392,10 @@ class DOMTextScanner {
     }
 
     /**
-     * @returns [enterable: boolean, newlines: integer]
-     *   The enterable value indicates whether the content of this node should be entered.
-     *   The newlines value corresponds to the number of newline characters that should be added.
+     * Gets seek information about an element.
+     * @returns {{enterable: boolean, newlines: number}} The seek information.
+     *   The `enterable` value indicates whether the content of this node should be entered.
+     *   The `newlines` value corresponds to the number of newline characters that should be added.
      *     1 newline corresponds to a simple new line in the layout.
      *     2 newlines corresponds to a significant visual distinction since the previous content.
      */
@@ -405,9 +406,9 @@ class DOMTextScanner {
             case 'RT':
             case 'SCRIPT':
             case 'STYLE':
-                return [false, 0];
+                return {enterable: false, newlines: 0};
             case 'BR':
-                return [false, 1];
+                return {enterable: false, newlines: 1};
             case 'TEXTAREA':
             case 'INPUT':
             case 'BUTTON':
@@ -436,7 +437,7 @@ class DOMTextScanner {
             }
         }
 
-        return [enterable, newlines];
+        return {enterable, newlines};
     }
 
     /**
