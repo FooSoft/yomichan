@@ -23,7 +23,7 @@ class MediaUtil {
      * Gets the file extension of a file path. URL search queries and hash
      * fragments are not handled.
      * @param path The path to the file.
-     * @returns The file extension, including the '.', or an empty string
+     * @returns {string} The file extension, including the '.', or an empty string
      *   if there is no file extension.
      */
     static getFileNameExtension(path) {
@@ -34,8 +34,8 @@ class MediaUtil {
     /**
      * Gets an image file's media type using a file path.
      * @param path The path to the file.
-     * @returns The media type string if it can be determined from the file path,
-     *   otherwise null.
+     * @returns {?string} The media type string if it can be determined from the file path,
+     *   otherwise `null`.
      */
     static getImageMediaTypeFromFileName(path) {
         switch (this.getFileNameExtension(path).toLowerCase()) {
@@ -71,8 +71,8 @@ class MediaUtil {
     /**
      * Gets the file extension for a corresponding media type.
      * @param mediaType The media type to use.
-     * @returns A file extension including the dot for the media type,
-     *   otherwise null.
+     * @returns {?string} A file extension including the dot for the media type,
+     *   otherwise `null`.
      */
     static getFileExtensionFromImageMediaType(mediaType) {
         switch (mediaType) {
@@ -102,8 +102,8 @@ class MediaUtil {
     /**
      * Gets the file extension for a corresponding media type.
      * @param mediaType The media type to use.
-     * @returns A file extension including the dot for the media type,
-     *   otherwise null.
+     * @returns {string} A file extension including the dot for the media type,
+     *   otherwise `null`.
      */
     static getFileExtensionFromAudioMediaType(mediaType) {
         switch (mediaType) {

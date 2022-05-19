@@ -150,7 +150,7 @@ class Yomichan extends EventDispatcher {
     /**
      * Checks whether or not a URL is an extension URL.
      * @param {string} url The URL to check.
-     * @returns true if the URL is an extension URL, false otherwise.
+     * @returns {boolean} `true` if the URL is an extension URL, `false` otherwise.
      */
     isExtensionUrl(url) {
         return this._extensionUrlBase !== null && url.startsWith(this._extensionUrlBase);

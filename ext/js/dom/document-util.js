@@ -88,7 +88,7 @@ class DocumentUtil {
      *   ```js
      *   new Map([ [character: string, [otherCharacter: string, includeCharacterAtEnd: boolean]], ... ])
      *   ```
-     * @returns The sentence and the offset to the original source: `{sentence: string, offset: integer}`.
+     * @returns {{sentence: string, offset: number}} The sentence and the offset to the original source.
      */
     extractSentence(source, layoutAwareScan, extent, terminateAtNewlines, terminatorMap, forwardQuoteMap, backwardQuoteMap) {
         // Scan text

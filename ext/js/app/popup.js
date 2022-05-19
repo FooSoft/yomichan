@@ -675,7 +675,7 @@ class Popup extends EventDispatcher {
     /**
      * @param {Rect[]} sourceRects
      * @param {string} writingMode
-     * @returns {SizeRect}
+     * @returns {SizeRect} The calculated rectangle for where to position the popup.
      */
     _getPosition(sourceRects, writingMode, viewport) {
         const scale = this._contentScale;
@@ -720,7 +720,7 @@ class Popup extends EventDispatcher {
     }
 
     /**
-     * @returns {SizeRect}
+     * @returns {SizeRect} The calculated rectangle for where to position the popup.
      */
     _getPositionForHorizontalText(sourceRect, frameWidth, frameHeight, viewport, horizontalOffset, verticalOffset, preferBelow) {
         const [left, width, after] = this._getConstrainedPosition(
@@ -743,7 +743,7 @@ class Popup extends EventDispatcher {
     }
 
     /**
-     * @returns {SizeRect}
+     * @returns {SizeRect} The calculated rectangle for where to position the popup.
      */
     _getPositionForVerticalText(sourceRect, frameWidth, frameHeight, viewport, horizontalOffset, verticalOffset, preferRight) {
         const [left, width, after] = this._getConstrainedPositionBinary(
@@ -887,8 +887,9 @@ class Popup extends EventDispatcher {
     }
 
     /**
-     * @param {Rect[]} sourceRects
-     * @returns {Rect}
+     * Computes the bounding rectangle for a set of rectangles.
+     * @param {Rect[]} sourceRects An array of rectangles.
+     * @returns {Rect} The bounding rectangle for all of the source rectangles.
      */
     _getBoundingSourceRect(sourceRects) {
         switch (sourceRects.length) {
@@ -907,10 +908,11 @@ class Popup extends EventDispatcher {
     }
 
     /**
-     * @param {SizeRect} sizeRect
-     * @param {Rect[]} sourceRects
-     * @param {number} ignoreIndex
-     * @returns {boolean}
+     * Checks whether or not a rectangle is overlapping any other rectangles.
+     * @param {SizeRect} sizeRect The rectangles to check for overlaps.
+     * @param {Rect[]} sourceRects The list of rectangles to compare against.
+     * @param {number} ignoreIndex The index of an item in `sourceRects` to ignore.
+     * @returns {boolean} `true` if `sizeRect` overlaps any one of `sourceRects`, excluding `sourceRects[ignoreIndex]`; `false` otherwise.
      */
     _isOverlapping(sizeRect, sourceRects, ignoreIndex) {
         const {left, top} = sizeRect;

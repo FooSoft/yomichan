@@ -21,9 +21,10 @@
 class DictionaryImporterMediaLoader {
     /**
      * Attempts to load an image using an ArrayBuffer and a media type to return details about it.
-     * @param content The binary content for the image, encoded as an ArrayBuffer.
-     * @param mediaType The media type for the image content.
-     * @returns A Promise which resolves with {content, width, height} on success, otherwise an error is thrown.
+     * @param {ArrayBuffer} content The binary content for the image, encoded as an ArrayBuffer.
+     * @param {string} mediaType The media type for the image content.
+     * @returns {Promise<{content: ArrayBuffer, width: number, height: number}>} Details about the requested image content.
+     * @throws {Error} An error can be thrown if the image fails to load.
      */
     getImageDetails(content, mediaType, transfer) {
         return new Promise((resolve, reject) => {

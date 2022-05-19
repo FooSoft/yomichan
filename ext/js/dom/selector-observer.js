@@ -50,7 +50,7 @@ class SelectorObserver {
 
     /**
      * Returns whether or not an element is currently being observed.
-     * @returns True if an element is being observed, false otherwise.
+     * @returns {boolean} `true` if an element is being observed, `false` otherwise.
      */
     get isObserving() {
         return this._observingElement !== null;
@@ -60,8 +60,8 @@ class SelectorObserver {
      * Starts DOM mutation observing the target element.
      * @param element The element to observe changes in.
      * @param attributes A boolean for whether or not attribute changes should be observed.
-     * @throws An error if element is null.
-     * @throws An error if an element is already being observed.
+     * @throws {Error} An error if element is null.
+     * @throws {Error} An error if an element is already being observed.
      */
     observe(element, attributes=false) {
         if (element === null) {

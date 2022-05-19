@@ -121,7 +121,7 @@ class HotkeyHandler extends EventDispatcher {
      * Removes a single event listener from a specific event.
      * @param eventName The string representing the event's name.
      * @param callback The event listener callback to add.
-     * @returns `true` if the callback was removed, `false` otherwise.
+     * @returns {boolean} `true` if the callback was removed, `false` otherwise.
      */
     off(eventName, callback) {
         const result = super.off(eventName, callback);
@@ -134,7 +134,7 @@ class HotkeyHandler extends EventDispatcher {
      * Attempts to simulate an action for a given combination of key and modifiers.
      * @param key A keyboard key code indicating which key needs to be pressed.
      * @param modifiers An array of keyboard modifiers which also need to be pressed. Supports: `'alt', 'ctrl', 'shift', 'meta'`.
-     * @returns `true` if an action was performed, `false` otherwise.
+     * @returns {boolean} `true` if an action was performed, `false` otherwise.
      */
     simulate(key, modifiers) {
         const hotkeyInfo = this._hotkeys.get(key);
