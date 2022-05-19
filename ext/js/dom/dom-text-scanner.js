@@ -151,7 +151,7 @@ class DOMTextScanner {
     _seekTextNodeForward(textNode, resetOffset) {
         const nodeValue = textNode.nodeValue;
         const nodeValueLength = nodeValue.length;
-        const [preserveNewlines, preserveWhitespace] = this._getWhitespaceSettings(textNode);
+        const {preserveNewlines, preserveWhitespace} = this._getWhitespaceSettings(textNode);
 
         let lineHasWhitespace = this._lineHasWhitespace;
         let lineHasContent = this._lineHasContent;
@@ -237,7 +237,7 @@ class DOMTextScanner {
     _seekTextNodeBackward(textNode, resetOffset) {
         const nodeValue = textNode.nodeValue;
         const nodeValueLength = nodeValue.length;
-        const [preserveNewlines, preserveWhitespace] = this._getWhitespaceSettings(textNode);
+        const {preserveNewlines, preserveWhitespace} = this._getWhitespaceSettings(textNode);
 
         let lineHasWhitespace = this._lineHasWhitespace;
         let lineHasContent = this._lineHasContent;
@@ -310,13 +310,13 @@ class DOMTextScanner {
     /**
      * Gets information about how whitespace characters are treated.
      * @param {Text} textNode The text node to check.
-     * @returns [preserveNewlines: boolean, preserveWhitespace: boolean]
-     *   The value of preserveNewlines indicates whether or not newline characters are treated as line breaks.
-     *   The value of preserveWhitespace indicates whether or not sequences of whitespace characters are collapsed.
+     * @returns {{preserveNewlines: boolean, preserveWhitespace: boolean}} Information about the whitespace.
+     *   The value of `preserveNewlines` indicates whether or not newline characters are treated as line breaks.
+     *   The value of `preserveWhitespace` indicates whether or not sequences of whitespace characters are collapsed.
      */
     _getWhitespaceSettings(textNode) {
         if (this._forcePreserveWhitespace) {
-            return [true, true];
+            return {preserveNewlines: true, preserveWhitespace: true};
         }
         const element = DOMTextScanner.getParentElement(textNode);
         if (element !== null) {
@@ -325,12 +325,12 @@ class DOMTextScanner {
                 case 'pre':
                 case 'pre-wrap':
                 case 'break-spaces':
-                    return [true, true];
+                    return {preserveNewlines: true, preserveWhitespace: true};
                 case 'pre-line':
-                    return [true, false];
+                    return {preserveNewlines: true, preserveWhitespace: false};
             }
         }
-        return [false, false];
+        return {preserveNewlines: false, preserveWhitespace: false};
     }
 
     // Static helpers
