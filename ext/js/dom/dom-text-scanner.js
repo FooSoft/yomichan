@@ -151,11 +151,7 @@ class DOMTextScanner {
     _seekTextNodeForward(textNode, resetOffset) {
         const nodeValue = textNode.nodeValue;
         const nodeValueLength = nodeValue.length;
-        const [preserveNewlines, preserveWhitespace] = (
-            this._forcePreserveWhitespace ?
-            [true, true] :
-            this._getWhitespaceSettings(textNode)
-        );
+        const [preserveNewlines, preserveWhitespace] = this._getWhitespaceSettings(textNode);
 
         let lineHasWhitespace = this._lineHasWhitespace;
         let lineHasContent = this._lineHasContent;
@@ -241,11 +237,7 @@ class DOMTextScanner {
     _seekTextNodeBackward(textNode, resetOffset) {
         const nodeValue = textNode.nodeValue;
         const nodeValueLength = nodeValue.length;
-        const [preserveNewlines, preserveWhitespace] = (
-            this._forcePreserveWhitespace ?
-            [true, true] :
-            this._getWhitespaceSettings(textNode)
-        );
+        const [preserveNewlines, preserveWhitespace] = this._getWhitespaceSettings(textNode);
 
         let lineHasWhitespace = this._lineHasWhitespace;
         let lineHasContent = this._lineHasContent;
@@ -323,6 +315,9 @@ class DOMTextScanner {
      *   The value of preserveWhitespace indicates whether or not sequences of whitespace characters are collapsed.
      */
     _getWhitespaceSettings(textNode) {
+        if (this._forcePreserveWhitespace) {
+            return [true, true];
+        }
         const element = DOMTextScanner.getParentElement(textNode);
         if (element !== null) {
             const style = window.getComputedStyle(element);
