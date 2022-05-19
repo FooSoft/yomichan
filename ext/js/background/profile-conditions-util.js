@@ -92,6 +92,7 @@ class ProfileConditionsUtil {
      *      },
      *      ...
      *  ]
+     * @returns {JsonSchema} A new `JsonSchema` object.
      */
     createSchema(conditionGroups) {
         const anyOf = [];

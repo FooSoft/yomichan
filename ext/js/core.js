@@ -482,6 +482,7 @@ class EventListenerCollection {
      * @param {string} type The type of event listener, which can be 'addEventListener', 'addListener', or 'on'.
      * @param {object} object The object to add the event listener to.
      * @param {...*} args The argument array passed to the object's event listener adding function.
+     * @returns {void}
      * @throws An error if type is not an expected value.
      */
     addGeneric(type, object, ...args) {

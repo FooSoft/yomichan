@@ -37,6 +37,7 @@ class FrameAncestryHandler {
 
     /**
      * Gets the frame ID that the instance is instantiated in.
+     * @type {number}
      */
     get frameId() {
         return this._frameId;

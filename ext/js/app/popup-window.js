@@ -180,6 +180,7 @@ class PopupWindow extends EventDispatcher {
     /**
      * Sets the custom styles for the popup content.
      * @param {string} css The CSS rules.
+     * @returns {Promise<void>}
      */
     setCustomCss(css) {
         return this._invoke(false, 'Display.setCustomCss', {id: this._id, css});
@@ -187,6 +188,7 @@ class PopupWindow extends EventDispatcher {
 
     /**
      * Stops the audio auto-play timer, if one has started.
+     * @returns {Promise<void>}
      */
     clearAutoPlayTimer() {
         return this._invoke(false, 'Display.clearAutoPlayTimer', {id: this._id});

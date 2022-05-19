@@ -109,6 +109,7 @@ class HotkeyHandler extends EventDispatcher {
      * Adds a single event listener to a specific event.
      * @param eventName The string representing the event's name.
      * @param callback The event listener callback to add.
+     * @returns {void}
      */
     on(eventName, callback) {
         const result = super.on(eventName, callback);

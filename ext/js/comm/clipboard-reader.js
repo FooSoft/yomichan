@@ -41,6 +41,7 @@ class ClipboardReader {
 
     /**
      * Gets the browser being used.
+     * @type {?string}
      */
     get browser() {
         return this._browser;
