@@ -34,8 +34,8 @@ class AnkiNoteDataCreator {
 
     /**
      * Creates a compatibility representation of the specified data.
-     * @param marker The marker that is being used for template rendering.
-     * @returns An object used for rendering Anki templates.
+     * @param {string} marker The marker that is being used for template rendering.
+     * @returns {object} An object used for rendering Anki templates.
      */
     create(marker, {
         dictionaryEntry,
@@ -83,8 +83,8 @@ class AnkiNoteDataCreator {
 
     /**
      * Creates a deferred-evaluation value.
-     * @param getter The function to invoke to get the return value.
-     * @returns An object which can be passed into `getCachedValue`.
+     * @param {Function} getter The function to invoke to get the return value.
+     * @returns {{getter: Function, hasValue: false, value: undefined}} An object which can be passed into `getCachedValue`.
      */
     createCachedValue(getter) {
         return {getter, hasValue: false, value: void 0};
@@ -92,8 +92,8 @@ class AnkiNoteDataCreator {
 
     /**
      * Gets the value of a cached object.
-     * @param item An object that was returned from `createCachedValue`.
-     * @returns The result of evaluating the getter, which is cached after the first invocation.
+     * @param {{getter: Function, hasValue: boolean, value: *}} item An object that was returned from `createCachedValue`.
+     * @returns {*} The result of evaluating the getter, which is cached after the first invocation.
      */
     getCachedValue(item) {
         if (item.hasValue) { return item.value; }

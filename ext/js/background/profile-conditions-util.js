@@ -125,8 +125,8 @@ class ProfileConditionsUtil {
     /**
      * Creates a normalized version of the context object to test,
      * assigning dependent fields as needed.
-     * @param context A context object which is used during schema validation.
-     * @returns A normalized context object.
+     * @param {object} context A context object which is used during schema validation.
+     * @returns {object} A normalized context object.
      */
     normalizeContext(context) {
         const normalizedContext = Object.assign({}, context);

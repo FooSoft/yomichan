@@ -53,7 +53,7 @@ class FrameAncestryHandler {
 
     /**
      * Returns whether or not this frame is the root frame in the tab.
-     * @returns `true` if it is the root, otherwise `false`.
+     * @returns {boolean} `true` if it is the root, otherwise `false`.
      */
     isRootFrame() {
         return (window === window.parent);
@@ -63,7 +63,7 @@ class FrameAncestryHandler {
      * Gets the frame ancestry information for the current frame. If the frame is the
      * root frame, an empty array is returned. Otherwise, an array of frame IDs is returned,
      * starting from the nearest ancestor.
-     * @returns An array of frame IDs corresponding to the ancestors of the current frame.
+     * @returns {number[]} An array of frame IDs corresponding to the ancestors of the current frame.
      */
     async getFrameAncestryInfo() {
         if (this._getFrameAncestryInfoPromise === null) {
@@ -76,8 +76,8 @@ class FrameAncestryHandler {
      * Gets the frame element of a child frame given a frame ID.
      * For this function to work, the `getFrameAncestryInfo` function needs to have
      * been invoked previously.
-     * @param frameId The frame ID of the child frame to get.
-     * @returns The element corresponding to the frame with ID `frameId`, otherwise `null`.
+     * @param {number} frameId The frame ID of the child frame to get.
+     * @returns {HTMLElement} The element corresponding to the frame with ID `frameId`, otherwise `null`.
      */
     getChildFrameElement(frameId) {
         const frameInfo = this._childFrameMap.get(frameId);
