@@ -154,7 +154,7 @@ class DOMTextScanner {
         const [preserveNewlines, preserveWhitespace] = (
             this._forcePreserveWhitespace ?
             [true, true] :
-            DOMTextScanner.getWhitespaceSettings(textNode)
+            this._getWhitespaceSettings(textNode)
         );
 
         let lineHasWhitespace = this._lineHasWhitespace;
@@ -244,7 +244,7 @@ class DOMTextScanner {
         const [preserveNewlines, preserveWhitespace] = (
             this._forcePreserveWhitespace ?
             [true, true] :
-            DOMTextScanner.getWhitespaceSettings(textNode)
+            this._getWhitespaceSettings(textNode)
         );
 
         let lineHasWhitespace = this._lineHasWhitespace;
@@ -313,6 +313,29 @@ class DOMTextScanner {
         this._newlines = newlines;
 
         return (remainder > 0);
+    }
+
+    /**
+     * Gets information about how whitespace characters are treated.
+     * @param {Text} textNode The text node to check.
+     * @returns [preserveNewlines: boolean, preserveWhitespace: boolean]
+     *   The value of preserveNewlines indicates whether or not newline characters are treated as line breaks.
+     *   The value of preserveWhitespace indicates whether or not sequences of whitespace characters are collapsed.
+     */
+    _getWhitespaceSettings(textNode) {
+        const element = DOMTextScanner.getParentElement(textNode);
+        if (element !== null) {
+            const style = window.getComputedStyle(element);
+            switch (style.whiteSpace) {
+                case 'pre':
+                case 'pre-wrap':
+                case 'break-spaces':
+                    return [true, true];
+                case 'pre-line':
+                    return [true, false];
+            }
+        }
+        return [false, false];
     }
 
     // Static helpers
@@ -419,29 +442,6 @@ class DOMTextScanner {
         }
 
         return [enterable, newlines];
-    }
-
-    /**
-     * Gets information about how whitespace characters are treated.
-     * @param {Text} textNode The text node to check.
-     * @returns [preserveNewlines: boolean, preserveWhitespace: boolean]
-     *   The value of preserveNewlines indicates whether or not newline characters are treated as line breaks.
-     *   The value of preserveWhitespace indicates whether or not sequences of whitespace characters are collapsed.
-     */
-    static getWhitespaceSettings(textNode) {
-        const element = DOMTextScanner.getParentElement(textNode);
-        if (element !== null) {
-            const style = window.getComputedStyle(element);
-            switch (style.whiteSpace) {
-                case 'pre':
-                case 'pre-wrap':
-                case 'break-spaces':
-                    return [true, true];
-                case 'pre-line':
-                    return [true, false];
-            }
-        }
-        return [false, false];
     }
 
     /**
