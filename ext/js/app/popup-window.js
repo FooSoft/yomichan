@@ -21,7 +21,7 @@
 class PopupWindow extends EventDispatcher {
     /**
      * Creates a new instance.
-     * @param {object} details
+     * @param {object} details Details about how to set up the instance.
      * @param {string} details.id The ID of the popup.
      * @param {number} details.depth The depth of the popup.
      * @param {number} details.frameId The ID of the host frame.
@@ -53,10 +53,10 @@ class PopupWindow extends EventDispatcher {
     /**
      * The parent of the popup, which is always `null` for `PopupWindow` instances,
      * since any potential parent popups are in a different frame.
-     * @param {Popup} value
-     * @type {Popup}
+     * @param {Popup} _value The parent to assign.
+     * @throws {Error} Throws an error, since this class doesn't support children.
      */
-    set parent(value) {
+    set parent(_value) {
         throw new Error('Not supported on PopupWindow');
     }
 
@@ -71,10 +71,10 @@ class PopupWindow extends EventDispatcher {
 
     /**
      * Attempts to set the child popup.
-     * @param {Popup} value
+     * @param {Popup} _value The child to assign.
      * @throws Throws an error, since this class doesn't support children.
      */
-    set child(value) {
+    set child(_value) {
         throw new Error('Not supported on PopupWindow');
     }
 

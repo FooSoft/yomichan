@@ -25,7 +25,7 @@
 class ClipboardReader {
     /**
      * Creates a new instances of a clipboard reader.
-     * @param {object} details
+     * @param {object} details Details about how to set up the instance.
      * @param {?Document} details.document The Document object to be used, or null for no support.
      * @param {?string} details.pasteTargetSelector The selector for the paste target element.
      * @param {?string} details.imagePasteTargetSelector The selector for the image paste target element.

@@ -26,7 +26,7 @@
 class AnkiNoteDataCreator {
     /**
      * Creates a new instance.
-     * @param japaneseUtil An instance of `JapaneseUtil`.
+     * @param {JapaneseUtil} japaneseUtil An instance of `JapaneseUtil`.
      */
     constructor(japaneseUtil) {
         this._japaneseUtil = japaneseUtil;
@@ -35,6 +35,14 @@ class AnkiNoteDataCreator {
     /**
      * Creates a compatibility representation of the specified data.
      * @param {string} marker The marker that is being used for template rendering.
+     * @param {object} details Information which is used to generate the data.
+     * @param {Translation.DictionaryEntry} details.dictionaryEntry The dictionary entry.
+     * @param {string} details.resultOutputMode The result output mode.
+     * @param {string} details.mode The mode being used to generate the Anki data.
+     * @param {string} details.glossaryLayoutMode The glossary layout mode.
+     * @param {boolean} details.compactTags Whether or not compact tags mode is enabled.
+     * @param {{documentTitle: string, query: string, fullQuery: string}} details.context Contextual information about the source of the dictionary entry.
+     * @param {object} details.media Media data.
      * @returns {object} An object used for rendering Anki templates.
      */
     create(marker, {

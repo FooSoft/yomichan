@@ -24,7 +24,7 @@
 class FrameAncestryHandler {
     /**
      * Creates a new instance.
-     * @param frameId The frame ID of the current frame the instance is instantiated in.
+     * @param {number} frameId The frame ID of the current frame the instance is instantiated in.
      */
     constructor(frameId) {
         this._frameId = frameId;

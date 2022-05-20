@@ -22,7 +22,7 @@ class MediaUtil {
     /**
      * Gets the file extension of a file path. URL search queries and hash
      * fragments are not handled.
-     * @param path The path to the file.
+     * @param {string} path The path to the file.
      * @returns {string} The file extension, including the '.', or an empty string
      *   if there is no file extension.
      */
@@ -33,7 +33,7 @@ class MediaUtil {
 
     /**
      * Gets an image file's media type using a file path.
-     * @param path The path to the file.
+     * @param {string} path The path to the file.
      * @returns {?string} The media type string if it can be determined from the file path,
      *   otherwise `null`.
      */
@@ -70,7 +70,7 @@ class MediaUtil {
 
     /**
      * Gets the file extension for a corresponding media type.
-     * @param mediaType The media type to use.
+     * @param {string} mediaType The media type to use.
      * @returns {?string} A file extension including the dot for the media type,
      *   otherwise `null`.
      */
@@ -101,7 +101,7 @@ class MediaUtil {
 
     /**
      * Gets the file extension for a corresponding media type.
-     * @param mediaType The media type to use.
+     * @param {string} mediaType The media type to use.
      * @returns {string} A file extension including the dot for the media type,
      *   otherwise `null`.
      */

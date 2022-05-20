@@ -66,7 +66,7 @@ class Popup extends EventDispatcher {
 
     /**
      * Creates a new instance.
-     * @param {object} details
+     * @param {object} details The details used to construct the new instance.
      * @param {string} details.id The ID of the popup.
      * @param {number} details.depth The depth of the popup.
      * @param {number} details.frameId The ID of the host frame.
@@ -673,8 +673,10 @@ class Popup extends EventDispatcher {
     }
 
     /**
-     * @param {Rect[]} sourceRects
-     * @param {string} writingMode
+     * Computes the position where the popup should be placed relative to the source content.
+     * @param {Rect[]} sourceRects The rectangles of the source content.
+     * @param {string} writingMode The CSS writing mode of the source text.
+     * @param {Rect} viewport The viewport that the popup can be placed within.
      * @returns {SizeRect} The calculated rectangle for where to position the popup.
      */
     _getPosition(sourceRects, writingMode, viewport) {
@@ -720,6 +722,14 @@ class Popup extends EventDispatcher {
     }
 
     /**
+     * Computes the position where the popup should be placed for horizontal text.
+     * @param {Rect} sourceRect The rectangle of the source content.
+     * @param {number} frameWidth The preferred width of the frame.
+     * @param {number} frameHeight The preferred height of the frame.
+     * @param {Rect} viewport The viewport that the frame can be placed within.
+     * @param {number} horizontalOffset The horizontal offset from the source rect that the popup will be placed.
+     * @param {number} verticalOffset The vertical offset from the source rect that the popup will be placed.
+     * @param {boolean} preferBelow Whether or not the popup is preferred to be placed below the source content.
      * @returns {SizeRect} The calculated rectangle for where to position the popup.
      */
     _getPositionForHorizontalText(sourceRect, frameWidth, frameHeight, viewport, horizontalOffset, verticalOffset, preferBelow) {
@@ -743,6 +753,14 @@ class Popup extends EventDispatcher {
     }
 
     /**
+     * Computes the position where the popup should be placed for vertical text.
+     * @param {Rect} sourceRect The rectangle of the source content.
+     * @param {number} frameWidth The preferred width of the frame.
+     * @param {number} frameHeight The preferred height of the frame.
+     * @param {Rect} viewport The viewport that the frame can be placed within.
+     * @param {number} horizontalOffset The horizontal offset from the source rect that the popup will be placed.
+     * @param {number} verticalOffset The vertical offset from the source rect that the popup will be placed.
+     * @param {boolean} preferRight Whether or not the popup is preferred to be placed to the right of the source content.
      * @returns {SizeRect} The calculated rectangle for where to position the popup.
      */
     _getPositionForVerticalText(sourceRect, frameWidth, frameHeight, viewport, horizontalOffset, verticalOffset, preferRight) {
@@ -824,6 +842,11 @@ class Popup extends EventDispatcher {
         return [position, size, after];
     }
 
+    /**
+     * Gets the visual viewport.
+     * @param {boolean} useVisualViewport Whether or not the `window.visualViewport` should be used.
+     * @returns {Rect} The rectangle of the visual viewport.
+     */
     _getViewport(useVisualViewport) {
         const visualViewport = window.visualViewport;
         if (visualViewport !== null && typeof visualViewport === 'object') {

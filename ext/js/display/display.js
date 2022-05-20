@@ -391,7 +391,7 @@ class Display extends EventDispatcher {
 
     /**
      * Updates the content of the display.
-     * @param {ContentDetails} details
+     * @param {ContentDetails} details Information about the content to show.
      */
     setContent(details) {
         const {focus, params, state, content} = details;

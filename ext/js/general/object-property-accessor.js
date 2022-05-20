@@ -21,7 +21,7 @@
 class ObjectPropertyAccessor {
     /**
      * Create a new accessor for a specific object.
-     * @param target The object which the getter and mutation methods are applied to.
+     * @param {object} target The object which the getter and mutation methods are applied to.
      */
     constructor(target) {
         this._target = target;
@@ -29,8 +29,8 @@ class ObjectPropertyAccessor {
 
     /**
      * Gets the value at the specified path.
-     * @param pathArray The path to the property on the target object.
-     * @param pathLength How many parts of the pathArray to use.
+     * @param {(string|number)[]} pathArray The path to the property on the target object.
+     * @param {number} [pathLength] How many parts of the pathArray to use.
      *   This parameter is optional and defaults to the length of pathArray.
      * @returns {*} The value found at the path.
      * @throws {Error} An error is thrown if pathArray is not valid for the target object.
@@ -50,9 +50,9 @@ class ObjectPropertyAccessor {
 
     /**
      * Sets the value at the specified path.
-     * @param pathArray The path to the property on the target object.
-     * @param value The value to assign to the property.
-     * @throws An error is thrown if pathArray is not valid for the target object.
+     * @param {(string|number)[]} pathArray The path to the property on the target object.
+     * @param {*} value The value to assign to the property.
+     * @throws {Error} An error is thrown if pathArray is not valid for the target object.
      */
     set(pathArray, value) {
         const ii = pathArray.length - 1;
@@ -69,8 +69,8 @@ class ObjectPropertyAccessor {
 
     /**
      * Deletes the property of the target object at the specified path.
-     * @param pathArray The path to the property on the target object.
-     * @throws An error is thrown if pathArray is not valid for the target object.
+     * @param {(string|number)[]}pathArray The path to the property on the target object.
+     * @throws {Error} An error is thrown if pathArray is not valid for the target object.
      */
     delete(pathArray) {
         const ii = pathArray.length - 1;
@@ -91,8 +91,8 @@ class ObjectPropertyAccessor {
 
     /**
      * Swaps two properties of an object or array.
-     * @param pathArray1 The path to the first property on the target object.
-     * @param pathArray2 The path to the second property on the target object.
+     * @param {(string|number)[]} pathArray1 The path to the first property on the target object.
+     * @param {(string|number)[]} pathArray2 The path to the second property on the target object.
      * @throws An error is thrown if pathArray1 or pathArray2 is not valid for the target object,
      *   or if the swap cannot be performed.
      */

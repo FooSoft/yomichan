@@ -349,7 +349,7 @@ function promiseAnimationFrame(timeout=null) {
 /**
  * Invokes a standard message handler. This function is used to react and respond
  * to communication messages within the extension.
- * @param {object} details
+ * @param {object} details Details about how to handle messages.
  * @param {Function} details.handler A handler function which is passed `params` and `...extraArgs` as arguments.
  * @param {boolean|string} details.async Whether or not the handler is async or not. Values include `false`, `true`, or `'dynamic'`.
  *   When the value is `'dynamic'`, the handler should return an object of the format `{async: boolean, result: any}`.

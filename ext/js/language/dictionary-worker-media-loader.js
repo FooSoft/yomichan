@@ -29,7 +29,7 @@ class DictionaryWorkerMediaLoader {
 
     /**
      * Handles a response message posted to the worker thread.
-     * @param params Details of the response.
+     * @param {{id: string, error: object|undefined, result: any|undefined}} params Details of the response.
      */
     handleMessage(params) {
         const {id} = params;

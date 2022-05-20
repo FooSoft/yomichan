@@ -20,19 +20,40 @@
  */
 class SelectorObserver {
     /**
+     * @function OnAddedCallback
+     * @param {Element} element The element which was added.
+     * @returns {*} Custom data which is assigned to element and passed to callbacks.
+     */
+
+    /**
+     * @function OnRemovedCallback
+     * @param {Element} element The element which was removed.
+     * @param {*} data The custom data corresponding to the element.
+     */
+
+    /**
+     * @function OnChildrenUpdatedCallback
+     * @param {Element} element The element which had its children updated.
+     * @param {*} data The custom data corresponding to the element.
+     */
+
+    /**
+     * @function IsStaleCallback
+     * @param {Element} element The element which had its children updated.
+     * @param {*} data The custom data corresponding to the element.
+     * @returns {boolean} Whether or not the data is stale for the element.
+     */
+
+    /**
      * Creates a new instance.
-     * @param details The configuration for the object.
-     * @param details.selector A string CSS selector used to find elements.
-     * @param details.ignoreSelector A string CSS selector used to filter elements, or null for no filtering.
-     * @param details.onAdded A function which is invoked for each element that is added that matches the selector.
-     *   The signature is (element) => data.
-     * @param details.onRemoved A function which is invoked for each element that is removed, or null.
-     *   The signature is (element, data) => void.
-     * @param details.onChildrenUpdated A function which is invoked for each element which has its children updated, or null.
-     *   The signature is (element, data) => void.
-     * @param details.isStale A function which checks if the data is stale for a given element, or null.
+     * @param {object} details The configuration for the object.
+     * @param {string} details.selector A string CSS selector used to find elements.
+     * @param {?string} details.ignoreSelector A string CSS selector used to filter elements, or `null` for no filtering.
+     * @param {OnAddedCallback} details.onAdded A function which is invoked for each element that is added that matches the selector.
+     * @param {?OnRemovedCallback} details.onRemoved A function which is invoked for each element that is removed, or `null`.
+     * @param {?OnChildrenUpdatedCallback} details.onChildrenUpdated A function which is invoked for each element which has its children updated, or `null`.
+     * @param {?IsStaleCallback} details.isStale A function which checks if the data is stale for a given element, or `null`.
      *   If the element is stale, it will be removed and potentially re-added.
-     *   The signature is (element, data) => bool.
      */
     constructor({selector, ignoreSelector=null, onAdded=null, onRemoved=null, onChildrenUpdated=null, isStale=null}) {
         this._selector = selector;
@@ -58,8 +79,8 @@ class SelectorObserver {
 
     /**
      * Starts DOM mutation observing the target element.
-     * @param element The element to observe changes in.
-     * @param attributes A boolean for whether or not attribute changes should be observed.
+     * @param {Element} element The element to observe changes in.
+     * @param {boolean} [attributes] A boolean for whether or not attribute changes should be observed.
      * @throws {Error} An error if element is null.
      * @throws {Error} An error if an element is already being observed.
      */
