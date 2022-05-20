@@ -320,7 +320,6 @@ class DisplayAnki {
         this._tagsNotification.open();
     }
 
-
     _tryAddAnkiNoteForSelectedEntry(mode) {
         const index = this._display.selectedIndex;
         this._addAnkiNote(index, mode);
