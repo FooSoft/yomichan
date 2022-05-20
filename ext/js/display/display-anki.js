@@ -18,7 +18,6 @@
 /* global
  * AnkiNoteBuilder
  * AnkiUtil
- * DisplayNotification
  * PopupMenu
  */
 
@@ -314,9 +313,7 @@ class DisplayAnki {
 
     _showAnkiTagsNotification(message) {
         if (this._ankiTagNotification === null) {
-            const node = this._display.displayGenerator.createEmptyFooterNotification();
-            node.classList.add('click-scannable');
-            this._ankiTagNotification = new DisplayNotification(this._display.notificationContainer, node);
+            this._ankiTagNotification = this._display.createNotification(true);
         }
 
         this._ankiTagNotification.setContent(message);
@@ -428,8 +425,7 @@ class DisplayAnki {
         }
 
         if (this._ankiNoteNotification === null) {
-            const node = this._display.displayGenerator.createEmptyFooterNotification();
-            this._ankiNoteNotification = new DisplayNotification(this._display.notificationContainer, node);
+            this._ankiNoteNotification = this._display.createNotification(false);
             this._ankiNoteNotificationEventListeners = new EventListenerCollection();
         }
 
