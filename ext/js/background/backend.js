@@ -516,13 +516,14 @@ class Backend {
         if (mode === 'edit') {
             try {
                 await this._anki.guiEditNote(noteId);
-                return;
+                return 'edit';
             } catch (e) {
                 // Not supported
             }
         }
         // Fallback
         await this._anki.guiBrowseNote(noteId);
+        return 'browse';
     }
 
     async _onApiSuspendAnkiCardsForNote({noteId}) {
