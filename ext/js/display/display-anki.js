@@ -47,6 +47,7 @@ class DisplayAnki {
         this._screenshotFormat = 'png';
         this._screenshotQuality = 100;
         this._scanLength = 10;
+        this._noteGuiMode = 'browse';
         this._noteTags = [];
         this._modeOptions = new Map();
         this._dictionaryEntryTypeModeMap = new Map([
@@ -132,7 +133,7 @@ class DisplayAnki {
     _onOptionsUpdated({options}) {
         const {
             general: {resultOutputMode, glossaryLayoutMode, compactTags},
-            anki: {tags, duplicateScope, duplicateScopeCheckAllModels, suspendNewCards, checkForDuplicates, displayTags, kanji, terms, screenshot: {format, quality}},
+            anki: {tags, duplicateScope, duplicateScopeCheckAllModels, suspendNewCards, checkForDuplicates, displayTags, kanji, terms, noteGuiMode, screenshot: {format, quality}},
             scanning: {length: scanLength}
         } = options;
 
@@ -147,6 +148,7 @@ class DisplayAnki {
         this._screenshotFormat = format;
         this._screenshotQuality = quality;
         this._scanLength = scanLength;
+        this._noteGuiMode = noteGuiMode;
         this._noteTags = [...tags];
         this._modeOptions.clear();
         this._modeOptions.set('kanji', kanji);
@@ -637,7 +639,7 @@ class DisplayAnki {
     _viewNote(node) {
         const noteIds = this._getNodeNoteIds(node);
         if (noteIds.length === 0) { return; }
-        yomichan.api.noteView(noteIds[0]);
+        yomichan.api.noteView(noteIds[0], this._noteGuiMode);
     }
 
     _showViewNoteMenu(node) {
