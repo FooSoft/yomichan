@@ -108,7 +108,7 @@ class AnkiConnect {
     /**
      * Opens the note editor GUI.
      * @param {number} noteId The ID of the note.
-     * @returns {Promise<null>}
+     * @returns {Promise<null>} Nothing is returned.
      */
     async guiEditNote(noteId) {
         return await this._invoke('guiEditNote', {note: noteId});
