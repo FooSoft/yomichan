@@ -420,7 +420,9 @@ class DisplayAnki {
         return error;
     }
 
-    _showErrorNotification(errors) {
+    _showErrorNotification(errors, displayErrors) {
+        if (typeof displayErrors === 'undefined') { displayErrors = errors; }
+
         if (this._errorNotificationEventListeners !== null) {
             this._errorNotificationEventListeners.removeAllEventListeners();
         }
@@ -430,7 +432,7 @@ class DisplayAnki {
             this._errorNotificationEventListeners = new EventListenerCollection();
         }
 
-        const content = this._display.displayGenerator.createAnkiNoteErrorsNotificationContent(errors);
+        const content = this._display.displayGenerator.createAnkiNoteErrorsNotificationContent(displayErrors);
         for (const node of content.querySelectorAll('.anki-note-error-log-link')) {
             this._errorNotificationEventListeners.addEventListener(node, 'click', () => {
                 console.log({ankiNoteErrors: errors});
@@ -636,10 +638,24 @@ class DisplayAnki {
         }
     }
 
-    _viewNote(node) {
+    async _viewNote(node) {
         const noteIds = this._getNodeNoteIds(node);
         if (noteIds.length === 0) { return; }
-        yomichan.api.noteView(noteIds[0], this._noteGuiMode);
+        const preferredMode = this._noteGuiMode;
+        let actualMode;
+        try {
+            actualMode = await yomichan.api.noteView(noteIds[0], preferredMode);
+        } catch (e) {
+            this._showErrorNotification([e]);
+            return;
+        }
+        if (preferredMode !== actualMode) {
+            const error = new Error('Preferred note window could not be opened.');
+            error.preferredMode = preferredMode;
+            error.actualMode = actualMode;
+            const displayError = this._display.displayGenerator.instantiateTemplateFragment('footer-notification-anki-view-note-error');
+            this._showErrorNotification([error], [displayError]);
+        }
     }
 
     _showViewNoteMenu(node) {
