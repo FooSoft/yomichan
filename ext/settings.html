@@ -1764,18 +1764,39 @@
                 <label class="toggle"><input type="checkbox" data-setting="anki.suspendNewCards"><span class="toggle-body"><span class="toggle-track"></span><span class="toggle-knob"></span></span></label>
             </div>
         </div></div>
-        <div class="settings-item advanced-only"><div class="settings-item-inner">
-            <div class="settings-item-left">
-                <div class="settings-item-label">View note window</div>
-                <div class="settings-item-description">Change what window is shown when viewing a note.</div>
+        <div class="settings-item advanced-only">
+            <div class="settings-item-inner">
+                <div class="settings-item-left">
+                    <div class="settings-item-label">Note viewer window</div>
+                    <div class="settings-item-description">
+                        Clicking the <em>View added note</em> button shows this window.
+                        <a tabindex="0" class="more-toggle more-only" data-parent-distance="4">More&hellip;</a>
+                    </div>
+                </div>
+                <div class="settings-item-right">
+                    <select data-setting="anki.noteGuiMode">
+                        <option value="browse">Card browser</option>
+                        <option value="edit">Note editor</option>
+                    </select>
+                </div>
             </div>
-            <div class="settings-item-right">
-                <select data-setting="anki.noteGuiMode">
-                    <option value="browse">Card browser</option>
-                    <option value="edit">Note editor</option>
-                </select>
+            <div class="settings-item-children more" hidden>
+                <p>
+                    AnkiConnect releases after around 2022-05-20 support a new note editor window
+                    which can be shown when clicking the <em>View added note</em> button.
+                    This can be tested using the buttons below.
+                    If an error occurs, you may need to update Anki and/or AnkiConnect.
+                </p>
+                <div class="margin-above flex-row-nowrap">
+                    <button class="test-anki-note-viewer-button" data-mode="browse">Test <em>Card browser</em></button>
+                    <button class="test-anki-note-viewer-button flex-margin-left" data-mode="edit">Test <em>Note editor</em></button>
+                    <div id="test-anki-note-viewer-results" class="flex-margin-left" hidden></div>
+                </div>
+                <p class="margin-above">
+                    <a tabindex="0" class="more-toggle" data-parent-distance="3">Less&hellip;</a>
+                </p>
             </div>
-        </div></div>
+        </div>
         <div class="settings-item advanced-only">
             <div class="settings-item-inner">
                 <div class="settings-item-left">
