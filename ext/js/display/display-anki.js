@@ -641,9 +641,8 @@ class DisplayAnki {
     async _viewNote(node) {
         const noteIds = this._getNodeNoteIds(node);
         if (noteIds.length === 0) { return; }
-        const preferredMode = this._noteGuiMode;
         try {
-            await yomichan.api.noteView(noteIds[0], preferredMode, false);
+            await yomichan.api.noteView(noteIds[0], this._noteGuiMode, false);
         } catch (e) {
             const displayErrors = (
                 e.message === 'Mode not supported' ?
