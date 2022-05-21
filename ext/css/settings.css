@@ -2150,7 +2150,7 @@ button.hotkey-list-item-enabled-button[data-scope-count='0'] {
 .test-anki-note-viewer-container {
     margin-top: 0.85em;
     display: flex;
-    flex-flow: row;
+    flex-flow: row wrap;
     align-items: flex-start;
 }
 .test-anki-note-viewer-container>:nth-child(n+2) {
