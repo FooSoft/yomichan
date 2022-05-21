@@ -348,20 +348,14 @@ class AnkiController {
     }
 
     async _testAnkiNoteViewerSafe(mode) {
-        let message;
-        let success = false;
+        this._setAnkiNoteViewerStatus(false, null);
         try {
             await this._testAnkiNoteViewer(mode);
-            message = 'Success!';
-            success = true;
         } catch (e) {
-            message = e.message;
+            this._setAnkiNoteViewerStatus(true, e);
+            return;
         }
-
-        const target = document.querySelector('#test-anki-note-viewer-results');
-        target.textContent = message;
-        target.dataset.success = `${success}`;
-        target.hidden = false;
+        this._setAnkiNoteViewerStatus(true, null);
     }
 
     async _testAnkiNoteViewer(mode) {
@@ -386,6 +380,19 @@ class AnkiController {
         }
 
         await yomichan.api.noteView(noteId, mode, false);
+    }
+
+    _setAnkiNoteViewerStatus(visible, error) {
+        const node = document.querySelector('#test-anki-note-viewer-results');
+        if (visible) {
+            const success = (error === null);
+            node.textContent = success ? 'Success!' : error.message;
+            node.dataset.success = `${success}`;
+        } else {
+            node.textContent = '';
+            delete node.dataset.success;
+        }
+        node.hidden = !visible;
     }
 }
 
