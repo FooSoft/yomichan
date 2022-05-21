@@ -512,13 +512,17 @@ class Backend {
         );
     }
 
-    async _onApiNoteView({noteId, mode}) {
+    async _onApiNoteView({noteId, mode, allowFallback}) {
         if (mode === 'edit') {
             try {
                 await this._anki.guiEditNote(noteId);
                 return 'edit';
             } catch (e) {
-                // Not supported
+                if (!this._anki.isErrorUnsupportedAction(e)) {
+                    throw e;
+                } else if (!allowFallback) {
+                    throw new Error('Mode not supported');
+                }
             }
         }
         // Fallback

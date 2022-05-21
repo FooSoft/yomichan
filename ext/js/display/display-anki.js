@@ -642,19 +642,16 @@ class DisplayAnki {
         const noteIds = this._getNodeNoteIds(node);
         if (noteIds.length === 0) { return; }
         const preferredMode = this._noteGuiMode;
-        let actualMode;
         try {
-            actualMode = await yomichan.api.noteView(noteIds[0], preferredMode);
+            await yomichan.api.noteView(noteIds[0], preferredMode, false);
         } catch (e) {
-            this._showErrorNotification([e]);
+            const displayErrors = (
+                e.message === 'Mode not supported' ?
+                [this._display.displayGenerator.instantiateTemplateFragment('footer-notification-anki-view-note-error')] :
+                void 0
+            );
+            this._showErrorNotification([e], displayErrors);
             return;
-        }
-        if (preferredMode !== actualMode) {
-            const error = new Error('Preferred note window could not be opened.');
-            error.preferredMode = preferredMode;
-            error.actualMode = actualMode;
-            const displayError = this._display.displayGenerator.instantiateTemplateFragment('footer-notification-anki-view-note-error');
-            this._showErrorNotification([error], [displayError]);
         }
     }
 
