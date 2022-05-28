@@ -50,10 +50,10 @@ class RequestBuilder {
             types: ['xmlhttprequest']
         };
 
-        let done = false;
+        let requestId = null;
         const onBeforeSendHeadersCallback = (details) => {
-            if (done || details.url !== url) { return {}; }
-            done = true;
+            if (requestId !== null || details.url !== url) { return {}; }
+            ({requestId} = details);
 
             const requestHeaders = details.requestHeaders;
             this._modifyHeaders(requestHeaders, modifications);
