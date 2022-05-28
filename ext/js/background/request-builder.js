@@ -17,7 +17,6 @@
 
 class RequestBuilder {
     constructor() {
-        this._extraHeadersSupported = null;
         this._onBeforeSendHeadersExtraInfoSpec = ['blocking', 'requestHeaders', 'extraHeaders'];
         this._textEncoder = new TextEncoder();
         this._ruleIds = new Set();
@@ -49,7 +48,7 @@ class RequestBuilder {
         const matchURL = this._getMatchURL(url);
 
         let done = false;
-        const callback = (details) => {
+        const onBeforeSendHeadersCallback = (details) => {
             if (done || details.url !== url) { return {}; }
             done = true;
 
@@ -62,48 +61,49 @@ class RequestBuilder {
             types: ['xmlhttprequest']
         };
 
-        let needsCleanup = false;
-        try {
-            this._onBeforeSendHeadersAddListener(callback, filter);
-            needsCleanup = true;
-        } catch (e) {
-            // NOP
-        }
+        const eventListeners = [];
+        this._addWebRequestEventListener(chrome.webRequest.onBeforeSendHeaders, onBeforeSendHeadersCallback, filter, this._onBeforeSendHeadersExtraInfoSpec, eventListeners);
 
         try {
             return await fetch(url, init);
         } finally {
-            if (needsCleanup) {
-                try {
-                    chrome.webRequest.onBeforeSendHeaders.removeListener(callback);
-                } catch (e) {
-                    // NOP
-                }
-            }
+            this._removeWebRequestEventListeners(eventListeners);
         }
     }
 
-    _onBeforeSendHeadersAddListener(callback, filter) {
-        const extraInfoSpec = this._onBeforeSendHeadersExtraInfoSpec;
-        for (let i = 0; i < 2; ++i) {
-            try {
-                chrome.webRequest.onBeforeSendHeaders.addListener(callback, filter, extraInfoSpec);
-                if (this._extraHeadersSupported === null) {
-                    this._extraHeadersSupported = true;
-                }
-                break;
-            } catch (e) {
-                // Firefox doesn't support the 'extraHeaders' option and will throw the following error:
-                // Type error for parameter extraInfoSpec (Error processing 2: Invalid enumeration value "extraHeaders") for webRequest.onBeforeSendHeaders.
-                if (this._extraHeadersSupported !== null || !`${e.message}`.includes('extraHeaders')) {
+    _addWebRequestEventListener(target, callback, filter, extraInfoSpec, eventListeners) {
+        try {
+            for (let i = 0; i < 2; ++i) {
+                try {
+                    target.addListener(callback, filter, extraInfoSpec);
+                    break;
+                } catch (e) {
+                    // Firefox doesn't support the 'extraHeaders' option and will throw the following error:
+                    // Type error for parameter extraInfoSpec (Error processing 2: Invalid enumeration value "extraHeaders") for [target].
+                    if (i === 0 && `${e.message}`.includes('extraHeaders') && Array.isArray(extraInfoSpec)) {
+                        const index = extraInfoSpec.indexOf('extraHeaders');
+                        if (index >= 0) {
+                            extraInfoSpec.splice(index, 1);
+                            continue;
+                        }
+                    }
                     throw e;
                 }
             }
+        } catch (e) {
+            console.log(e);
+            return;
+        }
+        eventListeners.push({target, callback});
+    }
 
-            // addListener failed; remove 'extraHeaders' from extraInfoSpec.
-            this._extraHeadersSupported = false;
-            const index = extraInfoSpec.indexOf('extraHeaders');
-            if (index >= 0) { extraInfoSpec.splice(index, 1); }
+    _removeWebRequestEventListeners(eventListeners) {
+        for (const {target, callback} of eventListeners) {
+            try {
+                target.removeListener(callback);
+            } catch (e) {
+                console.log(e);
+            }
         }
     }
 
