@@ -60,11 +60,37 @@ class RequestBuilder {
             return {requestHeaders};
         };
 
+        let errorDetailsTimer = null;
+        let {promise: errorDetailsPromise, resolve: errorDetailsResolve} = deferPromise();
+        const onErrorOccurredCallback = (details) => {
+            if (errorDetailsResolve === null || details.requestId !== requestId) { return; }
+            if (errorDetailsTimer !== null) {
+                clearTimeout(errorDetailsTimer);
+                errorDetailsTimer = null;
+            }
+            errorDetailsResolve(details);
+            errorDetailsResolve = null;
+        };
+
         const eventListeners = [];
         this._addWebRequestEventListener(chrome.webRequest.onBeforeSendHeaders, onBeforeSendHeadersCallback, filter, this._onBeforeSendHeadersExtraInfoSpec, eventListeners);
+        this._addWebRequestEventListener(chrome.webRequest.onErrorOccurred, onErrorOccurredCallback, filter, void 0, eventListeners);
 
         try {
             return await fetch(url, init);
+        } catch (e) {
+            // onErrorOccurred is not always invoked by this point, so a delay is needed
+            if (errorDetailsResolve !== null) {
+                errorDetailsTimer = setTimeout(() => {
+                    errorDetailsTimer = null;
+                    if (errorDetailsResolve === null) { return; }
+                    errorDetailsResolve(null);
+                    errorDetailsResolve = null;
+                }, 100);
+            }
+            const details = await errorDetailsPromise;
+            e.data = {details};
+            throw e;
         } finally {
             this._removeWebRequestEventListeners(eventListeners);
         }
