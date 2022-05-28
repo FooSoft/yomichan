@@ -229,7 +229,7 @@ class RequestBuilder {
 
             await this._updateDynamicRules({addRules});
             try {
-                return await fetch(url, init);
+                return await this._fetchInternal(url, init, null);
             } finally {
                 await this._tryUpdateDynamicRules({removeRuleIds: [id]});
             }
