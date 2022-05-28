@@ -35,16 +35,16 @@ class RequestBuilder {
             return await this._fetchAnonymousDeclarative(url, init);
         }
         const originURL = this._getOriginURL(url);
-        const modifications = [
+        const headerModifications = [
             ['cookie', null],
             ['origin', {name: 'Origin', value: originURL}]
         ];
-        return await this._fetchModifyHeaders(url, init, modifications);
+        return await this._fetchInternal(url, init, headerModifications);
     }
 
     // Private
 
-    async _fetchModifyHeaders(url, init, modifications) {
+    async _fetchInternal(url, init, headerModifications) {
         const filter = {
             urls: [this._getMatchURL(url)],
             types: ['xmlhttprequest']
@@ -56,7 +56,7 @@ class RequestBuilder {
             ({requestId} = details);
 
             const requestHeaders = details.requestHeaders;
-            this._modifyHeaders(requestHeaders, modifications);
+            this._modifyHeaders(requestHeaders, headerModifications);
             return {requestHeaders};
         };
 
