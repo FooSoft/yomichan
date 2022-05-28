@@ -45,7 +45,10 @@ class RequestBuilder {
     // Private
 
     async _fetchModifyHeaders(url, init, modifications) {
-        const matchURL = this._getMatchURL(url);
+        const filter = {
+            urls: [this._getMatchURL(url)],
+            types: ['xmlhttprequest']
+        };
 
         let done = false;
         const onBeforeSendHeadersCallback = (details) => {
@@ -55,10 +58,6 @@ class RequestBuilder {
             const requestHeaders = details.requestHeaders;
             this._modifyHeaders(requestHeaders, modifications);
             return {requestHeaders};
-        };
-        const filter = {
-            urls: [matchURL],
-            types: ['xmlhttprequest']
         };
 
         const eventListeners = [];
