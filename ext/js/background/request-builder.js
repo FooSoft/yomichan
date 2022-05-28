@@ -74,7 +74,11 @@ class RequestBuilder {
         try {
             for (let i = 0; i < 2; ++i) {
                 try {
-                    target.addListener(callback, filter, extraInfoSpec);
+                    if (typeof extraInfoSpec === 'undefined') {
+                        target.addListener(callback, filter);
+                    } else {
+                        target.addListener(callback, filter, extraInfoSpec);
+                    }
                     break;
                 } catch (e) {
                     // Firefox doesn't support the 'extraHeaders' option and will throw the following error:
