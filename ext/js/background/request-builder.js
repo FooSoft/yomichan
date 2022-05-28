@@ -55,6 +55,8 @@ class RequestBuilder {
             if (requestId !== null || details.url !== url) { return {}; }
             ({requestId} = details);
 
+            if (headerModifications === null) { return {}; }
+
             const requestHeaders = details.requestHeaders;
             this._modifyHeaders(requestHeaders, headerModifications);
             return {requestHeaders};
@@ -73,7 +75,8 @@ class RequestBuilder {
         };
 
         const eventListeners = [];
-        this._addWebRequestEventListener(chrome.webRequest.onBeforeSendHeaders, onBeforeSendHeadersCallback, filter, this._onBeforeSendHeadersExtraInfoSpec, eventListeners);
+        const onBeforeSendHeadersExtraInfoSpec = (headerModifications !== null ? this._onBeforeSendHeadersExtraInfoSpec : []);
+        this._addWebRequestEventListener(chrome.webRequest.onBeforeSendHeaders, onBeforeSendHeadersCallback, filter, onBeforeSendHeadersExtraInfoSpec, eventListeners);
         this._addWebRequestEventListener(chrome.webRequest.onErrorOccurred, onErrorOccurredCallback, filter, void 0, eventListeners);
 
         try {
