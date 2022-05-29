@@ -25,6 +25,7 @@
  * DictionaryImportController
  * DocumentFocusController
  * Environment
+ * ExtensionContentController
  * ExtensionKeyboardShortcutController
  * GenericSettingController
  * KeyboardShortcutController
@@ -70,6 +71,9 @@ async function setupGenericSettingsController(genericSettingController) {
     try {
         const documentFocusController = new DocumentFocusController();
         documentFocusController.prepare();
+
+        const extensionContentController = new ExtensionContentController();
+        extensionContentController.prepare();
 
         const statusFooter = new StatusFooter(document.querySelector('.status-footer-container'));
         statusFooter.prepare();
