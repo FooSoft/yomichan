@@ -15,13 +15,31 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/* global
+ * Environment
+ */
+
 class ExtensionContentController {
     prepare() {
         this._prepareSpecialUrls();
         this._prepareExtensionIdExamples();
+        this._prepareEnvironmentInfo();
     }
 
     // Private
+
+    async _prepareEnvironmentInfo() {
+        const {dataset} = document.documentElement;
+        const {manifest_version: manifestVersion} = chrome.runtime.getManifest();
+        dataset.manifestVersion = `${manifestVersion}`;
+
+        const environment = new Environment();
+        await environment.prepare();
+
+        const {browser, platform} = environment.getInfo();
+        dataset.browser = browser;
+        dataset.os = platform.os;
+    }
 
     _prepareExtensionIdExamples() {
         const nodes = document.querySelectorAll('.extension-id-example');

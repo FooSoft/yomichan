@@ -24,7 +24,6 @@
  * DictionaryController
  * DictionaryImportController
  * DocumentFocusController
- * Environment
  * ExtensionContentController
  * ExtensionKeyboardShortcutController
  * GenericSettingController
@@ -49,19 +48,6 @@
  * TranslationTextReplacementsController
  */
 
-async function setupEnvironmentInfo() {
-    const {dataset} = document.documentElement;
-    const {manifest_version: manifestVersion} = chrome.runtime.getManifest();
-    dataset.manifestVersion = `${manifestVersion}`;
-
-    const environment = new Environment();
-    await environment.prepare();
-    const {browser, platform} = environment.getInfo();
-
-    dataset.browser = browser;
-    dataset.os = platform.os;
-}
-
 async function setupGenericSettingsController(genericSettingController) {
     await genericSettingController.prepare();
     await genericSettingController.refresh();
@@ -77,8 +63,6 @@ async function setupGenericSettingsController(genericSettingController) {
 
         const statusFooter = new StatusFooter(document.querySelector('.status-footer-container'));
         statusFooter.prepare();
-
-        setupEnvironmentInfo();
 
         let prepareTimer = setTimeout(() => {
             prepareTimer = null;
