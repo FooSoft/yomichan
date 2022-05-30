@@ -83,9 +83,14 @@ class AnkiController {
         ankiApiKeyInput.addEventListener('focus', this._onApiKeyInputFocus.bind(this));
         ankiApiKeyInput.addEventListener('blur', this._onApiKeyInputBlur.bind(this));
 
-        const options = await this._settingsController.getOptions();
+        const onAnkiSettingChanged = () => { this._updateOptions(); };
+        const nodes = [ankiApiKeyInput, ...document.querySelectorAll('[data-setting="anki.enable"]')];
+        for (const node of nodes) {
+            node.addEventListener('settingChanged', onAnkiSettingChanged);
+        }
+
+        await this._updateOptions();
         this._settingsController.on('optionsChanged', this._onOptionsChanged.bind(this));
-        this._onOptionsChanged({options});
     }
 
     getFieldMarkers(type) {
@@ -167,6 +172,11 @@ class AnkiController {
     }
 
     // Private
+
+    async _updateOptions() {
+        const options = await this._settingsController.getOptions();
+        this._onOptionsChanged({options});
+    }
 
     async _onOptionsChanged({options: {anki}}) {
         let {apiKey} = anki;
