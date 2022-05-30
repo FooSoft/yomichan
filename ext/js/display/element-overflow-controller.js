@@ -32,6 +32,7 @@ class ElementOverflowController {
         for (const {name, definitionsCollapsible} of options.dictionaries) {
             let collapsible = false;
             let collapsed = false;
+            let force = false;
             switch (definitionsCollapsible) {
                 case 'expanded':
                     collapsible = true;
@@ -40,9 +41,18 @@ class ElementOverflowController {
                     collapsible = true;
                     collapsed = true;
                     break;
+                case 'force-expanded':
+                    collapsible = true;
+                    force = true;
+                    break;
+                case 'force-collapsed':
+                    collapsible = true;
+                    collapsed = true;
+                    force = true;
+                    break;
             }
             if (!collapsible) { continue; }
-            this._dictionaries.set(name, {collapsed});
+            this._dictionaries.set(name, {collapsed, force});
         }
     }
 
@@ -56,8 +66,12 @@ class ElementOverflowController {
             const dictionaryInfo = this._dictionaries.get(dictionary);
             if (typeof dictionaryInfo === 'undefined') { continue; }
 
-            this._updateElement(element);
-            this._elements.push(element);
+            if (dictionaryInfo.force) {
+                element.classList.add('collapsible', 'collapsible-forced');
+            } else {
+                this._updateElement(element);
+                this._elements.push(element);
+            }
 
             if (dictionaryInfo.collapsed) {
                 element.classList.add('collapsed');
@@ -77,8 +91,7 @@ class ElementOverflowController {
     }
 
     clearElements() {
-        if (this._elements.length === 0) { return; }
-        this._elements = [];
+        this._elements.length = 0;
         this._windowEventListeners.removeAllEventListeners();
     }
 
