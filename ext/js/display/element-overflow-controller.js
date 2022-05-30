@@ -60,7 +60,6 @@ class ElementOverflowController {
         if (this._dictionaries.size === 0) { return; }
 
         const elements = entry.querySelectorAll('.definition-item-inner');
-        let any = false;
         for (const element of elements) {
             const {dictionary} = element.parentNode.dataset;
             const dictionaryInfo = this._dictionaries.get(dictionary);
@@ -81,11 +80,9 @@ class ElementOverflowController {
             if (button !== null) {
                 this._eventListeners.addEventListener(button, 'click', this._onToggleButtonClickBind, false);
             }
-
-            any = true;
         }
 
-        if (any && this._windowEventListeners.size === 0) {
+        if (this._elements.length > 0 && this._windowEventListeners.size === 0) {
             this._windowEventListeners.addEventListener(window, 'resize', this._onWindowResizeBind, false);
         }
     }
