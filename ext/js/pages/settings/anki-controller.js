@@ -169,8 +169,11 @@ class AnkiController {
     // Private
 
     async _onOptionsChanged({options: {anki}}) {
+        let {apiKey} = anki;
+        if (apiKey === '') { apiKey = null; }
         this._ankiConnect.server = anki.server;
         this._ankiConnect.enabled = anki.enable;
+        this._ankiConnect.apiKey = apiKey;
 
         this._selectorObserver.disconnect();
         this._selectorObserver.observe(document.documentElement, true);
