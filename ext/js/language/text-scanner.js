@@ -515,7 +515,12 @@ class TextScanner extends EventDispatcher {
 
         this._primaryTouchIdentifier = identifier;
 
-        this._searchAtFromTouchStart(e, x, y);
+        if (this._pendingLookup) { return; }
+
+        const inputInfo = this._getMatchingInputGroupFromEvent('touch', 'touchStart', e);
+        if (inputInfo === null) { return; }
+
+        this._searchAtFromTouchStart(x, y, inputInfo);
     }
 
     _onTouchEnd(e) {
@@ -953,12 +958,7 @@ class TextScanner extends EventDispatcher {
         await this._searchAt(x, y, inputInfo);
     }
 
-    async _searchAtFromTouchStart(e, x, y) {
-        if (this._pendingLookup) { return; }
-
-        const inputInfo = this._getMatchingInputGroupFromEvent('touch', 'touchStart', e);
-        if (inputInfo === null) { return; }
-
+    async _searchAtFromTouchStart(x, y, inputInfo) {
         const textSourceCurrentPrevious = this._textSourceCurrent !== null ? this._textSourceCurrent.clone() : null;
         const preventScroll = inputInfo.input.options.preventTouchScrolling;
 
