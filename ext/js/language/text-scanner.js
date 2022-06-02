@@ -524,12 +524,10 @@ class TextScanner extends EventDispatcher {
     }
 
     _onTouchEnd(e) {
-        if (
-            this._primaryTouchIdentifier === null ||
-            this._getTouch(e.changedTouches, this._primaryTouchIdentifier) === null
-        ) {
-            return;
-        }
+        if (this._primaryTouchIdentifier === null) { return; }
+
+        const primaryTouch = this._getTouch(e.changedTouches, this._primaryTouchIdentifier);
+        if (primaryTouch === null) { return; }
 
         this._onPrimaryTouchEnd();
     }
