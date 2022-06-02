@@ -982,7 +982,7 @@ class TextScanner extends EventDispatcher {
         const inputInfo = this._getMatchingInputGroupFromEvent('pen', eventType, e);
         if (inputInfo === null) { return; }
 
-        const {input: {options}} = inputInfo;
+        const {options} = inputInfo.input;
         if (
             (!options.scanOnPenReleaseHover && this._penPointerReleased) ||
             !(this._penPointerPressed ? options.scanOnPenMove : options.scanOnPenHover)
@@ -990,7 +990,7 @@ class TextScanner extends EventDispatcher {
             return;
         }
 
-        const preventScroll = inputInfo.input.options.preventTouchScrolling;
+        const preventScroll = options.preventTouchScrolling;
 
         await this._searchAt(x, y, inputInfo);
 
