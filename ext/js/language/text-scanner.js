@@ -983,12 +983,7 @@ class TextScanner extends EventDispatcher {
         if (inputInfo === null) { return; }
 
         const {options} = inputInfo.input;
-        if (
-            (!options.scanOnPenReleaseHover && this._penPointerReleased) ||
-            !(this._penPointerPressed ? options.scanOnPenMove : options.scanOnPenHover)
-        ) {
-            return;
-        }
+        if (!this._isPenEventSupported(options)) { return; }
 
         const preventScroll = options.preventTouchScrolling;
 
@@ -1003,6 +998,16 @@ class TextScanner extends EventDispatcher {
             this._preventNextMouseDown = true;
             this._preventNextClick = true;
         }
+    }
+
+    _isPenEventSupported(options) {
+        if (
+            (!options.scanOnPenReleaseHover && this._penPointerReleased) ||
+            !(this._penPointerPressed ? options.scanOnPenMove : options.scanOnPenHover)
+        ) {
+            return false;
+        }
+        return true;
     }
 
     _getMatchingInputGroupFromEvent(pointerType, eventType, event) {
