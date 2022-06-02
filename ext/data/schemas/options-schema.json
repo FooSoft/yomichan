@@ -460,7 +460,7 @@
                                                     "scanOnTouchPress": true,
                                                     "scanOnPenMove": true,
                                                     "scanOnPenHover": true,
-                                                    "scanOnPenRelease": false,
+                                                    "scanOnPenReleaseHover": false,
                                                     "preventTouchScrolling": false,
                                                     "preventPenScrolling": false
                                                 }
@@ -481,7 +481,7 @@
                                                     "scanOnTouchPress": true,
                                                     "scanOnPenMove": true,
                                                     "scanOnPenHover": true,
-                                                    "scanOnPenRelease": false,
+                                                    "scanOnPenReleaseHover": false,
                                                     "preventTouchScrolling": true,
                                                     "preventPenScrolling": true
                                                 }
@@ -535,7 +535,7 @@
                                                         "scanOnTouchPress",
                                                         "scanOnPenMove",
                                                         "scanOnPenHover",
-                                                        "scanOnPenRelease",
+                                                        "scanOnPenReleaseHover",
                                                         "preventTouchScrolling",
                                                         "preventPenScrolling"
                                                     ],
@@ -568,7 +568,7 @@
                                                             "type": "boolean",
                                                             "default": true
                                                         },
-                                                        "scanOnPenRelease": {
+                                                        "scanOnPenReleaseHover": {
                                                             "type": "boolean",
                                                             "default": false
                                                         },

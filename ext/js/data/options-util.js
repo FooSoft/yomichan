@@ -956,6 +956,7 @@ class OptionsUtil {
         //  Added scanning.inputs[].options.scanOnTouchPress.
         //  Added scanning.inputs[].options.preventPenScrolling.
         //  Renamed scanning.inputs[].options.scanOnPenPress to scanOnPenMove.
+        //  Renamed scanning.inputs[].options.scanOnPenRelease to scanOnPenReleaseHover.
         for (const profile of options.profiles) {
             profile.options.anki.noteGuiMode = 'browse';
             profile.options.anki.apiKey = '';
@@ -964,6 +965,8 @@ class OptionsUtil {
                 input.options.preventPenScrolling = input.options.preventTouchScrolling;
                 input.options.scanOnPenMove = input.options.scanOnPenPress;
                 delete input.options.scanOnPenPress;
+                input.options.scanOnPenReleaseHover = input.options.scanOnPenRelease;
+                delete input.options.scanOnPenRelease;
             }
         }
         return options;

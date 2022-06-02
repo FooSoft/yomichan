@@ -171,7 +171,7 @@ class TextScanner extends EventDispatcher {
                     scanOnTouchPress,
                     scanOnPenMove,
                     scanOnPenHover,
-                    scanOnPenRelease,
+                    scanOnPenReleaseHover,
                     preventTouchScrolling,
                     preventPenScrolling
                 }
@@ -186,7 +186,7 @@ class TextScanner extends EventDispatcher {
                     scanOnTouchPress,
                     scanOnPenMove,
                     scanOnPenHover,
-                    scanOnPenRelease,
+                    scanOnPenReleaseHover,
                     preventTouchScrolling,
                     preventPenScrolling
                 }
@@ -984,7 +984,7 @@ class TextScanner extends EventDispatcher {
 
         const {input: {options}} = inputInfo;
         if (
-            (!options.scanOnPenRelease && this._penPointerReleased) ||
+            (!options.scanOnPenReleaseHover && this._penPointerReleased) ||
             !(this._penPointerPressed ? options.scanOnPenMove : options.scanOnPenHover)
         ) {
             return;

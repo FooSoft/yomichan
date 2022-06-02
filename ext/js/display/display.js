@@ -1519,7 +1519,7 @@ class Display extends EventDispatcher {
                     scanOnTouchPress: false,
                     scanOnPenMove: false,
                     scanOnPenHover: false,
-                    scanOnPenRelease: false,
+                    scanOnPenReleaseHover: false,
                     preventTouchScrolling: false,
                     preventPenScrolling: false
                 }
