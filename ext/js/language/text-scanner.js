@@ -172,7 +172,8 @@ class TextScanner extends EventDispatcher {
                     scanOnPenHover,
                     scanOnPenPress,
                     scanOnPenRelease,
-                    preventTouchScrolling
+                    preventTouchScrolling,
+                    preventPenScrolling
                 }
             }) => ({
                 include: this._getInputArray(include),
@@ -186,7 +187,8 @@ class TextScanner extends EventDispatcher {
                     scanOnPenHover,
                     scanOnPenPress,
                     scanOnPenRelease,
-                    preventTouchScrolling
+                    preventTouchScrolling,
+                    preventPenScrolling
                 }
             }));
         }
@@ -960,7 +962,7 @@ class TextScanner extends EventDispatcher {
 
     async _searchAtFromTouchStart(x, y, inputInfo) {
         const textSourceCurrentPrevious = this._textSourceCurrent !== null ? this._textSourceCurrent.clone() : null;
-        const preventScroll = inputInfo.input.options.preventTouchScrolling;
+        const preventScroll = inputInfo.input.options.preventPenScrolling;
 
         await this._searchAt(x, y, inputInfo);
 

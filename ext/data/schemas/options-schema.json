@@ -461,7 +461,8 @@
                                                     "scanOnPenHover": true,
                                                     "scanOnPenPress": true,
                                                     "scanOnPenRelease": false,
-                                                    "preventTouchScrolling": false
+                                                    "preventTouchScrolling": false,
+                                                    "preventPenScrolling": false
                                                 }
                                             },
                                             {
@@ -481,7 +482,8 @@
                                                     "scanOnPenHover": true,
                                                     "scanOnPenPress": true,
                                                     "scanOnPenRelease": false,
-                                                    "preventTouchScrolling": true
+                                                    "preventTouchScrolling": true,
+                                                    "preventPenScrolling": true
                                                 }
                                             }
                                         ],
@@ -534,7 +536,8 @@
                                                         "scanOnPenHover",
                                                         "scanOnPenPress",
                                                         "scanOnPenRelease",
-                                                        "preventTouchScrolling"
+                                                        "preventTouchScrolling",
+                                                        "preventPenScrolling"
                                                     ],
                                                     "properties": {
                                                         "showAdvanced": {
@@ -570,6 +573,10 @@
                                                             "default": false
                                                         },
                                                         "preventTouchScrolling": {
+                                                            "type": "boolean",
+                                                            "default": true
+                                                        },
+                                                        "preventPenScrolling": {
                                                             "type": "boolean",
                                                             "default": true
                                                         }

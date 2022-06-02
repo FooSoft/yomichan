@@ -954,11 +954,13 @@ class OptionsUtil {
         //  Added anki.noteGuiMode.
         //  Added anki.apiKey.
         //  Added scanning.inputs[].options.scanOnTouchPress.
+        //  Added scanning.inputs[].options.preventPenScrolling.
         for (const profile of options.profiles) {
             profile.options.anki.noteGuiMode = 'browse';
             profile.options.anki.apiKey = '';
             for (const input of profile.options.scanning.inputs) {
                 input.options.scanOnTouchPress = true;
+                input.options.preventPenScrolling = input.options.preventTouchScrolling;
             }
         }
         return options;

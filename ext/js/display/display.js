@@ -1520,7 +1520,8 @@ class Display extends EventDispatcher {
                     scanOnPenHover: false,
                     scanOnPenPress: false,
                     scanOnPenRelease: false,
-                    preventTouchScrolling: false
+                    preventTouchScrolling: false,
+                    preventPenScrolling: false
                 }
             }],
             deepContentScan: scanningOptions.deepDomScan,

@@ -154,7 +154,8 @@ class ScanInputsController {
                 scanOnPenHover: true,
                 scanOnPenPress: true,
                 scanOnPenRelease: false,
-                preventTouchScrolling: true
+                preventTouchScrolling: true,
+                preventPenScrolling: true
             }
         };
     }

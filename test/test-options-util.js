@@ -371,7 +371,8 @@ function createProfileOptionsUpdatedTestData1() {
                         scanOnPenHover: true,
                         scanOnPenPress: true,
                         scanOnPenRelease: false,
-                        preventTouchScrolling: true
+                        preventTouchScrolling: true,
+                        preventPenScrolling: true
                     }
                 },
                 {
@@ -391,7 +392,8 @@ function createProfileOptionsUpdatedTestData1() {
                         scanOnPenHover: true,
                         scanOnPenPress: true,
                         scanOnPenRelease: false,
-                        preventTouchScrolling: true
+                        preventTouchScrolling: true,
+                        preventPenScrolling: true
                     }
                 },
                 {
@@ -411,7 +413,8 @@ function createProfileOptionsUpdatedTestData1() {
                         scanOnPenHover: true,
                         scanOnPenPress: true,
                         scanOnPenRelease: false,
-                        preventTouchScrolling: true
+                        preventTouchScrolling: true,
+                        preventPenScrolling: true
                     }
                 }
             ]
