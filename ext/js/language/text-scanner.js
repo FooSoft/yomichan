@@ -652,7 +652,7 @@ class TextScanner extends EventDispatcher {
 
     _onTouchPointerDown(e) {
         const {clientX, clientY, pointerId} = e;
-        return this._onPrimaryTouchStart(e, clientX, clientY, pointerId);
+        this._onPrimaryTouchStart(e, clientX, clientY, pointerId);
     }
 
     _onTouchPointerMove(e) {
