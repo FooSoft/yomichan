@@ -368,8 +368,8 @@ function createProfileOptionsUpdatedTestData1() {
                         searchKanji: true,
                         scanOnTouchMove: true,
                         scanOnTouchPress: true,
+                        scanOnPenMove: true,
                         scanOnPenHover: true,
-                        scanOnPenPress: true,
                         scanOnPenRelease: false,
                         preventTouchScrolling: true,
                         preventPenScrolling: true
@@ -389,8 +389,8 @@ function createProfileOptionsUpdatedTestData1() {
                         searchKanji: true,
                         scanOnTouchMove: true,
                         scanOnTouchPress: true,
+                        scanOnPenMove: true,
                         scanOnPenHover: true,
-                        scanOnPenPress: true,
                         scanOnPenRelease: false,
                         preventTouchScrolling: true,
                         preventPenScrolling: true
@@ -410,8 +410,8 @@ function createProfileOptionsUpdatedTestData1() {
                         searchKanji: true,
                         scanOnTouchMove: true,
                         scanOnTouchPress: true,
+                        scanOnPenMove: true,
                         scanOnPenHover: true,
-                        scanOnPenPress: true,
                         scanOnPenRelease: false,
                         preventTouchScrolling: true,
                         preventPenScrolling: true

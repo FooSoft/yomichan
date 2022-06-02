@@ -458,8 +458,8 @@
                                                     "searchKanji": true,
                                                     "scanOnTouchMove": true,
                                                     "scanOnTouchPress": true,
+                                                    "scanOnPenMove": true,
                                                     "scanOnPenHover": true,
-                                                    "scanOnPenPress": true,
                                                     "scanOnPenRelease": false,
                                                     "preventTouchScrolling": false,
                                                     "preventPenScrolling": false
@@ -479,8 +479,8 @@
                                                     "searchKanji": true,
                                                     "scanOnTouchMove": true,
                                                     "scanOnTouchPress": true,
+                                                    "scanOnPenMove": true,
                                                     "scanOnPenHover": true,
-                                                    "scanOnPenPress": true,
                                                     "scanOnPenRelease": false,
                                                     "preventTouchScrolling": true,
                                                     "preventPenScrolling": true
@@ -533,8 +533,8 @@
                                                         "searchKanji",
                                                         "scanOnTouchMove",
                                                         "scanOnTouchPress",
+                                                        "scanOnPenMove",
                                                         "scanOnPenHover",
-                                                        "scanOnPenPress",
                                                         "scanOnPenRelease",
                                                         "preventTouchScrolling",
                                                         "preventPenScrolling"
@@ -560,11 +560,11 @@
                                                             "type": "boolean",
                                                             "default": true
                                                         },
-                                                        "scanOnPenHover": {
+                                                        "scanOnPenMove": {
                                                             "type": "boolean",
                                                             "default": true
                                                         },
-                                                        "scanOnPenPress": {
+                                                        "scanOnPenHover": {
                                                             "type": "boolean",
                                                             "default": true
                                                         },

@@ -1517,8 +1517,8 @@ class Display extends EventDispatcher {
                     searchKanji: true,
                     scanOnTouchMove: false,
                     scanOnTouchPress: false,
+                    scanOnPenMove: false,
                     scanOnPenHover: false,
-                    scanOnPenPress: false,
                     scanOnPenRelease: false,
                     preventTouchScrolling: false,
                     preventPenScrolling: false

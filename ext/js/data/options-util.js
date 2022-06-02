@@ -955,12 +955,15 @@ class OptionsUtil {
         //  Added anki.apiKey.
         //  Added scanning.inputs[].options.scanOnTouchPress.
         //  Added scanning.inputs[].options.preventPenScrolling.
+        //  Renamed scanning.inputs[].options.scanOnPenPress to scanOnPenMove.
         for (const profile of options.profiles) {
             profile.options.anki.noteGuiMode = 'browse';
             profile.options.anki.apiKey = '';
             for (const input of profile.options.scanning.inputs) {
                 input.options.scanOnTouchPress = true;
                 input.options.preventPenScrolling = input.options.preventTouchScrolling;
+                input.options.scanOnPenMove = input.options.scanOnPenPress;
+                delete input.options.scanOnPenPress;
             }
         }
         return options;

@@ -169,8 +169,8 @@ class TextScanner extends EventDispatcher {
                     searchKanji,
                     scanOnTouchMove,
                     scanOnTouchPress,
+                    scanOnPenMove,
                     scanOnPenHover,
-                    scanOnPenPress,
                     scanOnPenRelease,
                     preventTouchScrolling,
                     preventPenScrolling
@@ -184,8 +184,8 @@ class TextScanner extends EventDispatcher {
                     searchKanji,
                     scanOnTouchMove,
                     scanOnTouchPress,
+                    scanOnPenMove,
                     scanOnPenHover,
-                    scanOnPenPress,
                     scanOnPenRelease,
                     preventTouchScrolling,
                     preventPenScrolling
@@ -985,7 +985,7 @@ class TextScanner extends EventDispatcher {
         const {input: {options}} = inputInfo;
         if (
             (!options.scanOnPenRelease && this._penPointerReleased) ||
-            !(this._penPointerPressed ? options.scanOnPenPress : options.scanOnPenHover)
+            !(this._penPointerPressed ? options.scanOnPenMove : options.scanOnPenHover)
         ) {
             return;
         }
