@@ -168,6 +168,7 @@ class TextScanner extends EventDispatcher {
                     searchTerms,
                     searchKanji,
                     scanOnTouchMove,
+                    scanOnTouchPress,
                     scanOnPenHover,
                     scanOnPenPress,
                     scanOnPenRelease,
@@ -181,6 +182,7 @@ class TextScanner extends EventDispatcher {
                     searchTerms,
                     searchKanji,
                     scanOnTouchMove,
+                    scanOnTouchPress,
                     scanOnPenHover,
                     scanOnPenPress,
                     scanOnPenRelease,
@@ -518,7 +520,7 @@ class TextScanner extends EventDispatcher {
         if (this._pendingLookup) { return; }
 
         const inputInfo = this._getMatchingInputGroupFromEvent('touch', 'touchStart', e);
-        if (inputInfo === null) { return; }
+        if (inputInfo === null || !inputInfo.input.options.scanOnTouchPress) { return; }
 
         this._searchAtFromTouchStart(x, y, inputInfo);
     }

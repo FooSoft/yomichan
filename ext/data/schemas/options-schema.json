@@ -457,6 +457,7 @@
                                                     "searchTerms": true,
                                                     "searchKanji": true,
                                                     "scanOnTouchMove": true,
+                                                    "scanOnTouchPress": true,
                                                     "scanOnPenHover": true,
                                                     "scanOnPenPress": true,
                                                     "scanOnPenRelease": false,
@@ -476,6 +477,7 @@
                                                     "searchTerms": true,
                                                     "searchKanji": true,
                                                     "scanOnTouchMove": true,
+                                                    "scanOnTouchPress": true,
                                                     "scanOnPenHover": true,
                                                     "scanOnPenPress": true,
                                                     "scanOnPenRelease": false,
@@ -528,6 +530,7 @@
                                                         "searchTerms",
                                                         "searchKanji",
                                                         "scanOnTouchMove",
+                                                        "scanOnTouchPress",
                                                         "scanOnPenHover",
                                                         "scanOnPenPress",
                                                         "scanOnPenRelease",
@@ -547,6 +550,10 @@
                                                             "default": true
                                                         },
                                                         "scanOnTouchMove": {
+                                                            "type": "boolean",
+                                                            "default": true
+                                                        },
+                                                        "scanOnTouchPress": {
                                                             "type": "boolean",
                                                             "default": true
                                                         },

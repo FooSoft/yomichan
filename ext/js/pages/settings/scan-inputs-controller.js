@@ -150,6 +150,7 @@ class ScanInputsController {
                 searchTerms: true,
                 searchKanji: true,
                 scanOnTouchMove: true,
+                scanOnTouchPress: true,
                 scanOnPenHover: true,
                 scanOnPenPress: true,
                 scanOnPenRelease: false,
