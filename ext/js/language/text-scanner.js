@@ -83,8 +83,7 @@ class TextScanner extends EventDispatcher {
         this._preventNextMouseDown = false;
         this._preventNextClick = false;
         this._preventScroll = false;
-        this._penPointerPressed = false;
-        this._penPointerReleased = false;
+        this._penPointerState = 0; // 0 = not active; 1 = hovering; 2 = touching; 3 = hovering after touching
         this._pointerIdTypeMap = new Map();
 
         this._canClearSelection = true;
@@ -135,8 +134,7 @@ class TextScanner extends EventDispatcher {
         this._preventNextMouseDown = false;
         this._preventNextClick = false;
         this._preventScroll = false;
-        this._penPointerPressed = false;
-        this._penPointerReleased = false;
+        this._penPointerState = 0;
         this._pointerIdTypeMap.clear();
 
         this._enabledValue = value;
@@ -696,24 +694,22 @@ class TextScanner extends EventDispatcher {
     }
 
     _onPenPointerOver(e) {
-        this._penPointerPressed = false;
-        this._penPointerReleased = false;
+        this._penPointerState = 1;
         this._searchAtFromPen(e, e.clientX, e.clientY, 'pointerOver', false);
     }
 
     _onPenPointerDown(e) {
-        this._penPointerPressed = true;
+        this._penPointerState = 2;
         this._searchAtFromPen(e, e.clientX, e.clientY, 'pointerDown', true);
     }
 
     _onPenPointerMove(e) {
-        if (this._penPointerPressed && (!this._preventScroll || !e.cancelable)) { return; }
+        if (this._penPointerState === 2 && (!this._preventScroll || !e.cancelable)) { return; }
         this._searchAtFromPen(e, e.clientX, e.clientY, 'pointerMove', true);
     }
 
     _onPenPointerUp() {
-        this._penPointerPressed = false;
-        this._penPointerReleased = true;
+        this._penPointerState = 3;
         this._preventScroll = false;
     }
 
@@ -722,8 +718,7 @@ class TextScanner extends EventDispatcher {
     }
 
     _onPenPointerOut() {
-        this._penPointerPressed = false;
-        this._penPointerReleased = false;
+        this._penPointerState = 0;
         this._preventScroll = false;
         this._preventNextContextMenu = false;
         this._preventNextMouseDown = false;
@@ -1001,13 +996,16 @@ class TextScanner extends EventDispatcher {
     }
 
     _isPenEventSupported(options) {
-        if (
-            (!options.scanOnPenReleaseHover && this._penPointerReleased) ||
-            !(this._penPointerPressed ? options.scanOnPenMove : options.scanOnPenHover)
-        ) {
-            return false;
+        switch (this._penPointerState) {
+            case 1: // hovering
+                return options.scanOnPenHover;
+            case 2: // touching
+                return options.scanOnPenMove;
+            case 3: // hovering after touching
+                return options.scanOnPenReleaseHover;
+            default: // not active
+                return false;
         }
-        return true;
     }
 
     _getMatchingInputGroupFromEvent(pointerType, eventType, event) {
