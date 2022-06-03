@@ -566,14 +566,17 @@ class TextScanner extends EventDispatcher {
     }
 
     _onTouchMove(e) {
-        if (!this._preventScroll || !e.cancelable || this._primaryTouchIdentifier === null) {
+        if (this._primaryTouchIdentifier === null) { return; }
+
+        if (!e.cancelable) {
+            this._onPrimaryTouchEnd(e, 0, 0, false);
             return;
         }
 
+        if (!this._preventScroll) { return; }
+
         const primaryTouch = this._getTouch(e.changedTouches, this._primaryTouchIdentifier);
-        if (primaryTouch === null) {
-            return;
-        }
+        if (primaryTouch === null) { return; }
 
         const inputInfo = this._getMatchingInputGroupFromEvent('touch', 'touchMove', e);
         if (inputInfo === null) { return; }
