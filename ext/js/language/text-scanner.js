@@ -167,9 +167,12 @@ class TextScanner extends EventDispatcher {
                     searchKanji,
                     scanOnTouchMove,
                     scanOnTouchPress,
+                    scanOnTouchRelease,
                     scanOnPenMove,
                     scanOnPenHover,
                     scanOnPenReleaseHover,
+                    scanOnPenPress,
+                    scanOnPenRelease,
                     preventTouchScrolling,
                     preventPenScrolling
                 }
@@ -182,9 +185,12 @@ class TextScanner extends EventDispatcher {
                     searchKanji,
                     scanOnTouchMove,
                     scanOnTouchPress,
+                    scanOnTouchRelease,
                     scanOnPenMove,
                     scanOnPenHover,
                     scanOnPenReleaseHover,
+                    scanOnPenPress,
+                    scanOnPenRelease,
                     preventTouchScrolling,
                     preventPenScrolling
                 }

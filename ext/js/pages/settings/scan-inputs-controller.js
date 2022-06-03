@@ -151,9 +151,12 @@ class ScanInputsController {
                 searchKanji: true,
                 scanOnTouchMove: true,
                 scanOnTouchPress: true,
+                scanOnTouchRelease: false,
                 scanOnPenMove: true,
                 scanOnPenHover: true,
                 scanOnPenReleaseHover: false,
+                scanOnOPenPress: true,
+                scanOnOPenRelease: false,
                 preventTouchScrolling: true,
                 preventPenScrolling: true
             }
