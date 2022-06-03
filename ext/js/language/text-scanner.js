@@ -537,15 +537,21 @@ class TextScanner extends EventDispatcher {
         const primaryTouch = this._getTouch(e.changedTouches, this._primaryTouchIdentifier);
         if (primaryTouch === null) { return; }
 
-        this._onPrimaryTouchEnd();
+        const {clientX, clientY} = primaryTouch;
+        this._onPrimaryTouchEnd(e, clientX, clientY);
     }
 
-    _onPrimaryTouchEnd() {
+    _onPrimaryTouchEnd(e, x, y) {
         this._primaryTouchIdentifier = null;
         this._preventScroll = false;
         this._preventNextClick = false;
         // Don't revert context menu and mouse down prevention, since these events can occur after the touch has ended.
         // I.e. this._preventNextContextMenu and this._preventNextMouseDown should not be assigned to false.
+
+        const inputInfo = this._getMatchingInputGroupFromEvent('touch', 'touchEnd', e);
+        if (inputInfo === null || !inputInfo.input.options.scanOnTouchRelease) { return; }
+
+        this._searchAtFromTouchEnd(x, y, inputInfo);
     }
 
     _onTouchCancel(e) {
@@ -677,12 +683,14 @@ class TextScanner extends EventDispatcher {
         this._searchAt(e.clientX, e.clientY, inputInfo);
     }
 
-    _onTouchPointerUp() {
-        return this._onPrimaryTouchEnd();
+    _onTouchPointerUp(e) {
+        const {clientX, clientY} = e;
+        return this._onPrimaryTouchEnd(e, clientX, clientY);
     }
 
-    _onTouchPointerCancel() {
-        return this._onPrimaryTouchEnd();
+    _onTouchPointerCancel(e) {
+        const {clientX, clientY} = e;
+        return this._onPrimaryTouchEnd(e, clientX, clientY);
     }
 
     _onTouchPointerOut() {
@@ -976,6 +984,10 @@ class TextScanner extends EventDispatcher {
             this._preventNextContextMenu = true;
             this._preventNextMouseDown = true;
         }
+    }
+
+    async _searchAtFromTouchEnd(x, y, inputInfo) {
+        await this._searchAt(x, y, inputInfo);
     }
 
     async _searchAtFromPen(e, eventType, prevent) {
