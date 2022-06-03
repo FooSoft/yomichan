@@ -155,8 +155,8 @@ class ScanInputsController {
                 scanOnPenMove: true,
                 scanOnPenHover: true,
                 scanOnPenReleaseHover: false,
-                scanOnOPenPress: true,
-                scanOnOPenRelease: false,
+                scanOnPenPress: true,
+                scanOnPenRelease: false,
                 preventTouchScrolling: true,
                 preventPenScrolling: true
             }
