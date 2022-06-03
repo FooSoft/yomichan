@@ -701,17 +701,17 @@ class TextScanner extends EventDispatcher {
 
     _onPenPointerOver(e) {
         this._penPointerState = 1;
-        this._searchAtFromPen(e, e.clientX, e.clientY, 'pointerOver', false);
+        this._searchAtFromPen(e, 'pointerOver', false);
     }
 
     _onPenPointerDown(e) {
         this._penPointerState = 2;
-        this._searchAtFromPen(e, e.clientX, e.clientY, 'pointerDown', true);
+        this._searchAtFromPen(e, 'pointerDown', true);
     }
 
     _onPenPointerMove(e) {
         if (this._penPointerState === 2 && (!this._preventScroll || !e.cancelable)) { return; }
-        this._searchAtFromPen(e, e.clientX, e.clientY, 'pointerMove', true);
+        this._searchAtFromPen(e, 'pointerMove', true);
     }
 
     _onPenPointerUp() {
@@ -977,7 +977,7 @@ class TextScanner extends EventDispatcher {
         }
     }
 
-    async _searchAtFromPen(e, x, y, eventType, prevent) {
+    async _searchAtFromPen(e, eventType, prevent) {
         if (this._pendingLookup) { return; }
 
         const inputInfo = this._getMatchingInputGroupFromEvent('pen', eventType, e);
@@ -988,7 +988,7 @@ class TextScanner extends EventDispatcher {
 
         const preventScroll = options.preventTouchScrolling;
 
-        await this._searchAt(x, y, inputInfo);
+        await this._searchAt(e.clientX, e.clientY, inputInfo);
 
         if (
             prevent &&
