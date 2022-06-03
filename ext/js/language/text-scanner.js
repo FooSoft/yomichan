@@ -981,7 +981,7 @@ class TextScanner extends EventDispatcher {
 
     async _searchAtFromTouchStart(x, y, inputInfo) {
         const textSourceCurrentPrevious = this._textSourceCurrent !== null ? this._textSourceCurrent.clone() : null;
-        const preventScroll = inputInfo.input.options.preventPenScrolling;
+        const preventScroll = inputInfo.input.options.preventTouchScrolling;
 
         await this._searchAt(x, y, inputInfo);
 
@@ -1008,7 +1008,7 @@ class TextScanner extends EventDispatcher {
         const {options} = inputInfo.input;
         if (!this._isPenEventSupported(eventType, options)) { return; }
 
-        const preventScroll = options.preventTouchScrolling;
+        const preventScroll = options.preventPenScrolling;
 
         await this._searchAt(e.clientX, e.clientY, inputInfo);
 
