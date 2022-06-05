@@ -158,43 +158,7 @@ class TextScanner extends EventDispatcher {
         matchTypePrefix
     }) {
         if (Array.isArray(inputs)) {
-            this._inputs = inputs.map(({
-                include,
-                exclude,
-                types,
-                options: {
-                    searchTerms,
-                    searchKanji,
-                    scanOnTouchMove,
-                    scanOnTouchPress,
-                    scanOnTouchRelease,
-                    scanOnPenMove,
-                    scanOnPenHover,
-                    scanOnPenReleaseHover,
-                    scanOnPenPress,
-                    scanOnPenRelease,
-                    preventTouchScrolling,
-                    preventPenScrolling
-                }
-            }) => ({
-                include: this._getInputArray(include),
-                exclude: this._getInputArray(exclude),
-                types: this._getInputTypeSet(types),
-                options: {
-                    searchTerms,
-                    searchKanji,
-                    scanOnTouchMove,
-                    scanOnTouchPress,
-                    scanOnTouchRelease,
-                    scanOnPenMove,
-                    scanOnPenHover,
-                    scanOnPenReleaseHover,
-                    scanOnPenPress,
-                    scanOnPenRelease,
-                    preventTouchScrolling,
-                    preventPenScrolling
-                }
-            }));
+            this._inputs = inputs.map((input) => this._convertInput(input));
         }
         if (typeof deepContentScan === 'boolean') {
             this._deepContentScan = deepContentScan;
@@ -1084,6 +1048,29 @@ class TextScanner extends EventDispatcher {
         return true;
     }
 
+    _convertInput(input) {
+        const {options} = input;
+        return {
+            include: this._getInputArray(input.include),
+            exclude: this._getInputArray(input.exclude),
+            types: this._getInputTypeSet(input.types),
+            options: {
+                searchTerms: this._getInputBoolean(options.searchTerms),
+                searchKanji: this._getInputBoolean(options.searchKanji),
+                scanOnTouchMove: this._getInputBoolean(options.scanOnTouchMove),
+                scanOnTouchPress: this._getInputBoolean(options.scanOnTouchPress),
+                scanOnTouchRelease: this._getInputBoolean(options.scanOnTouchRelease),
+                scanOnPenMove: this._getInputBoolean(options.scanOnPenMove),
+                scanOnPenHover: this._getInputBoolean(options.scanOnPenHover),
+                scanOnPenReleaseHover: this._getInputBoolean(options.scanOnPenReleaseHover),
+                scanOnPenPress: this._getInputBoolean(options.scanOnPenPress),
+                scanOnPenRelease: this._getInputBoolean(options.scanOnPenRelease),
+                preventTouchScrolling: this._getInputBoolean(options.preventTouchScrolling),
+                preventPenScrolling: this._getInputBoolean(options.preventPenScrolling)
+            }
+        };
+    }
+
     _getInputArray(value) {
         return (
             typeof value === 'string' ?
@@ -1098,6 +1085,10 @@ class TextScanner extends EventDispatcher {
         if (touch) { set.add('touch'); }
         if (pen) { set.add('pen'); }
         return set;
+    }
+
+    _getInputBoolean(value) {
+        return typeof value === 'boolean' && value;
     }
 
     _getPointerEventType(e) {
