@@ -24,6 +24,7 @@
 class DocumentUtil {
     constructor() {
         this._transparentColorPattern = /rgba\s*\([^)]*,\s*0(?:\.0+)?\s*\)/;
+        this._cssZoomSupported = (typeof document.createElement('div').style.zoom === 'string');
     }
 
     getRangeFromPoint(x, y, deepContentScan) {
@@ -441,6 +442,11 @@ class DocumentUtil {
             return false;
         }
 
+        // Convert CSS zoom coordinates
+        if (this._cssZoomSupported) {
+            ({x, y} = this._convertCssZoomCoordinates(x, y, startContainer));
+        }
+
         // Scan forward
         const nodePre = range.endContainer;
         const offsetPre = range.endOffset;
@@ -661,5 +667,19 @@ class DocumentUtil {
 
     _isElementUserSelectAll(element) {
         return getComputedStyle(element).userSelect === 'all';
+    }
+
+    _convertCssZoomCoordinates(x, y, node) {
+        const ELEMENT_NODE = Node.ELEMENT_NODE;
+        for (; node !== null; node = node.parentNode) {
+            if (node.nodeType !== ELEMENT_NODE) { continue; }
+            let {zoom} = getComputedStyle(node);
+            if (typeof zoom !== 'string') { continue; }
+            zoom = Number.parseFloat(zoom);
+            if (!Number.isFinite(zoom) || zoom === 0) { continue; }
+            x /= zoom;
+            y /= zoom;
+        }
+        return {x, y};
     }
 }
