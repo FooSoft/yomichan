@@ -436,7 +436,8 @@ class DocumentUtil {
 
     _isPointInRange(x, y, range) {
         // Require a text node to start
-        if (range.startContainer.nodeType !== Node.TEXT_NODE) {
+        const {startContainer} = range;
+        if (startContainer.nodeType !== Node.TEXT_NODE) {
             return false;
         }
 
@@ -444,7 +445,7 @@ class DocumentUtil {
         const nodePre = range.endContainer;
         const offsetPre = range.endOffset;
         try {
-            const {node, offset, content} = new DOMTextScanner(range.endContainer, range.endOffset, true, false).seek(1);
+            const {node, offset, content} = new DOMTextScanner(nodePre, offsetPre, true, false).seek(1);
             range.setEnd(node, offset);
 
             if (!this._isWhitespace(content) && DocumentUtil.isPointInAnyRect(x, y, range.getClientRects())) {
@@ -455,7 +456,7 @@ class DocumentUtil {
         }
 
         // Scan backward
-        const {node, offset, content} = new DOMTextScanner(range.startContainer, range.startOffset, true, false).seek(-1);
+        const {node, offset, content} = new DOMTextScanner(startContainer, range.startOffset, true, false).seek(-1);
         range.setStart(node, offset);
 
         if (!this._isWhitespace(content) && DocumentUtil.isPointInAnyRect(x, y, range.getClientRects())) {
