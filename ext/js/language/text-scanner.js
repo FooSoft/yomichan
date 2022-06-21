@@ -87,6 +87,9 @@ class TextScanner extends EventDispatcher {
         this._pointerIdTypeMap = new Map();
 
         this._canClearSelection = true;
+
+        this._yomichanIsChangingTextSelectionNow = false;
+        this._userHasNotSelectedAnythingManually = true;
     }
 
     get canClearSelection() {
@@ -259,8 +262,10 @@ class TextScanner extends EventDispatcher {
 
     setCurrentTextSource(textSource) {
         this._textSourceCurrent = textSource;
-        if (this._selectText) {
+        if (this._selectText && this._userHasNotSelectedAnythingManually) {
+            this._yomichanIsChangingTextSelectionNow = true;
             this._textSourceCurrent.select();
+            setTimeout(() => this._yomichanIsChangingTextSelectionNow = false, 0);
             this._textSourceCurrentSelected = true;
         } else {
             this._textSourceCurrentSelected = false;
@@ -754,6 +759,8 @@ class TextScanner extends EventDispatcher {
             eventListenerInfos.push(...this._getMouseClickOnlyEventListeners2(capture));
         }
 
+        eventListenerInfos.push(this._getManualSelectionChangeByUserListener(capture));
+
         for (const args of eventListenerInfos) {
             this._eventListeners.addEventListener(...args);
         }
@@ -813,6 +820,15 @@ class TextScanner extends EventDispatcher {
             }
         }
         return entries;
+    }
+
+    _getManualSelectionChangeByUserListener(capture) {
+        const callback = () => {
+            if (this._yomichanIsChangingTextSelectionNow) { return; }
+            this._userHasNotSelectedAnythingManually = window.getSelection().isCollapsed;
+        };
+
+        return [document, 'selectionchange', callback, capture];
     }
 
     _getTouch(touchList, identifier) {
