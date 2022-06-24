@@ -48,6 +48,7 @@ class DisplayAnki {
         this._screenshotQuality = 100;
         this._scanLength = 10;
         this._noteGuiMode = 'browse';
+        this._audioDownloadIdleTimeout = null;
         this._noteTags = [];
         this._modeOptions = new Map();
         this._dictionaryEntryTypeModeMap = new Map([
@@ -536,7 +537,7 @@ class DisplayAnki {
         const fields = Object.entries(modeOptions.fields);
         const contentOrigin = this._display.getContentOrigin();
         const details = this._ankiNoteBuilder.getDictionaryEntryDetailsForNote(dictionaryEntry);
-        const audioDetails = (details.type === 'term' ? this._displayAudio.getAnkiNoteMediaAudioDetails(details.term, details.reading) : null);
+        const audioDetails = this._getAnkiNoteMediaAudioDetails(details);
         const optionsContext = this._display.getOptionsContext();
 
         const {note, errors, requirements: outputRequirements} = await this._ankiNoteBuilder.createNote({
@@ -584,6 +585,12 @@ class DisplayAnki {
             if (typeof offset !== 'number') { offset = 0; }
         }
         return {text, offset};
+    }
+
+    _getAnkiNoteMediaAudioDetails(details) {
+        if (details.type !== 'term') { return null; }
+        const {sources, preferredAudioIndex} = this._displayAudio.getAnkiNoteMediaAudioDetails(details.term, details.reading);
+        return {sources, preferredAudioIndex, idleTimeout: this._audioDownloadIdleTimeout};
     }
 
     // View note functions

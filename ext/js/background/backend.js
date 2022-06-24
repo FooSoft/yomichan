@@ -1809,7 +1809,7 @@ class Backend {
             return null;
         }
 
-        const {sources, preferredAudioIndex} = details;
+        const {sources, preferredAudioIndex, idleTimeout} = details;
         let data;
         let contentType;
         try {
@@ -1817,7 +1817,8 @@ class Backend {
                 sources,
                 preferredAudioIndex,
                 term,
-                reading
+                reading,
+                idleTimeout
             ));
         } catch (e) {
             const error = this._getAudioDownloadError(e);

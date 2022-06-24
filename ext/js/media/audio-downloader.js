@@ -50,7 +50,7 @@ class AudioDownloader {
         return [];
     }
 
-    async downloadTermAudio(sources, preferredAudioIndex, term, reading) {
+    async downloadTermAudio(sources, preferredAudioIndex, term, reading, idleTimeout) {
         const errors = [];
         for (const source of sources) {
             let infoList = await this.getTermAudioInfoList(source, term, reading);
@@ -61,7 +61,7 @@ class AudioDownloader {
                 switch (info.type) {
                     case 'url':
                         try {
-                            return await this._downloadAudioFromUrl(info.url, source.type);
+                            return await this._downloadAudioFromUrl(info.url, source.type, idleTimeout);
                         } catch (e) {
                             errors.push(e);
                         }
