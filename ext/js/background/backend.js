@@ -1920,6 +1920,14 @@ class Backend {
             if (Array.isArray(errors)) {
                 for (const error2 of errors) {
                     if (!isObject(error2.data)) { continue; }
+                    if (error2.name === 'AbortError') {
+                        const result = new Error('Audio download was cancelled due to an idle timeout');
+                        result.data = {
+                            // Note: exposing errors here causes a security issue related to DOMException on Firefox.
+                            referenceUrl: '/issues.html#audio-download-idle-timeout'
+                        };
+                        return result;
+                    }
                     const {details} = error2.data;
                     if (!isObject(details)) { continue; }
                     if (details.error === 'net::ERR_FAILED') {
