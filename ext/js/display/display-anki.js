@@ -134,7 +134,19 @@ class DisplayAnki {
     _onOptionsUpdated({options}) {
         const {
             general: {resultOutputMode, glossaryLayoutMode, compactTags},
-            anki: {tags, duplicateScope, duplicateScopeCheckAllModels, suspendNewCards, checkForDuplicates, displayTags, kanji, terms, noteGuiMode, screenshot: {format, quality}},
+            anki: {
+                tags,
+                duplicateScope,
+                duplicateScopeCheckAllModels,
+                suspendNewCards,
+                checkForDuplicates,
+                displayTags,
+                kanji,
+                terms,
+                noteGuiMode,
+                screenshot: {format, quality},
+                downloadTimeout
+            },
             scanning: {length: scanLength}
         } = options;
 
@@ -151,6 +163,7 @@ class DisplayAnki {
         this._scanLength = scanLength;
         this._noteGuiMode = noteGuiMode;
         this._noteTags = [...tags];
+        this._audioDownloadIdleTimeout = (Number.isFinite(downloadTimeout) && downloadTimeout > 0 ? downloadTimeout : null);
         this._modeOptions.clear();
         this._modeOptions.set('kanji', kanji);
         this._modeOptions.set('term-kanji', terms);
