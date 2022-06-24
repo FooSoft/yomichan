@@ -241,21 +241,42 @@ class AudioDownloader {
         return url.replace(/\{([^}]*)\}/g, (m0, m1) => (Object.prototype.hasOwnProperty.call(data, m1) ? `${data[m1]}` : m0));
     }
 
-    async _downloadAudioFromUrl(url, sourceType) {
+    async _downloadAudioFromUrl(url, sourceType, idleTimeout) {
+        let signal;
+        let onProgress = null;
+        let idleTimer = null;
+        if (typeof idleTimeout === 'number') {
+            const abortController = new AbortController();
+            ({signal} = abortController);
+            const onIdleTimeout = () => {
+                abortController.abort('Idle timeout');
+            };
+            onProgress = (done) => {
+                clearTimeout(idleTimer);
+                idleTimer = done ? null : setTimeout(onIdleTimeout, idleTimeout);
+            };
+            idleTimer = setTimeout(onIdleTimeout, idleTimeout);
+        }
+
         const response = await this._requestBuilder.fetchAnonymous(url, {
             method: 'GET',
             mode: 'cors',
             cache: 'default',
             credentials: 'omit',
             redirect: 'follow',
-            referrerPolicy: 'no-referrer'
+            referrerPolicy: 'no-referrer',
+            signal
         });
 
         if (!response.ok) {
             throw new Error(`Invalid response: ${response.status}`);
         }
 
-        const arrayBuffer = await response.arrayBuffer();
+        const arrayBuffer = await this._readFetchResponseArrayBuffer(response, onProgress);
+
+        if (idleTimer !== null) {
+            clearTimeout(idleTimer);
+        }
 
         if (!await this._isAudioBinaryValid(arrayBuffer, sourceType)) {
             throw new Error('Could not retrieve audio');
@@ -313,5 +334,67 @@ class AudioDownloader {
             referrerPolicy: 'no-referrer'
         });
         return await response.json();
+    }
+
+    async _readFetchResponseArrayBuffer(response, onProgress) {
+        let reader;
+        try {
+            if (typeof onProgress === 'function') {
+                reader = response.body.getReader();
+            }
+        } catch (e) {
+            // NOP
+        }
+
+        if (typeof reader === 'undefined') {
+            return await response.arrayBuffer();
+        }
+
+        const contentLengthString = response.headers.get('Content-Length');
+        const contentLength = contentLengthString !== null ? Number.parseInt(contentLengthString, 10) : null;
+        let target = Number.isFinite(contentLength) ? new Uint8Array(contentLength) : null;
+        let targetPosition = 0;
+        let totalLength = 0;
+        const targets = [];
+
+        while (true) {
+            const {done, value} = await reader.read();
+            if (done) { break; }
+            onProgress(false);
+            if (target === null) {
+                targets.push({array: value, length: value.length});
+            } else if (targetPosition + value.length > target.length) {
+                targets.push({array: target, length: targetPosition});
+                target = null;
+            } else {
+                target.set(value, targetPosition);
+                targetPosition += value.length;
+            }
+            totalLength += value.length;
+        }
+
+        if (target === null) {
+            target = this._joinUint8Arrays(targets, totalLength);
+        } else if (totalLength < target.length) {
+            target = target.slice(0, totalLength);
+        }
+
+        onProgress(true);
+
+        return target;
+    }
+
+    _joinUint8Arrays(items, totalLength) {
+        if (items.length === 1) {
+            const {array, length} = items[0];
+            if (array.length === length) { return array; }
+        }
+        const result = new Uint8Array(totalLength);
+        let position = 0;
+        for (const {array, length} of items) {
+            result.set(array, position);
+            position += length;
+        }
+        return result;
     }
 }
