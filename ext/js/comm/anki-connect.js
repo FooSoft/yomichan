@@ -155,16 +155,7 @@ class AnkiConnect {
         await this._checkVersion();
         const actions = [];
         for (const note of notes) {
-            let query = '';
-            switch (this._getDuplicateScopeFromNote(note)) {
-                case 'deck':
-                    query = `"deck:${this._escapeQuery(note.deckName)}" `;
-                    break;
-                case 'deck-root':
-                    query = `"deck:${this._escapeQuery(AnkiUtil.getRootDeckName(note.deckName))}" `;
-                    break;
-            }
-            query += this._fieldsToQuery(note.fields);
+            const query = this._getNoteQuery(note);
             actions.push({action: 'findNotes', params: {query}});
         }
         return await this._invoke('multi', {actions});
@@ -314,5 +305,19 @@ class AnkiConnect {
             }
         }
         return null;
+    }
+
+    _getNoteQuery(note) {
+        let query = '';
+        switch (this._getDuplicateScopeFromNote(note)) {
+            case 'deck':
+                query = `"deck:${this._escapeQuery(note.deckName)}" `;
+                break;
+            case 'deck-root':
+                query = `"deck:${this._escapeQuery(AnkiUtil.getRootDeckName(note.deckName))}" `;
+                break;
+        }
+        query += this._fieldsToQuery(note.fields);
+        return query;
     }
 }
