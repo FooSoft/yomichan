@@ -153,7 +153,8 @@ class AnkiConnect {
     async findNoteIds(notes) {
         if (!this._enabled) { return []; }
         await this._checkVersion();
-        const actions = notes.map((note) => {
+        const actions = [];
+        for (const note of notes) {
             let query = '';
             switch (this._getDuplicateScopeFromNote(note)) {
                 case 'deck':
@@ -164,8 +165,8 @@ class AnkiConnect {
                     break;
             }
             query += this._fieldsToQuery(note.fields);
-            return {action: 'findNotes', params: {query}};
-        });
+            actions.push({action: 'findNotes', params: {query}});
+        }
         return await this._invoke('multi', {actions});
     }
 
