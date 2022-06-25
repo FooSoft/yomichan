@@ -153,12 +153,36 @@ class AnkiConnect {
     async findNoteIds(notes) {
         if (!this._enabled) { return []; }
         await this._checkVersion();
+
         const actions = [];
+        const actionsTargetsList = [];
+        const actionsTargetsMap = new Map();
+        const allNoteIds = [];
+
         for (const note of notes) {
             const query = this._getNoteQuery(note);
-            actions.push({action: 'findNotes', params: {query}});
+            let actionsTargets = actionsTargetsMap.get(query);
+            if (typeof actionsTargets === 'undefined') {
+                actionsTargets = [];
+                actionsTargetsList.push(actionsTargets);
+                actionsTargetsMap.set(query, actionsTargets);
+                actions.push({action: 'findNotes', params: {query}});
+            }
+            const noteIds = [];
+            allNoteIds.push(noteIds);
+            actionsTargets.push(noteIds);
         }
-        return await this._invoke('multi', {actions});
+
+        const result = await this._invoke('multi', {actions});
+        for (let i = 0, ii = Math.min(result.length, actionsTargetsList.length); i < ii; ++i) {
+            const noteIds = result[i];
+            for (const actionsTargets of actionsTargetsList[i]) {
+                for (const noteId of noteIds) {
+                    actionsTargets.push(noteId);
+                }
+            }
+        }
+        return allNoteIds;
     }
 
     async suspendCards(cardIds) {
