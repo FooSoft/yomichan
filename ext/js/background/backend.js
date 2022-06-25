@@ -1919,7 +1919,6 @@ class Backend {
             const {errors} = error.data;
             if (Array.isArray(errors)) {
                 for (const error2 of errors) {
-                    if (!isObject(error2.data)) { continue; }
                     if (error2.name === 'AbortError') {
                         const result = new Error('Audio download was cancelled due to an idle timeout');
                         result.data = {
@@ -1928,6 +1927,7 @@ class Backend {
                         };
                         return result;
                     }
+                    if (!isObject(error2.data)) { continue; }
                     const {details} = error2.data;
                     if (!isObject(details)) { continue; }
                     if (details.error === 'net::ERR_FAILED') {

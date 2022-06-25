@@ -92,7 +92,25 @@ class RequestBuilder {
                 }, 100);
             }
             const details = await errorDetailsPromise;
-            e.data = {details};
+            if (details !== null) {
+                const data = {details};
+                try {
+                    e.data = data;
+                } catch (e2) {
+                    // On Firefox, assigning DOMException.data can fail in certain contexts.
+                    // https://bugzilla.mozilla.org/show_bug.cgi?id=1776555
+                    try {
+                        Object.defineProperty(e, 'data', {
+                            configurable: true,
+                            enumerable: true,
+                            writable: true,
+                            value: data
+                        });
+                    } catch (e3) {
+                        // NOP
+                    }
+                }
+            }
             throw e;
         } finally {
             this._removeWebRequestEventListeners(eventListeners);
