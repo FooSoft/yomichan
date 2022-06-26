@@ -759,7 +759,7 @@ class TextScanner extends EventDispatcher {
             eventListenerInfos.push(...this._getMouseClickOnlyEventListeners2(capture));
         }
 
-        eventListenerInfos.push(this._getManualSelectionChangeByUserListener(capture));
+        eventListenerInfos.push(this._getManualSelectionChangeByUserListener());
 
         for (const args of eventListenerInfos) {
             this._eventListeners.addEventListener(...args);
@@ -822,13 +822,13 @@ class TextScanner extends EventDispatcher {
         return entries;
     }
 
-    _getManualSelectionChangeByUserListener(capture) {
+    _getManualSelectionChangeByUserListener() {
         const callback = () => {
             if (this._yomichanIsChangingTextSelectionNow) { return; }
             this._userHasNotSelectedAnythingManually = window.getSelection().isCollapsed;
         };
 
-        return [document, 'selectionchange', callback, capture];
+        return [document, 'selectionchange', callback];
     }
 
     _getTouch(touchList, identifier) {
