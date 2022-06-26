@@ -144,6 +144,7 @@ class TextScanner extends EventDispatcher {
 
         if (value) {
             this._hookEvents();
+            this._userHasNotSelectedAnythingManually = window.getSelection().isCollapsed;
         }
     }
 
