@@ -377,6 +377,11 @@ class TextScanner extends EventDispatcher {
         this._preventNextClickScan = true;
     }
 
+    _onSelectionChangeCheckUserSelection() {
+        if (this._yomichanIsChangingTextSelectionNow) { return; }
+        this._userHasNotSelectedAnythingManually = window.getSelection().isCollapsed;
+    }
+
     _onSearchClickMouseDown(e) {
         if (e.button !== 0) { return; }
         this._resetPreventNextClickScan();
@@ -760,7 +765,7 @@ class TextScanner extends EventDispatcher {
             eventListenerInfos.push(...this._getMouseClickOnlyEventListeners2(capture));
         }
 
-        eventListenerInfos.push(this._getManualSelectionChangeByUserListener());
+        eventListenerInfos.push(this._getSelectionChangeCheckUserSelectionListener());
 
         for (const args of eventListenerInfos) {
             this._eventListeners.addEventListener(...args);
@@ -823,13 +828,8 @@ class TextScanner extends EventDispatcher {
         return entries;
     }
 
-    _getManualSelectionChangeByUserListener() {
-        const callback = () => {
-            if (this._yomichanIsChangingTextSelectionNow) { return; }
-            this._userHasNotSelectedAnythingManually = window.getSelection().isCollapsed;
-        };
-
-        return [document, 'selectionchange', callback];
+    _getSelectionChangeCheckUserSelectionListener() {
+        return [document, 'selectionchange', this._onSelectionChangeCheckUserSelection.bind(this)];
     }
 
     _getTouch(touchList, identifier) {
