@@ -178,7 +178,7 @@ class Display extends EventDispatcher {
             ['previousEntryDifferentDictionary', () => { this._focusEntryWithDifferentDictionary(-1, true); }]
         ]);
         this.registerDirectMessageHandlers([
-            ['Display.setOptionsContext', {async: false, handler: this._onMessageSetOptionsContext.bind(this)}],
+            ['Display.setOptionsContext', {async: true,  handler: this._onMessageSetOptionsContext.bind(this)}],
             ['Display.setContent',        {async: false, handler: this._onMessageSetContent.bind(this)}],
             ['Display.setCustomCss',      {async: false, handler: this._onMessageSetCustomCss.bind(this)}],
             ['Display.setContentScale',   {async: false, handler: this._onMessageSetContentScale.bind(this)}],
@@ -551,8 +551,8 @@ class Display extends EventDispatcher {
         invokeMessageHandler(messageHandler, params, callback);
     }
 
-    _onMessageSetOptionsContext({optionsContext}) {
-        this.setOptionsContext(optionsContext);
+    async _onMessageSetOptionsContext({optionsContext}) {
+        await this.setOptionsContext(optionsContext);
         this.searchLast();
     }
 
