@@ -459,21 +459,25 @@ class Display extends EventDispatcher {
         this._documentFocusController.blurElement(element);
     }
 
-    searchLast() {
+    searchLast(updateOptionsContext) {
         const type = this._contentType;
         if (type === 'clear') { return; }
         const query = this._query;
+        const hasState = this._historyHasState();
         const state = (
-            this._historyHasState() ?
+            hasState ?
             clone(this._history.state) :
             {
                 focusEntry: 0,
-                optionsContext: this._optionsContext,
+                optionsContext: null,
                 url: window.location.href,
                 sentence: {text: query, offset: 0},
                 documentTitle: document.title
             }
         );
+        if (!hasState || updateOptionsContext) {
+            state.optionsContext = clone(this._optionsContext);
+        }
         const details = {
             focus: false,
             historyMode: 'clear',
@@ -553,7 +557,7 @@ class Display extends EventDispatcher {
 
     async _onMessageSetOptionsContext({optionsContext}) {
         await this.setOptionsContext(optionsContext);
-        this.searchLast();
+        this.searchLast(true);
     }
 
     _onMessageSetContent({details}) {
