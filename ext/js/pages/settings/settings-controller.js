@@ -22,9 +22,9 @@
  */
 
 class SettingsController extends EventDispatcher {
-    constructor(profileIndex=0) {
+    constructor() {
         super();
-        this._profileIndex = profileIndex;
+        this._profileIndex = 0;
         this._source = generateId(16);
         this._pageExitPreventions = new Set();
         this._pageExitPreventionEventListeners = new EventListenerCollection();
@@ -49,11 +49,16 @@ class SettingsController extends EventDispatcher {
         return this._permissionsUtil;
     }
 
-    prepare() {
+    async prepare() {
         yomichan.on('optionsUpdated', this._onOptionsUpdated.bind(this));
         if (this._canObservePermissionsChanges()) {
             chrome.permissions.onAdded.addListener(this._onPermissionsChanged.bind(this));
             chrome.permissions.onRemoved.addListener(this._onPermissionsChanged.bind(this));
+        }
+        const optionsFull = await this.getOptionsFull();
+        const {profiles, profileCurrent} = optionsFull;
+        if (profileCurrent >= 0 && profileCurrent < profiles.length) {
+            this._profileIndex = profileCurrent;
         }
     }
 
