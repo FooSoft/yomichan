@@ -15,6 +15,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/* global
+ * StringUtil
+ */
+
 class TextSourceElement {
     constructor(element, fullContent=null, startOffset=0, endOffset=0) {
         this._element = element;
@@ -63,6 +67,9 @@ class TextSourceElement {
     setEndOffset(length, _layoutAwareScan, fromEnd) {
         const offset = fromEnd ? this._endOffset : this._startOffset;
         length = Math.min(this._fullContent.length - offset, length);
+        if (length > 0) {
+            length = StringUtil.readCodePointsForward(this._fullContent, offset, length).length;
+        }
         this._endOffset = offset + length;
         this._content = this._fullContent.substring(this._startOffset, this._endOffset);
         return length;
@@ -70,6 +77,9 @@ class TextSourceElement {
 
     setStartOffset(length) {
         length = Math.min(this._startOffset, length);
+        if (length > 0) {
+            length = StringUtil.readCodePointsBackward(this._fullContent, this._startOffset - 1, length).length;
+        }
         this._startOffset -= length;
         this._content = this._fullContent.substring(this._startOffset, this._endOffset);
         return length;
