@@ -16,7 +16,7 @@
  */
 
 /**
- * Class containing generic string utility functions.
+ * Class containing generic ArrayBuffer utility functions.
  */
 class ArrayBufferUtil {
     /**
