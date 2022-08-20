@@ -61,24 +61,18 @@ class TextSourceElement {
     }
 
     setEndOffset(length, _layoutAwareScan, fromEnd) {
-        if (fromEnd) {
-            const delta = Math.min(this._fullContent.length - this._endOffset, length);
-            this._endOffset += delta;
-            this._content = this._fullContent.substring(this._startOffset, this._endOffset);
-            return delta;
-        } else {
-            const delta = Math.min(this._fullContent.length - this._startOffset, length);
-            this._endOffset = this._startOffset + delta;
-            this._content = this._fullContent.substring(this._startOffset, this._endOffset);
-            return delta;
-        }
+        const offset = fromEnd ? this._endOffset : this._startOffset;
+        length = Math.min(this._fullContent.length - offset, length);
+        this._endOffset = offset + length;
+        this._content = this._fullContent.substring(this._startOffset, this._endOffset);
+        return length;
     }
 
     setStartOffset(length) {
-        const delta = Math.min(this._startOffset, length);
-        this._startOffset -= delta;
+        length = Math.min(this._startOffset, length);
+        this._startOffset -= length;
         this._content = this._fullContent.substring(this._startOffset, this._endOffset);
-        return delta;
+        return length;
     }
 
     collapse(toStart) {
