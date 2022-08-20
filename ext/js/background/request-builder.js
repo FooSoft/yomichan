@@ -42,6 +42,58 @@ class RequestBuilder {
         return await this._fetchInternal(url, init, headerModifications);
     }
 
+    static async readFetchResponseArrayBuffer(response, onProgress) {
+        let reader;
+        try {
+            if (typeof onProgress === 'function') {
+                reader = response.body.getReader();
+            }
+        } catch (e) {
+            // Not supported
+        }
+
+        if (typeof reader === 'undefined') {
+            const result = await response.arrayBuffer();
+            if (typeof onProgress === 'function') {
+                onProgress(true);
+            }
+            return result;
+        }
+
+        const contentLengthString = response.headers.get('Content-Length');
+        const contentLength = contentLengthString !== null ? Number.parseInt(contentLengthString, 10) : null;
+        let target = Number.isFinite(contentLength) ? new Uint8Array(contentLength) : null;
+        let targetPosition = 0;
+        let totalLength = 0;
+        const targets = [];
+
+        while (true) {
+            const {done, value} = await reader.read();
+            if (done) { break; }
+            onProgress(false);
+            if (target === null) {
+                targets.push({array: value, length: value.length});
+            } else if (targetPosition + value.length > target.length) {
+                targets.push({array: target, length: targetPosition});
+                target = null;
+            } else {
+                target.set(value, targetPosition);
+                targetPosition += value.length;
+            }
+            totalLength += value.length;
+        }
+
+        if (target === null) {
+            target = this._joinUint8Arrays(targets, totalLength);
+        } else if (totalLength < target.length) {
+            target = target.slice(0, totalLength);
+        }
+
+        onProgress(true);
+
+        return target;
+    }
+
     // Private
 
     async _fetchInternal(url, init, headerModifications) {
@@ -316,5 +368,19 @@ class RequestBuilder {
                 // NOP
             }
         }
+    }
+
+    static _joinUint8Arrays(items, totalLength) {
+        if (items.length === 1) {
+            const {array, length} = items[0];
+            if (array.length === length) { return array; }
+        }
+        const result = new Uint8Array(totalLength);
+        let position = 0;
+        for (const {array, length} of items) {
+            result.set(array, position);
+            position += length;
+        }
+        return result;
     }
 }
