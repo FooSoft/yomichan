@@ -94,22 +94,7 @@ class RequestBuilder {
             const details = await errorDetailsPromise;
             if (details !== null) {
                 const data = {details};
-                try {
-                    e.data = data;
-                } catch (e2) {
-                    // On Firefox, assigning DOMException.data can fail in certain contexts.
-                    // https://bugzilla.mozilla.org/show_bug.cgi?id=1776555
-                    try {
-                        Object.defineProperty(e, 'data', {
-                            configurable: true,
-                            enumerable: true,
-                            writable: true,
-                            value: data
-                        });
-                    } catch (e3) {
-                        // NOP
-                    }
-                }
+                this._assignErrorData(e, data);
             }
             throw e;
         } finally {
@@ -312,5 +297,24 @@ class RequestBuilder {
             result += `%${byte.toString(16).toUpperCase().padStart(2, '0')}`;
         }
         return result;
+    }
+
+    _assignErrorData(error, data) {
+        try {
+            error.data = data;
+        } catch (e) {
+            // On Firefox, assigning DOMException.data can fail in certain contexts.
+            // https://bugzilla.mozilla.org/show_bug.cgi?id=1776555
+            try {
+                Object.defineProperty(error, 'data', {
+                    configurable: true,
+                    enumerable: true,
+                    writable: true,
+                    value: data
+                });
+            } catch (e2) {
+                // NOP
+            }
+        }
     }
 }
