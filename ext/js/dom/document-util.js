@@ -670,8 +670,14 @@ class DocumentUtil {
     }
 
     _convertCssZoomCoordinates(x, y, node) {
+        // documentElement must be excluded because the computer style of its zoom property is inconsistent.
+        // * If CSS `:root{zoom:X;}` is specified, the computed zoom will always report `X`.
+        // * If CSS `:root{zoom:X;}` is not specified, the computed zoom report the browser's zoom level.
+        // Therefor, if CSS root zoom is specified as a value other than 1, the adjusted {x, y} values
+        // would be incorrect, which is not new behaviour.
         const ELEMENT_NODE = Node.ELEMENT_NODE;
-        for (; node !== null; node = node.parentNode) {
+        const {documentElement} = document;
+        for (; node !== null && node !== documentElement; node = node.parentNode) {
             if (node.nodeType !== ELEMENT_NODE) { continue; }
             let {zoom} = getComputedStyle(node);
             if (typeof zoom !== 'string') { continue; }
