@@ -27,7 +27,7 @@ class DocumentUtil {
         this._cssZoomSupported = (typeof document.createElement('div').style.zoom === 'string');
     }
 
-    getRangeFromPoint(x, y, deepContentScan) {
+    getRangeFromPoint(x, y, {deepContentScan, normalizeCssZoom}) {
         const elements = this._getElementsFromPoint(x, y, deepContentScan);
         let imposter = null;
         let imposterContainer = null;
@@ -52,7 +52,7 @@ class DocumentUtil {
             }
         }
 
-        const range = this._caretRangeFromPointExt(x, y, deepContentScan ? elements : []);
+        const range = this._caretRangeFromPointExt(x, y, deepContentScan ? elements : [], normalizeCssZoom);
         if (range !== null) {
             if (imposter !== null) {
                 this._setImposterStyle(imposterContainer.style, 'z-index', '-2147483646');
@@ -435,7 +435,7 @@ class DocumentUtil {
         return e !== null ? [e] : [];
     }
 
-    _isPointInRange(x, y, range) {
+    _isPointInRange(x, y, range, normalizeCssZoom) {
         // Require a text node to start
         const {startContainer} = range;
         if (startContainer.nodeType !== Node.TEXT_NODE) {
@@ -443,7 +443,7 @@ class DocumentUtil {
         }
 
         // Convert CSS zoom coordinates
-        if (this._cssZoomSupported) {
+        if (this._cssZoomSupported && normalizeCssZoom) {
             ({x, y} = this._convertCssZoomCoordinates(x, y, startContainer));
         }
 
@@ -583,7 +583,7 @@ class DocumentUtil {
         }
     }
 
-    _caretRangeFromPointExt(x, y, elements) {
+    _caretRangeFromPointExt(x, y, elements, normalizeCssZoom) {
         let previousStyles = null;
         try {
             let i = 0;
@@ -596,7 +596,7 @@ class DocumentUtil {
 
                 const startContainer = range.startContainer;
                 if (startContinerPre !== startContainer) {
-                    if (this._isPointInRange(x, y, range)) {
+                    if (this._isPointInRange(x, y, range, normalizeCssZoom)) {
                         return range;
                     }
                     startContinerPre = startContainer;
