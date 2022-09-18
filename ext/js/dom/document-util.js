@@ -24,7 +24,6 @@
 class DocumentUtil {
     constructor() {
         this._transparentColorPattern = /rgba\s*\([^)]*,\s*0(?:\.0+)?\s*\)/;
-        this._cssZoomSupported = (typeof document.createElement('div').style.zoom === 'string');
     }
 
     getRangeFromPoint(x, y, {deepContentScan, normalizeCssZoom}) {
@@ -173,6 +172,51 @@ class DocumentUtil {
             text: text.substring(pos1, pos2),
             offset: startLength - pos1
         };
+    }
+
+    /**
+     * Computes the scaling adjustment that is necessary for client space coordinates based on the
+     * CSS zoom level.
+     * @param {Node} node A node in the document.
+     * @returns {number} The scaling factor.
+     */
+    static computeZoomScale(node) {
+        if (this._cssZoomSupported === null) {
+            this._cssZoomSupported = (typeof document.createElement('div').style.zoom === 'string');
+        }
+        if (!this._cssZoomSupported) { return 1; }
+        // documentElement must be excluded because the computer style of its zoom property is inconsistent.
+        // * If CSS `:root{zoom:X;}` is specified, the computed zoom will always report `X`.
+        // * If CSS `:root{zoom:X;}` is not specified, the computed zoom report the browser's zoom level.
+        // Therefor, if CSS root zoom is specified as a value other than 1, the adjusted {x, y} values
+        // would be incorrect, which is not new behaviour.
+        let scale = 1;
+        const ELEMENT_NODE = Node.ELEMENT_NODE;
+        const {documentElement} = document;
+        for (; node !== null && node !== documentElement; node = node.parentNode) {
+            if (node.nodeType !== ELEMENT_NODE) { continue; }
+            let {zoom} = getComputedStyle(node);
+            if (typeof zoom !== 'string') { continue; }
+            zoom = Number.parseFloat(zoom);
+            if (!Number.isFinite(zoom) || zoom === 0) { continue; }
+            scale *= zoom;
+        }
+        return scale;
+    }
+
+    static convertRectZoomCoordinates(rect, node) {
+        const scale = this.computeZoomScale(node);
+        return (scale === 1 ? rect : new DOMRect(rect.left * scale, rect.top * scale, rect.width * scale, rect.height * scale));
+    }
+
+    static convertMultipleRectZoomCoordinates(rects, node) {
+        const scale = this.computeZoomScale(node);
+        if (scale === 1) { return rects; }
+        const results = [];
+        for (const rect of rects) {
+            results.push(new DOMRect(rect.left * scale, rect.top * scale, rect.width * scale, rect.height * scale));
+        }
+        return results;
     }
 
     static isPointInRect(x, y, rect) {
@@ -443,8 +487,10 @@ class DocumentUtil {
         }
 
         // Convert CSS zoom coordinates
-        if (this._cssZoomSupported && normalizeCssZoom) {
-            ({x, y} = this._convertCssZoomCoordinates(x, y, startContainer));
+        if (normalizeCssZoom) {
+            const scale = DocumentUtil.computeZoomScale(startContainer);
+            x /= scale;
+            y /= scale;
         }
 
         // Scan forward
@@ -668,24 +714,6 @@ class DocumentUtil {
     _isElementUserSelectAll(element) {
         return getComputedStyle(element).userSelect === 'all';
     }
-
-    _convertCssZoomCoordinates(x, y, node) {
-        // documentElement must be excluded because the computer style of its zoom property is inconsistent.
-        // * If CSS `:root{zoom:X;}` is specified, the computed zoom will always report `X`.
-        // * If CSS `:root{zoom:X;}` is not specified, the computed zoom report the browser's zoom level.
-        // Therefor, if CSS root zoom is specified as a value other than 1, the adjusted {x, y} values
-        // would be incorrect, which is not new behaviour.
-        const ELEMENT_NODE = Node.ELEMENT_NODE;
-        const {documentElement} = document;
-        for (; node !== null && node !== documentElement; node = node.parentNode) {
-            if (node.nodeType !== ELEMENT_NODE) { continue; }
-            let {zoom} = getComputedStyle(node);
-            if (typeof zoom !== 'string') { continue; }
-            zoom = Number.parseFloat(zoom);
-            if (!Number.isFinite(zoom) || zoom === 0) { continue; }
-            x /= zoom;
-            y /= zoom;
-        }
-        return {x, y};
-    }
 }
+// eslint-disable-next-line no-underscore-dangle
+DocumentUtil._cssZoomSupported = null;
