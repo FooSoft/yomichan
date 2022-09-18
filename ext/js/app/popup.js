@@ -680,12 +680,12 @@ class Popup extends EventDispatcher {
      * @returns {SizeRect} The calculated rectangle for where to position the popup.
      */
     _getPosition(sourceRects, writingMode, viewport) {
-        const scale = this._contentScale;
-        const scaleRatio = this._frameSizeContentScale === null ? 1.0 : scale / this._frameSizeContentScale;
-        this._frameSizeContentScale = scale;
+        const contentScale = this._contentScale;
+        const scaleRatio = this._frameSizeContentScale === null ? 1.0 : contentScale / this._frameSizeContentScale;
+        this._frameSizeContentScale = contentScale;
         const frameRect = this._frame.getBoundingClientRect();
-        const frameWidth = Math.max(frameRect.width * scaleRatio, this._initialWidth * scale);
-        const frameHeight = Math.max(frameRect.height * scaleRatio, this._initialHeight * scale);
+        const frameWidth = Math.max(frameRect.width * scaleRatio, this._initialWidth * contentScale);
+        const frameHeight = Math.max(frameRect.height * scaleRatio, this._initialHeight * contentScale);
 
         const horizontal = (writingMode === 'horizontal-tb' || this._verticalTextPosition === 'default');
         let preferAfter;
@@ -700,8 +700,8 @@ class Popup extends EventDispatcher {
             horizontalOffset = this._horizontalOffset2;
             verticalOffset = this._verticalOffset2;
         }
-        horizontalOffset *= scale;
-        verticalOffset *= scale;
+        horizontalOffset *= contentScale;
+        verticalOffset *= contentScale;
 
         let best = null;
         const sourceRectsLength = sourceRects.length;
