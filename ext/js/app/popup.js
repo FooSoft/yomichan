@@ -368,7 +368,7 @@ class Popup extends EventDispatcher {
      *   `valid` is `false` for `PopupProxy`, since the DOM node is hosted in a different frame.
      */
     getFrameRect() {
-        const {left, top, right, bottom} = this._frame.getBoundingClientRect();
+        const {left, top, right, bottom} = this._getFrameBoundingClientRect();
         return {left, top, right, bottom, valid: true};
     }
 
@@ -377,7 +377,7 @@ class Popup extends EventDispatcher {
      * @returns {Promise<{width: number, height: number, valid: boolean}>} The size and whether or not it is valid.
      */
     async getFrameSize() {
-        const {width, height} = this._frame.getBoundingClientRect();
+        const {width, height} = this._getFrameBoundingClientRect();
         return {width, height, valid: true};
     }
 
@@ -680,6 +680,7 @@ class Popup extends EventDispatcher {
      * @returns {SizeRect} The calculated rectangle for where to position the popup.
      */
     _getPosition(sourceRects, writingMode, viewport) {
+        sourceRects = this._convertSourceRectsCoordinateSpace(sourceRects);
         const contentScale = this._contentScale;
         const scaleRatio = this._frameSizeContentScale === null ? 1.0 : contentScale / this._frameSizeContentScale;
         this._frameSizeContentScale = contentScale;
@@ -954,5 +955,44 @@ class Popup extends EventDispatcher {
             }
         }
         return false;
+    }
+
+    /**
+     * Gets the bounding client rect for the frame element, with a coordinate conversion applied.
+     * @returns {DOMRect} The rectangle of the frame.
+     */
+    _getFrameBoundingClientRect() {
+        return DocumentUtil.convertRectZoomCoordinates(this._frame.getBoundingClientRect(), this._container);
+    }
+
+    /**
+     * Converts the coordinate space of source rectangles.
+     * @param {Rect[]} sourceRects The list of rectangles to convert.
+     * @returns {Rect[]} Either an updated list of rectangles, or `sourceRects` if no change is required.
+     */
+    _convertSourceRectsCoordinateSpace(sourceRects) {
+        let scale = DocumentUtil.computeZoomScale(this._container);
+        if (scale === 1) { return sourceRects; }
+        scale = 1 / scale;
+        const sourceRects2 = [];
+        for (const rect of sourceRects) {
+            sourceRects2.push(this._createScaledRect(rect, scale));
+        }
+        return sourceRects2;
+    }
+
+    /**
+     * Creates a scaled rectangle.
+     * @param {Rect} rect The rectangle to scale.
+     * @param {number} scale The scale factor.
+     * @returns {Rect} A new rectangle which has been scaled.
+     */
+    _createScaledRect(rect, scale) {
+        return {
+            left: rect.left * scale,
+            top: rect.top * scale,
+            right: rect.right * scale,
+            bottom: rect.bottom * scale
+        };
     }
 }
