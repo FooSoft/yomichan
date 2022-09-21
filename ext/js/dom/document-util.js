@@ -191,10 +191,19 @@ class DocumentUtil {
         // Therefor, if CSS root zoom is specified as a value other than 1, the adjusted {x, y} values
         // would be incorrect, which is not new behaviour.
         let scale = 1;
-        const ELEMENT_NODE = Node.ELEMENT_NODE;
+        const {ELEMENT_NODE, DOCUMENT_FRAGMENT_NODE} = Node;
         const {documentElement} = document;
         for (; node !== null && node !== documentElement; node = node.parentNode) {
-            if (node.nodeType !== ELEMENT_NODE) { continue; }
+            const {nodeType} = node;
+            if (nodeType === DOCUMENT_FRAGMENT_NODE) {
+                const {host} = node;
+                if (typeof host !== 'undefined') {
+                    node = host;
+                }
+                continue;
+            } else if (nodeType !== ELEMENT_NODE) {
+                continue;
+            }
             let {zoom} = getComputedStyle(node);
             if (typeof zoom !== 'string') { continue; }
             zoom = Number.parseFloat(zoom);
