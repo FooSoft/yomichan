@@ -40,8 +40,8 @@ class GoogleDocsUtil {
         styleNode.disabled = true;
         for (const element of elements) {
             if (!element.matches(selector)) { continue; }
-            const {ariaLabel} = element;
-            if (typeof ariaLabel !== 'string') { continue; }
+            const ariaLabel = element.getAttribute('aria-label');
+            if (typeof ariaLabel !== 'string' || ariaLabel.length === 0) { continue; }
             return this._createRange(element, ariaLabel, x, y, normalizeCssZoom);
         }
         return null;
