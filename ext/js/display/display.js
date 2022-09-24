@@ -20,7 +20,6 @@
  * DisplayGenerator
  * DisplayHistory
  * DisplayNotification
- * DocumentUtil
  * ElementOverflowController
  * FrameEndpoint
  * Frontend
