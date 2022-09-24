@@ -22,10 +22,6 @@
  */
 
 class DocumentUtil {
-    getRangeFromPoint(...args) { return DocumentUtil.getRangeFromPoint(...args); }
-
-    extractSentence(...args) { return DocumentUtil.extractSentence(...args); }
-
     static getRangeFromPoint(x, y, {deepContentScan, normalizeCssZoom}) {
         const elements = this._getElementsFromPoint(x, y, deepContentScan);
         let imposter = null;
