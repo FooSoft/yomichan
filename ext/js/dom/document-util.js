@@ -22,7 +22,14 @@
  */
 
 class DocumentUtil {
-    static getRangeFromPoint(x, y, {deepContentScan, normalizeCssZoom}) {
+    static getRangeFromPoint(x, y, options) {
+        for (const handler of this._getRangeFromPointHandlers) {
+            const r = handler(x, y, options);
+            if (r !== null) { return r; }
+        }
+
+        const {deepContentScan, normalizeCssZoom} = options;
+
         const elements = this._getElementsFromPoint(x, y, deepContentScan);
         let imposter = null;
         let imposterContainer = null;
@@ -60,6 +67,10 @@ class DocumentUtil {
             }
             return null;
         }
+    }
+
+    static registerGetRangeFromPointHandler(handler) {
+        this._getRangeFromPointHandlers.push(handler);
     }
 
     /**
@@ -724,3 +735,5 @@ class DocumentUtil {
 DocumentUtil._transparentColorPattern = /rgba\s*\([^)]*,\s*0(?:\.0+)?\s*\)/;
 // eslint-disable-next-line no-underscore-dangle
 DocumentUtil._cssZoomSupported = null;
+// eslint-disable-next-line no-underscore-dangle
+DocumentUtil._getRangeFromPointHandlers = [];
