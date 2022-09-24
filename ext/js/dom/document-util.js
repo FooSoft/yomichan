@@ -22,11 +22,11 @@
  */
 
 class DocumentUtil {
-    constructor() {
-        this._transparentColorPattern = /rgba\s*\([^)]*,\s*0(?:\.0+)?\s*\)/;
-    }
+    getRangeFromPoint(...args) { return DocumentUtil.getRangeFromPoint(...args); }
 
-    getRangeFromPoint(x, y, {deepContentScan, normalizeCssZoom}) {
+    extractSentence(...args) { return DocumentUtil.extractSentence(...args); }
+
+    static getRangeFromPoint(x, y, {deepContentScan, normalizeCssZoom}) {
         const elements = this._getElementsFromPoint(x, y, deepContentScan);
         let imposter = null;
         let imposterContainer = null;
@@ -90,7 +90,7 @@ class DocumentUtil {
      *   ```
      * @returns {{sentence: string, offset: number}} The sentence and the offset to the original source.
      */
-    extractSentence(source, layoutAwareScan, extent, terminateAtNewlines, terminatorMap, forwardQuoteMap, backwardQuoteMap) {
+    static extractSentence(source, layoutAwareScan, extent, terminateAtNewlines, terminatorMap, forwardQuoteMap, backwardQuoteMap) {
         // Scan text
         source = source.clone();
         const startLength = source.setStartOffset(extent, layoutAwareScan);
@@ -397,11 +397,11 @@ class DocumentUtil {
         }
     }
 
-    _setImposterStyle(style, propertyName, value) {
+    static _setImposterStyle(style, propertyName, value) {
         style.setProperty(propertyName, value, 'important');
     }
 
-    _createImposter(element, isTextarea) {
+    static _createImposter(element, isTextarea) {
         const body = document.body;
         if (body === null) { return [null, null]; }
 
@@ -477,7 +477,7 @@ class DocumentUtil {
         return [imposter, container];
     }
 
-    _getElementsFromPoint(x, y, all) {
+    static _getElementsFromPoint(x, y, all) {
         if (all) {
             // document.elementsFromPoint can return duplicates which must be removed.
             const elements = document.elementsFromPoint(x, y);
@@ -488,7 +488,7 @@ class DocumentUtil {
         return e !== null ? [e] : [];
     }
 
-    _isPointInRange(x, y, range, normalizeCssZoom) {
+    static _isPointInRange(x, y, range, normalizeCssZoom) {
         // Require a text node to start
         const {startContainer} = range;
         if (startContainer.nodeType !== Node.TEXT_NODE) {
@@ -530,11 +530,11 @@ class DocumentUtil {
         return false;
     }
 
-    _isWhitespace(string) {
+    static _isWhitespace(string) {
         return string.trim().length === 0;
     }
 
-    _caretRangeFromPoint(x, y) {
+    static _caretRangeFromPoint(x, y) {
         if (typeof document.caretRangeFromPoint === 'function') {
             // Chrome, Edge
             return document.caretRangeFromPoint(x, y);
@@ -549,7 +549,7 @@ class DocumentUtil {
         return null;
     }
 
-    _caretPositionFromPoint(x, y) {
+    static _caretPositionFromPoint(x, y) {
         const position = document.caretPositionFromPoint(x, y);
         if (position === null) {
             return null;
@@ -586,7 +586,7 @@ class DocumentUtil {
         }
     }
 
-    _caretPositionFromPointNormalizeStyles(x, y, nextElement) {
+    static _caretPositionFromPointNormalizeStyles(x, y, nextElement) {
         const previousStyles = new Map();
         try {
             while (true) {
@@ -638,7 +638,7 @@ class DocumentUtil {
         }
     }
 
-    _caretRangeFromPointExt(x, y, elements, normalizeCssZoom) {
+    static _caretRangeFromPointExt(x, y, elements, normalizeCssZoom) {
         let previousStyles = null;
         try {
             let i = 0;
@@ -670,7 +670,7 @@ class DocumentUtil {
         }
     }
 
-    _disableTransparentElement(elements, i, previousStyles) {
+    static _disableTransparentElement(elements, i, previousStyles) {
         while (true) {
             if (i >= elements.length) {
                 return -1;
@@ -685,13 +685,13 @@ class DocumentUtil {
         }
     }
 
-    _recordPreviousStyle(previousStyles, element) {
+    static _recordPreviousStyle(previousStyles, element) {
         if (previousStyles.has(element)) { return; }
         const style = element.hasAttribute('style') ? element.getAttribute('style') : null;
         previousStyles.set(element, style);
     }
 
-    _revertStyles(previousStyles) {
+    static _revertStyles(previousStyles) {
         for (const [element, style] of previousStyles.entries()) {
             if (style === null) {
                 element.removeAttribute('style');
@@ -701,7 +701,7 @@ class DocumentUtil {
         }
     }
 
-    _isElementTransparent(element) {
+    static _isElementTransparent(element) {
         if (
             element === document.body ||
             element === document.documentElement
@@ -716,13 +716,15 @@ class DocumentUtil {
         );
     }
 
-    _isColorTransparent(cssColor) {
+    static _isColorTransparent(cssColor) {
         return this._transparentColorPattern.test(cssColor);
     }
 
-    _isElementUserSelectAll(element) {
+    static _isElementUserSelectAll(element) {
         return getComputedStyle(element).userSelect === 'all';
     }
 }
+// eslint-disable-next-line no-underscore-dangle
+DocumentUtil._transparentColorPattern = /rgba\s*\([^)]*,\s*0(?:\.0+)?\s*\)/;
 // eslint-disable-next-line no-underscore-dangle
 DocumentUtil._cssZoomSupported = null;
