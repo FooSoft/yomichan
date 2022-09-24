@@ -497,7 +497,7 @@ class DocumentUtil {
 
         // Convert CSS zoom coordinates
         if (normalizeCssZoom) {
-            const scale = DocumentUtil.computeZoomScale(startContainer);
+            const scale = this.computeZoomScale(startContainer);
             x /= scale;
             y /= scale;
         }
@@ -509,7 +509,7 @@ class DocumentUtil {
             const {node, offset, content} = new DOMTextScanner(nodePre, offsetPre, true, false).seek(1);
             range.setEnd(node, offset);
 
-            if (!this._isWhitespace(content) && DocumentUtil.isPointInAnyRect(x, y, range.getClientRects())) {
+            if (!this._isWhitespace(content) && this.isPointInAnyRect(x, y, range.getClientRects())) {
                 return true;
             }
         } finally {
@@ -520,7 +520,7 @@ class DocumentUtil {
         const {node, offset, content} = new DOMTextScanner(startContainer, range.startOffset, true, false).seek(-1);
         range.setStart(node, offset);
 
-        if (!this._isWhitespace(content) && DocumentUtil.isPointInAnyRect(x, y, range.getClientRects())) {
+        if (!this._isWhitespace(content) && this.isPointInAnyRect(x, y, range.getClientRects())) {
             // This purposefully leaves the starting offset as modified and sets the range length to 0.
             range.setEnd(node, offset);
             return true;
