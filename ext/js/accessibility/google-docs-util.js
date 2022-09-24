@@ -48,6 +48,8 @@ class GoogleDocsUtil {
     }
 
     static _getStyleNode(selector) {
+        // This <style> node is necessary to force the SVG <rect> elements to have a fill,
+        // which allows them to be included in document.elementsFromPoint's return value.
         if (this._styleNode === null) {
             const style = document.createElement('style');
             style.textContent = `${selector}{fill:#0000 !important;}`;
