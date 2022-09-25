@@ -93,13 +93,6 @@ class TextSourceRange {
         return length - state.remainder;
     }
 
-    getRect() {
-        if (this._imposterElement !== null && !this._imposterElement.isConnected) { return this._cachedRect; }
-        const result = DocumentUtil.convertRectZoomCoordinates(this._range.getBoundingClientRect(), this._range.startContainer);
-        if (this._cachedRect !== null) { this._cachedRect = result; }
-        return result;
-    }
-
     getRects() {
         if (this._imposterElement !== null && !this._imposterElement.isConnected) { return this._cachedRects; }
         const result = DocumentUtil.convertMultipleRectZoomCoordinates(this._range.getClientRects(), this._range.startContainer);

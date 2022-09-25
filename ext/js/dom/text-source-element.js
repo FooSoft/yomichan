@@ -82,10 +82,6 @@ class TextSourceElement {
         return length;
     }
 
-    getRect() {
-        return DocumentUtil.convertRectZoomCoordinates(this._element.getBoundingClientRect(), this._element);
-    }
-
     getRects() {
         return DocumentUtil.convertMultipleRectZoomCoordinates(this._element.getClientRects(), this._element);
     }
