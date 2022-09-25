@@ -21,12 +21,14 @@
  */
 
 class TextSourceRange {
-    constructor(range, rangeStartOffset, content, imposterElement, imposterSourceElement) {
+    constructor(range, rangeStartOffset, content, imposterElement, imposterSourceElement, cachedRect, cachedRects) {
         this._range = range;
         this._rangeStartOffset = rangeStartOffset;
         this._content = content;
         this._imposterElement = imposterElement;
         this._imposterSourceElement = imposterSourceElement;
+        this._cachedRect = cachedRect;
+        this._cachedRects = cachedRects;
     }
 
     get type() {
@@ -46,7 +48,15 @@ class TextSourceRange {
     }
 
     clone() {
-        return new TextSourceRange(this._range.cloneRange(), this._rangeStartOffset, this._content, this._imposterElement, this._imposterSourceElement);
+        return new TextSourceRange(
+            this._range.cloneRange(),
+            this._rangeStartOffset,
+            this._content,
+            this._imposterElement,
+            this._imposterSourceElement,
+            this._cachedRect,
+            this._cachedRects
+        );
     }
 
     cleanup() {
@@ -84,11 +94,17 @@ class TextSourceRange {
     }
 
     getRect() {
-        return DocumentUtil.convertRectZoomCoordinates(this._range.getBoundingClientRect(), this._range.startContainer);
+        if (this._imposterElement !== null && !this._imposterElement.isConnected) { return this._cachedRect; }
+        const result = DocumentUtil.convertRectZoomCoordinates(this._range.getBoundingClientRect(), this._range.startContainer);
+        if (this._cachedRect !== null) { this._cachedRect = result; }
+        return result;
     }
 
     getRects() {
-        return DocumentUtil.convertMultipleRectZoomCoordinates(this._range.getClientRects(), this._range.startContainer);
+        if (this._imposterElement !== null && !this._imposterElement.isConnected) { return this._cachedRects; }
+        const result = DocumentUtil.convertMultipleRectZoomCoordinates(this._range.getClientRects(), this._range.startContainer);
+        if (this._cachedRects !== null) { this._cachedRects = result; }
+        return result;
     }
 
     getWritingMode() {
@@ -140,10 +156,12 @@ class TextSourceRange {
     }
 
     static create(range) {
-        return new TextSourceRange(range, range.startOffset, range.toString(), null, null);
+        return new TextSourceRange(range, range.startOffset, range.toString(), null, null, null, null);
     }
 
     static createFromImposter(range, imposterElement, imposterSourceElement) {
-        return new TextSourceRange(range, range.startOffset, range.toString(), imposterElement, imposterSourceElement);
+        const cachedRect = DocumentUtil.convertRectZoomCoordinates(range.getBoundingClientRect(), range.startContainer);
+        const cachedRects = DocumentUtil.convertMultipleRectZoomCoordinates(range.getClientRects(), range.startContainer);
+        return new TextSourceRange(range, range.startOffset, range.toString(), imposterElement, imposterSourceElement, cachedRect, cachedRects);
     }
 }
