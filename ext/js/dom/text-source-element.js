@@ -86,15 +86,6 @@ class TextSourceElement {
         return length;
     }
 
-    collapse(toStart) {
-        if (toStart) {
-            this._endOffset = this._startOffset;
-        } else {
-            this._startOffset = this._endOffset;
-        }
-        this._content = '';
-    }
-
     getRect() {
         return DocumentUtil.convertRectZoomCoordinates(this._element.getBoundingClientRect(), this._element);
     }

@@ -85,11 +85,6 @@ class TextSourceRange {
         return length - state.remainder;
     }
 
-    collapse(toStart) {
-        this._range.collapse(toStart);
-        this._content = '';
-    }
-
     getRect() {
         return DocumentUtil.convertRectZoomCoordinates(this._range.getBoundingClientRect(), this._range.startContainer);
     }
