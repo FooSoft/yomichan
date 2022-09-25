@@ -65,7 +65,7 @@ class TextSourceElement {
         return this._content;
     }
 
-    setEndOffset(length, _layoutAwareScan, fromEnd) {
+    setEndOffset(length, fromEnd) {
         const offset = fromEnd ? this._endOffset : this._startOffset;
         length = Math.min(this._fullContent.length - offset, length);
         if (length > 0) {

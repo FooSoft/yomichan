@@ -66,7 +66,7 @@ class TextSourceRange {
         return this._content;
     }
 
-    setEndOffset(length, layoutAwareScan, fromEnd) {
+    setEndOffset(length, fromEnd, layoutAwareScan) {
         let node;
         let offset;
         if (fromEnd) {

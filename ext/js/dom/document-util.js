@@ -132,7 +132,7 @@ class DocumentUtil {
         // Scan text
         source = source.clone();
         const startLength = source.setStartOffset(extent, layoutAwareScan);
-        const endLength = source.setEndOffset(extent * 2 - startLength, layoutAwareScan, true);
+        const endLength = source.setEndOffset(extent * 2 - startLength, true, layoutAwareScan);
         const text = source.text();
         const textLength = text.length;
         const textEndAnchor = textLength - endLength;
