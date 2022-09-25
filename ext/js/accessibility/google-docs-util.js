@@ -67,13 +67,14 @@ class GoogleDocsUtil {
         const content = document.createTextNode(text);
         const svgText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         const transform = element.getAttribute('transform') || '';
+        const font = element.getAttribute('data-font-css') || '';
         svgText.setAttribute('x', element.getAttribute('x'));
         svgText.setAttribute('y', element.getAttribute('y'));
         svgText.appendChild(content);
         const textStyle = svgText.style;
         this._setImportantStyle(textStyle, 'all', 'initial');
         this._setImportantStyle(textStyle, 'transform', transform);
-        this._setImportantStyle(textStyle, 'font', element.dataset.fontCss);
+        this._setImportantStyle(textStyle, 'font', font);
         this._setImportantStyle(textStyle, 'text-anchor', 'start');
         element.parentNode.appendChild(svgText);
 
