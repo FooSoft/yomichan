@@ -99,7 +99,8 @@ class TextSourceRange {
     }
 
     getWritingMode() {
-        return TextSourceRange.getElementWritingMode(TextSourceRange.getParentElement(this._range.startContainer));
+        const node = this._range.startContainer;
+        return DocumentUtil.getElementWritingMode(node !== null ? node.parentElement : null);
     }
 
     select() {
@@ -141,38 +142,5 @@ class TextSourceRange {
 
     getNodesInRange() {
         return DocumentUtil.getNodesInRange(this._range);
-    }
-
-    static getParentElement(node) {
-        while (node !== null && node.nodeType !== Node.ELEMENT_NODE) {
-            node = node.parentNode;
-        }
-        return node;
-    }
-
-    static getElementWritingMode(element) {
-        if (element !== null) {
-            const style = window.getComputedStyle(element);
-            const writingMode = style.writingMode;
-            if (typeof writingMode === 'string') {
-                return TextSourceRange.normalizeWritingMode(writingMode);
-            }
-        }
-        return 'horizontal-tb';
-    }
-
-    static normalizeWritingMode(writingMode) {
-        switch (writingMode) {
-            case 'lr':
-            case 'lr-tb':
-            case 'rl':
-                return 'horizontal-tb';
-            case 'tb':
-                return 'vertical-lr';
-            case 'tb-rl':
-                return 'vertical-rl';
-            default:
-                return writingMode;
-        }
     }
 }

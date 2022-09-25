@@ -418,6 +418,43 @@ class DocumentUtil {
         }
     }
 
+    /**
+     * Gets the parent writing mode of an element.
+     * See: https://developer.mozilla.org/en-US/docs/Web/CSS/writing-mode.
+     * @param {Element} element The HTML element to check.
+     * @returns {string} The writing mode.
+     */
+    static getElementWritingMode(element) {
+        if (element !== null) {
+            const {writingMode} = getComputedStyle(element);
+            if (typeof writingMode === 'string') {
+                return this.normalizeWritingMode(writingMode);
+            }
+        }
+        return 'horizontal-tb';
+    }
+
+    /**
+     * Normalizes a CSS writing mode value by converting non-standard and deprecated values
+     * into their corresponding standard vaules.
+     * @param {string} writingMode The writing mode to normalize.
+     * @returns {string} The normalized writing mode.
+     */
+    static normalizeWritingMode(writingMode) {
+        switch (writingMode) {
+            case 'lr':
+            case 'lr-tb':
+            case 'rl':
+                return 'horizontal-tb';
+            case 'tb':
+                return 'vertical-lr';
+            case 'tb-rl':
+                return 'vertical-rl';
+            default:
+                return writingMode;
+        }
+    }
+
     // Private
 
     static _getActiveButtons(event, array) {
