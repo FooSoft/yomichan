@@ -49,10 +49,6 @@ class TextSourceElement {
         return this._endOffset;
     }
 
-    get isConnected() {
-        return this._element.isConnected;
-    }
-
     clone() {
         return new TextSourceElement(this._element, this._fullContent, this._startOffset, this._endOffset);
     }
