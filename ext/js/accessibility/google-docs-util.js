@@ -34,7 +34,7 @@ class GoogleDocsUtil {
      */
     static getRangeFromPoint(x, y, {normalizeCssZoom}) {
         const selector = '.kix-canvas-tile-content svg>g>rect';
-        const styleNode = this._getStyleNode(selector);
+        const styleNode = this._getStyleNode();
         styleNode.disabled = false;
         const elements = document.elementsFromPoint(x, y);
         styleNode.disabled = true;
@@ -47,12 +47,15 @@ class GoogleDocsUtil {
         return null;
     }
 
-    static _getStyleNode(selector) {
+    static _getStyleNode() {
         // This <style> node is necessary to force the SVG <rect> elements to have a fill,
         // which allows them to be included in document.elementsFromPoint's return value.
         if (this._styleNode === null) {
             const style = document.createElement('style');
-            style.textContent = `${selector}{fill:#0000 !important;}`;
+            style.textContent = [
+                '.kix-canvas-tile-content{pointer-events:none!important;}',
+                '.kix-canvas-tile-content svg>g>rect{pointer-events:all!important;}'
+            ].join('\n');
             const parent = document.head || document.documentElement;
             if (parent !== null) {
                 parent.appendChild(style);
