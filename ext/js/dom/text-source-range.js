@@ -21,9 +21,9 @@
  */
 
 class TextSourceRange {
-    constructor(range, content, imposterElement, imposterSourceElement) {
+    constructor(range, rangeStartOffset, content, imposterElement, imposterSourceElement) {
         this._range = range;
-        this._rangeStartOffset = range.startOffset;
+        this._rangeStartOffset = rangeStartOffset;
         this._content = content;
         this._imposterElement = imposterElement;
         this._imposterSourceElement = imposterSourceElement;
@@ -53,7 +53,7 @@ class TextSourceRange {
     }
 
     clone() {
-        return new TextSourceRange(this._range.cloneRange(), this._content, this._imposterElement, this._imposterSourceElement);
+        return new TextSourceRange(this._range.cloneRange(), this._rangeStartOffset, this._content, this._imposterElement, this._imposterSourceElement);
     }
 
     cleanup() {
@@ -147,10 +147,10 @@ class TextSourceRange {
     }
 
     static create(range) {
-        return new TextSourceRange(range, range.toString(), null, null);
+        return new TextSourceRange(range, range.startOffset, range.toString(), null, null);
     }
 
     static createFromImposter(range, imposterElement, imposterSourceElement) {
-        return new TextSourceRange(range, range.toString(), imposterElement, imposterSourceElement);
+        return new TextSourceRange(range, range.startOffset, range.toString(), imposterElement, imposterSourceElement);
     }
 }
