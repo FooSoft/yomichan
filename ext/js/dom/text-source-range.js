@@ -143,4 +143,12 @@ class TextSourceRange {
     getNodesInRange() {
         return DocumentUtil.getNodesInRange(this._range);
     }
+
+    static create(range) {
+        return new TextSourceRange(range, range.toString(), null, null);
+    }
+
+    static createFromImposter(range, imposterElement, imposterSourceElement) {
+        return new TextSourceRange(range, range.toString(), imposterElement, imposterSourceElement);
+    }
 }

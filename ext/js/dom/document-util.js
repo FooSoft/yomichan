@@ -85,8 +85,9 @@ class DocumentUtil {
             if (imposter !== null) {
                 this._setImposterStyle(imposterContainer.style, 'z-index', '-2147483646');
                 this._setImposterStyle(imposter.style, 'pointer-events', 'none');
+                return TextSourceRange.createFromImposter(range, imposterContainer, imposterSourceElement);
             }
-            return new TextSourceRange(range, '', imposterContainer, imposterSourceElement);
+            return TextSourceRange.create(range);
         } else {
             if (imposterContainer !== null) {
                 imposterContainer.parentNode.removeChild(imposterContainer);
