@@ -21,9 +21,9 @@
  */
 
 class TextSourceElement {
-    constructor(element, fullContent=null, startOffset=0, endOffset=0) {
+    constructor(element, fullContent, startOffset, endOffset) {
         this._element = element;
-        this._fullContent = (typeof fullContent === 'string' ? fullContent : TextSourceElement.getElementContent(element));
+        this._fullContent = fullContent;
         this._startOffset = startOffset;
         this._endOffset = endOffset;
         this._content = this._fullContent.substring(this._startOffset, this._endOffset);
@@ -130,7 +130,11 @@ class TextSourceElement {
         return [this._element];
     }
 
-    static getElementContent(element) {
+    static create(element) {
+        return new TextSourceElement(element, this._getElementContent(element), 0, 0);
+    }
+
+    static _getElementContent(element) {
         let content;
         switch (element.nodeName.toUpperCase()) {
             case 'BUTTON':

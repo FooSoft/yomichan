@@ -66,7 +66,7 @@ class DocumentUtil {
                 case 'IMG':
                 case 'BUTTON':
                 case 'SELECT':
-                    return new TextSourceElement(element);
+                    return TextSourceElement.create(element);
                 case 'INPUT':
                     if (element.type === 'text') {
                         imposterSourceElement = element;
