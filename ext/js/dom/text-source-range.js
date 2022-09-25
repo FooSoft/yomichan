@@ -67,11 +67,16 @@ class TextSourceRange {
     }
 
     setEndOffset(length, layoutAwareScan, fromEnd) {
-        const state = (
-            fromEnd ?
-            new DOMTextScanner(this._range.endContainer, this._range.endOffset, !layoutAwareScan, layoutAwareScan).seek(length) :
-            new DOMTextScanner(this._range.startContainer, this._range.startOffset, !layoutAwareScan, layoutAwareScan).seek(length)
-        );
+        let node;
+        let offset;
+        if (fromEnd) {
+            node = this._range.endContainer;
+            offset = this._range.endOffset;
+        } else {
+            node = this._range.startContainer;
+            offset = this._range.startOffset;
+        }
+        const state = new DOMTextScanner(node, offset, !layoutAwareScan, layoutAwareScan).seek(length);
         this._range.setEnd(state.node, state.offset);
         this._content = (fromEnd ? this._content + state.content : state.content);
         return length - state.remainder;
