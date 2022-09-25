@@ -110,7 +110,7 @@ class GoogleDocsUtil {
             }
         }
         range.setStart(textNode, start);
-        range.setEnd(textNode, end);
+        range.setEnd(textNode, start);
         return range;
     }
 
