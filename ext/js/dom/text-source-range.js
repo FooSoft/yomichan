@@ -95,9 +95,7 @@ class TextSourceRange {
 
     getRects() {
         if (this._isImposterDisconnected()) { return this._getCachedRects(); }
-        const result = DocumentUtil.convertMultipleRectZoomCoordinates(this._range.getClientRects(), this._range.startContainer);
-        if (this._cachedRects !== null) { this._cachedRects = result; }
-        return result;
+        return DocumentUtil.convertMultipleRectZoomCoordinates(this._range.getClientRects(), this._range.startContainer);
     }
 
     getWritingMode() {
