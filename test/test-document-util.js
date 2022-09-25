@@ -160,9 +160,8 @@ async function testDocumentTextScanningFunctions(dom, {DocumentUtil, TextSourceR
             range.setStart(imposter ? imposter : startNode, startOffset);
             range.setEnd(imposter ? imposter : startNode, endOffset);
 
-            // Override getClientRects and getBoundingClientRect to return a rect guaranteed to contain (x, y)
+            // Override getClientRects to return a rect guaranteed to contain (x, y)
             range.getClientRects = () => [new DOMRect(x - 1, y - 1, 2, 2)];
-            range.getBoundingClientRect = () => new DOMRect(x - 1, y - 1, 2, 2);
             return range;
         };
 
