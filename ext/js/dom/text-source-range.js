@@ -99,12 +99,14 @@ class TextSourceRange {
     }
 
     select() {
+        if (this._imposterElement !== null) { return; }
         const selection = window.getSelection();
         selection.removeAllRanges();
         selection.addRange(this._range);
     }
 
     deselect() {
+        if (this._imposterElement !== null) { return; }
         const selection = window.getSelection();
         selection.removeAllRanges();
     }
