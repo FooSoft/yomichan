@@ -33,16 +33,15 @@ class GoogleDocsUtil {
      * @returns {?TextSourceRange|TextSourceElement} A range for the hovered text or element, or `null` if no applicable content was found.
      */
     static getRangeFromPoint(x, y, {normalizeCssZoom}) {
-        const selector = '.kix-canvas-tile-content svg>g>rect';
         const styleNode = this._getStyleNode();
         styleNode.disabled = false;
-        const elements = document.elementsFromPoint(x, y);
+        const element = document.elementFromPoint(x, y);
         styleNode.disabled = true;
-        for (const element of elements) {
-            if (!element.matches(selector)) { continue; }
+        if (element !== null && element.matches('.kix-canvas-tile-content svg>g>rect')) {
             const ariaLabel = element.getAttribute('aria-label');
-            if (typeof ariaLabel !== 'string' || ariaLabel.length === 0) { continue; }
-            return this._createRange(element, ariaLabel, x, y, normalizeCssZoom);
+            if (typeof ariaLabel === 'string' && ariaLabel.length > 0) {
+                return this._createRange(element, ariaLabel, x, y, normalizeCssZoom);
+            }
         }
         return null;
     }
