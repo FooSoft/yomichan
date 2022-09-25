@@ -21,13 +21,14 @@
  */
 
 class TextSourceRange {
-    constructor(range, rangeStartOffset, content, imposterElement, imposterSourceElement, cachedRects) {
+    constructor(range, rangeStartOffset, content, imposterElement, imposterSourceElement, cachedRects, cachedSourceRect) {
         this._range = range;
         this._rangeStartOffset = rangeStartOffset;
         this._content = content;
         this._imposterElement = imposterElement;
         this._imposterSourceElement = imposterSourceElement;
         this._cachedRects = cachedRects;
+        this._cachedSourceRect = cachedSourceRect;
     }
 
     get type() {
@@ -53,7 +54,8 @@ class TextSourceRange {
             this._content,
             this._imposterElement,
             this._imposterSourceElement,
-            this._cachedRects
+            this._cachedRects,
+            this._cachedSourceRect
         );
     }
 
@@ -92,7 +94,7 @@ class TextSourceRange {
     }
 
     getRects() {
-        if (this._imposterElement !== null && !this._imposterElement.isConnected) { return this._cachedRects; }
+        if (this._imposterElement !== null && !this._imposterElement.isConnected) { return this._getCachedRects(); }
         const result = DocumentUtil.convertMultipleRectZoomCoordinates(this._range.getClientRects(), this._range.startContainer);
         if (this._cachedRects !== null) { this._cachedRects = result; }
         return result;
@@ -147,11 +149,21 @@ class TextSourceRange {
     }
 
     static create(range) {
-        return new TextSourceRange(range, range.startOffset, range.toString(), null, null, null);
+        return new TextSourceRange(range, range.startOffset, range.toString(), null, null, null, null);
     }
 
     static createFromImposter(range, imposterElement, imposterSourceElement) {
         const cachedRects = DocumentUtil.convertMultipleRectZoomCoordinates(range.getClientRects(), range.startContainer);
-        return new TextSourceRange(range, range.startOffset, range.toString(), imposterElement, imposterSourceElement, cachedRects);
+        const cachedSourceRect = DocumentUtil.convertRectZoomCoordinates(imposterSourceElement.getBoundingClientRect(), imposterSourceElement);
+        return new TextSourceRange(range, range.startOffset, range.toString(), imposterElement, imposterSourceElement, cachedRects, cachedSourceRect);
+    }
+
+    _getCachedRects() {
+        const sourceRect = DocumentUtil.convertRectZoomCoordinates(this._imposterSourceElement.getBoundingClientRect(), this._imposterSourceElement);
+        return DocumentUtil.offsetDOMRects(
+            this._cachedRects,
+            sourceRect.left - this._cachedSourceRect.left,
+            sourceRect.top - this._cachedSourceRect.top
+        );
     }
 }

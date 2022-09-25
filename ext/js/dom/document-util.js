@@ -420,6 +420,21 @@ class DocumentUtil {
     }
 
     /**
+     * Offsets an array of DOMRects by a given amount.
+     * @param {DOMRect[]} rects The DOMRects to offset.
+     * @param {number} x The horizontal offset amount.
+     * @param {number} y The vertical offset amount.
+     * @returns {DOMRect} The DOMRects with the offset applied.
+     */
+    static offsetDOMRects(rects, x, y) {
+        const results = [];
+        for (const rect of rects) {
+            results.push(new DOMRect(rect.left + x, rect.top + y, rect.width, rect.height));
+        }
+        return results;
+    }
+
+    /**
      * Gets the parent writing mode of an element.
      * See: https://developer.mozilla.org/en-US/docs/Web/CSS/writing-mode.
      * @param {Element} element The HTML element to check.
