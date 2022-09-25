@@ -21,11 +21,11 @@
  */
 
 class TextSourceRange {
-    constructor(range, content, imposterContainer, imposterSourceElement) {
+    constructor(range, content, imposterElement, imposterSourceElement) {
         this._range = range;
         this._rangeStartOffset = range.startOffset;
         this._content = content;
-        this._imposterContainer = imposterContainer;
+        this._imposterElement = imposterElement;
         this._imposterSourceElement = imposterSourceElement;
     }
 
@@ -53,12 +53,12 @@ class TextSourceRange {
     }
 
     clone() {
-        return new TextSourceRange(this._range.cloneRange(), this._content, this._imposterContainer, this._imposterSourceElement);
+        return new TextSourceRange(this._range.cloneRange(), this._content, this._imposterElement, this._imposterSourceElement);
     }
 
     cleanup() {
-        if (this._imposterContainer !== null && this._imposterContainer.parentNode !== null) {
-            this._imposterContainer.parentNode.removeChild(this._imposterContainer);
+        if (this._imposterElement !== null && this._imposterElement.parentNode !== null) {
+            this._imposterElement.parentNode.removeChild(this._imposterElement);
         }
     }
 
