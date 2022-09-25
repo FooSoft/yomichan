@@ -21,13 +21,12 @@
  */
 
 class TextSourceRange {
-    constructor(range, rangeStartOffset, content, imposterElement, imposterSourceElement, cachedRect, cachedRects) {
+    constructor(range, rangeStartOffset, content, imposterElement, imposterSourceElement, cachedRects) {
         this._range = range;
         this._rangeStartOffset = rangeStartOffset;
         this._content = content;
         this._imposterElement = imposterElement;
         this._imposterSourceElement = imposterSourceElement;
-        this._cachedRect = cachedRect;
         this._cachedRects = cachedRects;
     }
 
@@ -54,7 +53,6 @@ class TextSourceRange {
             this._content,
             this._imposterElement,
             this._imposterSourceElement,
-            this._cachedRect,
             this._cachedRects
         );
     }
@@ -149,12 +147,11 @@ class TextSourceRange {
     }
 
     static create(range) {
-        return new TextSourceRange(range, range.startOffset, range.toString(), null, null, null, null);
+        return new TextSourceRange(range, range.startOffset, range.toString(), null, null, null);
     }
 
     static createFromImposter(range, imposterElement, imposterSourceElement) {
-        const cachedRect = DocumentUtil.convertRectZoomCoordinates(range.getBoundingClientRect(), range.startContainer);
         const cachedRects = DocumentUtil.convertMultipleRectZoomCoordinates(range.getClientRects(), range.startContainer);
-        return new TextSourceRange(range, range.startOffset, range.toString(), imposterElement, imposterSourceElement, cachedRect, cachedRects);
+        return new TextSourceRange(range, range.startOffset, range.toString(), imposterElement, imposterSourceElement, cachedRects);
     }
 }
