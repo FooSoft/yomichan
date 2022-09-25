@@ -94,14 +94,14 @@ class TextSourceRange {
     }
 
     getRects() {
-        if (this._imposterElement !== null && !this._imposterElement.isConnected) { return this._getCachedRects(); }
+        if (this._isImposterDisconnected()) { return this._getCachedRects(); }
         const result = DocumentUtil.convertMultipleRectZoomCoordinates(this._range.getClientRects(), this._range.startContainer);
         if (this._cachedRects !== null) { this._cachedRects = result; }
         return result;
     }
 
     getWritingMode() {
-        const node = this._range.startContainer;
+        const node = this._isImposterDisconnected() ? this._imposterSourceElement : this._range.startContainer;
         return DocumentUtil.getElementWritingMode(node !== null ? node.parentElement : null);
     }
 
@@ -156,6 +156,10 @@ class TextSourceRange {
         const cachedRects = DocumentUtil.convertMultipleRectZoomCoordinates(range.getClientRects(), range.startContainer);
         const cachedSourceRect = DocumentUtil.convertRectZoomCoordinates(imposterSourceElement.getBoundingClientRect(), imposterSourceElement);
         return new TextSourceRange(range, range.startOffset, range.toString(), imposterElement, imposterSourceElement, cachedRects, cachedSourceRect);
+    }
+
+    _isImposterDisconnected() {
+        return this._imposterElement !== null && !this._imposterElement.isConnected;
     }
 
     _getCachedRects() {
