@@ -21,9 +21,8 @@
  */
 
 class DOMDataBinder {
-    constructor({selector, ignoreSelectors=[], createElementMetadata, compareElementMetadata, getValues, setValues, onError=null}) {
+    constructor({selector, createElementMetadata, compareElementMetadata, getValues, setValues, onError=null}) {
         this._selector = selector;
-        this._ignoreSelectors = ignoreSelectors;
         this._createElementMetadata = createElementMetadata;
         this._compareElementMetadata = compareElementMetadata;
         this._getValues = getValues;
@@ -33,7 +32,7 @@ class DOMDataBinder {
         this._assignTasks = new TaskAccumulator(this._onBulkAssign.bind(this));
         this._selectorObserver = new SelectorObserver({
             selector,
-            ignoreSelector: (ignoreSelectors.length > 0 ? ignoreSelectors.join(',') : null),
+            ignoreSelector: null,
             onAdded: this._createObserver.bind(this),
             onRemoved: this._removeObserver.bind(this),
             onChildrenUpdated: this._onObserverChildrenUpdated.bind(this),
