@@ -328,16 +328,6 @@ class DocumentUtil {
         return false;
     }
 
-    static isMouseButtonPressed(mouseEvent, button) {
-        const mouseEventButton = mouseEvent.button;
-        switch (button) {
-            case 'primary': return mouseEventButton === 0;
-            case 'secondary': return mouseEventButton === 2;
-            case 'auxiliary': return mouseEventButton === 1;
-            default: return false;
-        }
-    }
-
     /**
      * Gets an array of the active modifier keys.
      * @param {KeyboardEvent|MouseEvent|TouchEvent} event The event to check.
