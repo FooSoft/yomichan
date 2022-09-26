@@ -172,8 +172,9 @@ class TextSourceRange {
      * @returns {string} The rects.
      */
     getWritingMode() {
-        const node = this._isImposterDisconnected() ? this._imposterSourceElement : this._range.startContainer;
-        return DocumentUtil.getElementWritingMode(node !== null ? node.parentElement : null);
+        let node = this._isImposterDisconnected() ? this._imposterSourceElement : this._range.startContainer;
+        if (node !== null && node.nodeType !== Node.ELEMENT_NODE) { node = node.parentElement; }
+        return DocumentUtil.getElementWritingMode(node);
     }
 
     /**
