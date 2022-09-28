@@ -124,7 +124,7 @@ class TextSourceRange {
      * @param {boolean} fromEnd Whether to move the offset from the current end position (if `true`) or the start position (if `false`).
      * @param {boolean} layoutAwareScan Whether or not HTML layout information should be used to generate
      *   the string content when scanning.
-     * @returns {number} The actual number of characters (not codepoints) that were read.
+     * @returns {number} The actual number of codepoints that were read.
      */
     setEndOffset(length, fromEnd, layoutAwareScan) {
         let node;
@@ -147,7 +147,7 @@ class TextSourceRange {
      * @param {number} length The maximum number of codepoints to move by.
      * @param {boolean} layoutAwareScan Whether or not HTML layout information should be used to generate
      *   the string content when scanning.
-     * @returns {number} The actual number of characters (not codepoints) that were read.
+     * @returns {number} The actual number of codepoints that were read.
      */
     setStartOffset(length, layoutAwareScan) {
         const state = new DOMTextScanner(this._range.startContainer, this._range.startOffset, !layoutAwareScan, layoutAwareScan).seek(-length);
