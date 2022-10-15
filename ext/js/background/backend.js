@@ -596,7 +596,7 @@ class Backend {
     }
 
     async _onApiClipboardGet() {
-        return this._clipboardReader.getText();
+        return this._clipboardReader.getText(false);
     }
 
     async _onApiGetDisplayTemplatesHtml() {
@@ -1773,7 +1773,7 @@ class Backend {
 
         try {
             if (clipboardDetails !== null && clipboardDetails.text) {
-                clipboardText = await this._clipboardReader.getText();
+                clipboardText = await this._clipboardReader.getText(false);
             }
         } catch (e) {
             errors.push(serializeError(e));

@@ -56,10 +56,11 @@ class ClipboardReader {
 
     /**
      * Gets the text in the clipboard.
+     * @param {boolean} useRichText Whether or not to use rich text for pasting, when possible.
      * @returns {string} A string containing the clipboard text.
      * @throws {Error} Error if not supported.
      */
-    async getText() {
+    async getText(useRichText) {
         /*
         Notes:
             document.execCommand('paste') doesn't work on Firefox.
@@ -86,13 +87,22 @@ class ClipboardReader {
             throw new Error('Clipboard reading not supported in this context');
         }
 
-        const target = this._getPasteTarget();
-        target.value = '';
-        target.focus();
-        document.execCommand('paste');
-        const result = target.value;
-        target.value = '';
-        return (typeof result === 'string' ? result : '');
+        if (useRichText) {
+            const target = this._getRichContentPasteTarget();
+            target.focus();
+            document.execCommand('paste');
+            const result = target.textContent;
+            this._clearRichContent(target);
+            return result;
+        } else {
+            const target = this._getPasteTarget();
+            target.value = '';
+            target.focus();
+            document.execCommand('paste');
+            const result = target.value;
+            target.value = '';
+            return (typeof result === 'string' ? result : '');
+        }
     }
 
     /**
