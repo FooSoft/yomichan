@@ -1,11 +1,11 @@
 #clipboard-rich-content-paste-target,
 #clipboard-rich-content-paste-target * {
-  background-image: none !important;
-  list-style-image: none !important;
-  content: none !important;
-  cursor: auto !important;
-  border-image-source: none !important;
-  offset-path: none !important;
-  -webkit-mask-image: none !important;
-  mask-image: none !important;
+    background-image: none !important;
+    list-style-image: none !important;
+    content: none !important;
+    cursor: auto !important;
+    border-image-source: none !important;
+    offset-path: none !important;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
 }
