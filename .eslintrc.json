@@ -1,6 +1,9 @@
 {
     "root": true,
-    "extends": "eslint:recommended",
+    "extends": [
+        "eslint:recommended",
+        "plugin:jsonc/recommended-with-json"
+    ],
     "parserOptions": {
         "ecmaVersion": 8,
         "sourceType": "script",
@@ -17,7 +20,8 @@
     "plugins": [
         "no-unsanitized",
         "header",
-        "jsdoc"
+        "jsdoc",
+        "jsonc"
     ],
     "ignorePatterns": [
         "/ext/lib/"
@@ -123,8 +127,43 @@
         "jsdoc/tag-lines": "error",
         "jsdoc/valid-types": "error",
 
+        "jsonc/indent": ["error", 4],
+        "jsonc/array-bracket-newline": ["error", "consistent"],
+        "jsonc/array-bracket-spacing": ["error", "never"],
+        "jsonc/array-element-newline": ["error", "consistent"],
+        "jsonc/comma-style": ["error", "last"],
+        "jsonc/key-spacing": ["error", {"beforeColon": false, "afterColon": true, "mode": "strict"}],
+        "jsonc/no-octal-escape": "error",
+        "jsonc/object-curly-newline": ["error", {"consistent": true}],
+        "jsonc/object-curly-spacing": ["error", "never"],
+        "jsonc/object-property-newline": ["error", {"allowAllPropertiesOnSameLine": true}]
     },
     "overrides": [
+        {
+            "files": [
+                "*.json"
+            ],
+            "parser": "jsonc-eslint-parser"
+        },
+        {
+            "files": [
+                "test/data/anki-note-builder-test-results.json",
+                "test/data/translator-test-results-note-data1.json",
+                "test/data/translator-test-results.json"
+            ],
+            "rules": {
+                "jsonc/indent": ["error", 2]
+            }
+        },
+        {
+            "files": [
+                "test/data/dictionaries/valid-dictionary1/term_bank_1.json"
+            ],
+            "rules": {
+                "jsonc/array-element-newline": ["off"],
+                "jsonc/object-property-newline": ["off"]
+            }
+        },
         {
             "files": [
                 "*.js"
