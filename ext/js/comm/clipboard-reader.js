@@ -86,15 +86,7 @@ class ClipboardReader {
             throw new Error('Clipboard reading not supported in this context');
         }
 
-        let target = this._pasteTarget;
-        if (target === null) {
-            target = document.querySelector(this._pasteTargetSelector);
-            if (target === null) {
-                throw new Error('Clipboard paste target does not exist');
-            }
-            this._pasteTarget = target;
-        }
-
+        const target = this._getPasteTarget();
         target.value = '';
         target.focus();
         document.execCommand('paste');
@@ -143,15 +135,7 @@ class ClipboardReader {
             throw new Error('Clipboard reading not supported in this context');
         }
 
-        let target = this._richContentPasteTarget;
-        if (target === null) {
-            target = document.querySelector(this._richContentPasteTargetSelector);
-            if (target === null) {
-                throw new Error('Clipboard paste target does not exist');
-            }
-            this._richContentPasteTarget = target;
-        }
-
+        const target = this._getRichContentPasteTarget();
         target.focus();
         document.execCommand('paste');
         const image = target.querySelector('img[src^="data:"]');
@@ -176,5 +160,21 @@ class ClipboardReader {
             reader.onerror = () => reject(reader.error);
             reader.readAsDataURL(file);
         });
+    }
+
+    _getPasteTarget() {
+        if (this._pasteTarget === null) { this._pasteTarget = this._findPasteTarget(this._pasteTargetSelector); }
+        return this._pasteTarget;
+    }
+
+    _getRichContentPasteTarget() {
+        if (this._richContentPasteTarget === null) { this._richContentPasteTarget = this._findPasteTarget(this._richContentPasteTargetSelector); }
+        return this._richContentPasteTarget;
+    }
+
+    _findPasteTarget(selector) {
+        const target = this._document.querySelector(selector);
+        if (target === null) { throw new Error('Clipboard paste target does not exist'); }
+        return target;
     }
 }
