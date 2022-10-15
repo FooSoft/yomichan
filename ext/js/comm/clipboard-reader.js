@@ -63,7 +63,7 @@ class ClipboardReader {
     async getText(useRichText) {
         /*
         Notes:
-            document.execCommand('paste') doesn't work on Firefox.
+            document.execCommand('paste') sometimes doesn't work on Firefox.
             See: https://bugzilla.mozilla.org/show_bug.cgi?id=1603985
             Therefore, navigator.clipboard.readText() is used on Firefox.
 
@@ -73,7 +73,7 @@ class ClipboardReader {
               being an extension with clipboard permissions. It effectively asks for the
               non-extension permission for clipboard access.
         */
-        if (this._isFirefox()) {
+        if (this._isFirefox() && !useRichText) {
             try {
                 return await navigator.clipboard.readText();
             } catch (e) {
