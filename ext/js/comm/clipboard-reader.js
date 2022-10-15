@@ -28,15 +28,15 @@ class ClipboardReader {
      * @param {object} details Details about how to set up the instance.
      * @param {?Document} details.document The Document object to be used, or null for no support.
      * @param {?string} details.pasteTargetSelector The selector for the paste target element.
-     * @param {?string} details.imagePasteTargetSelector The selector for the image paste target element.
+     * @param {?string} details.richContentPasteTargetSelector The selector for the rich content paste target element.
      */
-    constructor({document=null, pasteTargetSelector=null, imagePasteTargetSelector=null}) {
+    constructor({document=null, pasteTargetSelector=null, richContentPasteTargetSelector=null}) {
         this._document = document;
         this._browser = null;
         this._pasteTarget = null;
         this._pasteTargetSelector = pasteTargetSelector;
-        this._imagePasteTarget = null;
-        this._imagePasteTargetSelector = imagePasteTargetSelector;
+        this._richContentPasteTarget = null;
+        this._richContentPasteTargetSelector = richContentPasteTargetSelector;
     }
 
     /**
@@ -143,13 +143,13 @@ class ClipboardReader {
             throw new Error('Clipboard reading not supported in this context');
         }
 
-        let target = this._imagePasteTarget;
+        let target = this._richContentPasteTarget;
         if (target === null) {
-            target = document.querySelector(this._imagePasteTargetSelector);
+            target = document.querySelector(this._richContentPasteTargetSelector);
             if (target === null) {
                 throw new Error('Clipboard paste target does not exist');
             }
-            this._imagePasteTarget = target;
+            this._richContentPasteTarget = target;
         }
 
         target.focus();

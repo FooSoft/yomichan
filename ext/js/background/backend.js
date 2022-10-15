@@ -53,7 +53,7 @@ class Backend {
             // eslint-disable-next-line no-undef
             document: (typeof document === 'object' && document !== null ? document : null),
             pasteTargetSelector: '#clipboard-paste-target',
-            imagePasteTargetSelector: '#clipboard-rich-content-paste-target'
+            richContentPasteTargetSelector: '#clipboard-rich-content-paste-target'
         });
         this._clipboardMonitor = new ClipboardMonitor({
             japaneseUtil: this._japaneseUtil,
