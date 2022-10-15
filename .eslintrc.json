@@ -61,7 +61,7 @@
         "array-bracket-spacing": ["error", "never"],
         "arrow-spacing": ["error", {"before": true, "after": true}],
         "block-spacing": ["error", "always"],
-        "comma-spacing": ["error", { "before": false, "after": true }],
+        "comma-spacing": ["error", {"before": false, "after": true}],
         "computed-property-spacing": ["error", "never"],
         "func-call-spacing": ["error", "never"],
         "function-paren-newline": ["error", "multiline-arguments"],
