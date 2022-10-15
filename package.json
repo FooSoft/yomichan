@@ -50,6 +50,6 @@
         "parse5": "^7.0.0",
         "stylelint": "^14.14.0",
         "stylelint-config-recommended": "^9.0.0",
-        "web-ext": "^6.8.0"
+        "web-ext": "^7.3.0"
     }
 }
