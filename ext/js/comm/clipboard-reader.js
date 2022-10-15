@@ -140,10 +140,7 @@ class ClipboardReader {
         document.execCommand('paste');
         const image = target.querySelector('img[src^="data:"]');
         const result = (image !== null ? image.getAttribute('src') : null);
-        for (const image2 of target.querySelectorAll('img')) {
-            image2.removeAttribute('src');
-        }
-        target.textContent = '';
+        this._clearRichContent(target);
         return result;
     }
 
@@ -176,5 +173,13 @@ class ClipboardReader {
         const target = this._document.querySelector(selector);
         if (target === null) { throw new Error('Clipboard paste target does not exist'); }
         return target;
+    }
+
+    _clearRichContent(element) {
+        for (const image of element.querySelectorAll('img')) {
+            image.removeAttribute('src');
+            image.removeAttribute('srcset');
+        }
+        element.textContent = '';
     }
 }
