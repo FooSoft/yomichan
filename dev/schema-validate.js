@@ -42,8 +42,9 @@ class JsonSchemaAjv {
     validate(data) {
         if (this._validate(data)) { return; }
         const {errors} = this._validate;
-        const message = errors.map((e) => e.toString()).join('\n');
-        throw new Error(message);
+        const error = new Error('Schema validation failed');
+        error.data = JSON.parse(JSON.stringify(errors));
+        throw error;
     }
 }
 
