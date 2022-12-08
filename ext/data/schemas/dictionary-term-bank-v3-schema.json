@@ -254,6 +254,15 @@
                     "type": "string",
                     "default": "medium"
                 },
+                "color": {
+                    "type": "string",
+                    "enum": ["black", "white", "gray", "red", "blue", "yellow", "green", "purple", "orange"],
+                    "default": "black"
+                },
+                "colorRGBA": {
+                    "type": "string",
+                    "default": "#000000FF"
+                },
                 "textDecorationLine": {
                     "oneOf": [
                         {

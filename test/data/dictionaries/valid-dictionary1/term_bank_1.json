@@ -93,6 +93,8 @@
                 {"tag": "div", "style": {"fontSize": "x-large"}, "content": "fontSize:x-large"},
                 {"tag": "div", "style": {"fontSize": "xx-large"}, "content": "fontSize:xx-large"},
                 {"tag": "div", "style": {"fontSize": "xxx-large"}, "content": "fontSize:xxx-large"},
+                {"tag": "div", "style": {"color": "red"}, "content": "color:red"},
+                {"tag": "div", "style": {"colorRGBA": "#ABC123FF"}, "content": "colorRGBA:#ABC123FF"},
                 {"tag": "div", "style": {"textDecorationLine": "none"}, "content": "textDecorationLine:none "},
                 {"tag": "div", "style": {"textDecorationLine": "underline"}, "content": "textDecorationLine:underline "},
                 {"tag": "div", "style": {"textDecorationLine": "overline"}, "content": "textDecorationLine:overline "},

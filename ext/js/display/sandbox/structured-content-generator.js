@@ -263,6 +263,8 @@ class StructuredContentGenerator {
             fontStyle,
             fontWeight,
             fontSize,
+            color,
+            colorRGBA,
             textDecorationLine,
             verticalAlign,
             textAlign,
@@ -275,6 +277,10 @@ class StructuredContentGenerator {
         if (typeof fontStyle === 'string') { style.fontStyle = fontStyle; }
         if (typeof fontWeight === 'string') { style.fontWeight = fontWeight; }
         if (typeof fontSize === 'string') { style.fontSize = fontSize; }
+        if (typeof color === 'string') { style.color = color; }
+        if (typeof colorRGBA === 'string' && colorRGBA.length === 9 && colorRGBA.match(/#[0-9A-Fa-f]{8}/g)) {
+            style.color = colorRGBA;
+        }
         if (typeof verticalAlign === 'string') { style.verticalAlign = verticalAlign; }
         if (typeof textAlign === 'string') { style.textAlign = textAlign; }
         if (typeof textDecorationLine === 'string') {
