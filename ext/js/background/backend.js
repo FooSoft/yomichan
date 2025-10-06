@@ -1936,11 +1936,12 @@ class Backend {
                     if (!isObject(error2.data)) { continue; }
                     const {details} = error2.data;
                     if (!isObject(details)) { continue; }
-                    if (details.error === 'net::ERR_FAILED') {
-                        // This is potentially an error due to the extension not having enough URL privileges.
-                        // The message logged to the console looks like this:
-                        //  Access to fetch at '<URL>' from origin 'chrome-extension://<ID>' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
-                        return this._createAudioDownloadError('Audio download failed due to possible extension permissions error', 'audio-download-failed', errors);
+                    switch (details.error) {
+                        case 'net::ERR_FAILED':
+                            // This is potentially an error due to the extension not having enough URL privileges.
+                            // The message logged to the console looks like this:
+                            //  Access to fetch at '<URL>' from origin 'chrome-extension://<ID>' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
+                            return this._createAudioDownloadError('Audio download failed due to possible extension permissions error', 'audio-download-failed-permissions-error', errors);
                     }
                 }
             }
